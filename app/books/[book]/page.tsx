@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import BookReader, { type ReaderPage } from "@/components/BookReader";
 import {
   getAllBooks,
   getBook,
@@ -54,6 +55,22 @@ export default async function BookOverview({
     (n) => !book.non_story_pages.includes(n),
   );
 
+  // Preview pages carry their own glossary in the artwork; the parsed words
+  // are what makes the panel linkable, so both come from the same source.
+  const readerPages: ReaderPage[] = Array.from(
+    { length: book.preview_pages },
+    (_, idx) => {
+      const n = idx + 1;
+      return {
+        n,
+        src: `/book/${book.slug}/${String(n).padStart(2, "0")}.webp`,
+        words: vocab
+          .filter((w) => w.page === n)
+          .map((w) => ({ ar: w.ar, en: w.en })),
+      };
+    },
+  );
+
   return (
     <main className="mx-auto w-full max-w-[640px] px-6 py-10 sm:px-8">
       <Link
@@ -83,6 +100,21 @@ export default async function BookOverview({
           taught · fully vowelled
         </p>
       </header>
+
+      {readerPages.length > 0 && (
+        <section className="mb-14">
+          <h2 className="mb-2 text-[18px] font-medium">Read the opening</h2>
+          <p className="mb-6 text-[15px] text-[var(--ink)]/70">
+            Click the page to turn it. Open <b>Book vocab</b> for the new words
+            on the page you are reading.
+          </p>
+          <BookReader
+            pages={readerPages}
+            totalPages={book.page_count}
+            slug={book.slug}
+          />
+        </section>
+      )}
 
       <section className="mb-12">
         <h2

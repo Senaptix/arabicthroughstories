@@ -11,6 +11,11 @@ audio_status: none
 # text and so have no per-page glossary or audio clip.
 non_story_pages: [1, 2, 53, 54]
 
+# Pages readable in the on-site book preview, from page 1. A PREVIEW, not
+# the book: the site is a companion and the full text stays in print.
+# Images live in public/book/<slug>/NN.webp.
+preview_pages: 13
+
 # Sample pages shown on the marketing page. AT MOST TWO — the site is a
 # COMPANION to the book (audio, vocabulary, word families), not the book
 # itself. Putting the whole text online would deter buying the book.

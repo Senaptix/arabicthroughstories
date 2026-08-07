@@ -64,6 +64,14 @@ export const BookSchema = z.object({
     .max(2, "the site shows at most two sample pages — it is a companion, not the book")
     .default([]),
   /**
+   * How many pages of the book can be read on the site, from page 1.
+   *
+   * A PREVIEW, not the book. The site is a companion; the full text stays
+   * in print. Raising this puts more of the product online — a commercial
+   * decision, not a layout one.
+   */
+  preview_pages: z.number().int().positive().default(0),
+  /**
    * One page presented as a read-along: narration, the animation for that
    * page, and the line currently being read.
    *
