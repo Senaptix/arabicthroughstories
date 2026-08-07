@@ -1,0 +1,33 @@
+slug: ibrahim
+title_en: Who Broke the Idols
+title_ar: مَنْ كَسَرَ الْأَصْنَامَ؟
+series: qisas-an-nabiyyin
+series_order: 1
+page_count: 54
+age_range: "7-12"
+vowelling: full
+audio_status: none
+# Cover, contents, and the two word-family appendix pages carry no story
+# text and so have no per-page glossary or audio clip.
+non_story_pages: [1, 2, 53, 54]
+
+# Sample pages shown on the marketing page. AT MOST TWO — the site is a
+# COMPANION to the book (audio, vocabulary, word families), not the book
+# itself. Putting the whole text online would deter buying the book.
+# Extracted verbatim from the book repo manuscript, never retyped.
+sample_pages:
+  - page: 39
+    ar:
+      - "وَلَمَّا أَرَادَ إِبْرَاهِيمُ أَنْ يَذْهَبَ، قَالَتْ هَاجَرُ:"
+      - "إِلَى أَيْنَ يَا سَيِّدِي؟ أَتَتْرُكُنِي هُنَا؟"
+      - "أَتَتْرُكُنِي وَلَيْسَ هُنَا مَاءٌ وَلَا طَعَامٌ؟"
+      - "هَلْ أَمَرَكَ اللهُ بِهَذَا؟"
+      - "قَالَ إِبْرَاهِيمُ: نَعَمْ!"
+      - "قَالَتْ هَاجَرُ: إِذًا لَا يُضَيِّعُنَا!"
+    en:
+      - "When Ibrahim was ready to go, Hajar said,"
+      - "\"Where are you going, my master? Are you leaving me here?"
+      - "Are you leaving me where there is no water and no food?"
+      - "Has Allah commanded you to do this?\""
+      - "Ibrahim said, \"Yes!\""
+      - "Hajar said, \"Then He will never let us be lost!\""

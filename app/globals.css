@@ -1,26 +1,100 @@
 @import "tailwindcss";
 
+/*
+ * Design tokens for the Qisas companion site.
+ * Values are taken verbatim from the printed book (Canva DAG_D7Oe4MM,
+ * measured in BOOK_SPEC.md) — see WEBSITE_DESIGN.md for the full spec
+ * and reasoning. Do not adjust these colours; they must match the book.
+ */
+@theme {
+  /* Structure + surface colours */
+  --color-brand-blue: #004aad;
+  --color-paper: #faf5ea;
+  --color-ink: #000000;
+  --color-panel-light: #d9d9d9;
+  --color-surface: #ffffff;
+
+  /* Illustration accents — accents/illustration only, never UI backgrounds */
+  --color-sand: #e8d5b0;
+  --color-terracotta: #c1663f;
+  --color-clay: #8b5e3c;
+  --color-sage: #8a9a7b;
+  --color-night: #1a2a4a;
+
+  /* Font families. The @font-face / next/font wiring is handled elsewhere;
+     these variables are what components consume. */
+  --font-arabic: "Scheherazade New", "Amiri", "Noto Naskh Arabic", serif;
+  --font-latin: "Lexend Deca", system-ui, sans-serif;
+}
+
+/* Also expose the raw values as plain custom properties, for places
+   (e.g. clamp() in inline styles) that read var(--brand-blue) directly
+   rather than the Tailwind-generated --color-* names. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  --brand-blue: #004aad;
+  --paper: #faf5ea;
+  --ink: #000000;
+  --panel-light: #d9d9d9;
+  --surface: #ffffff;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --sand: #e8d5b0;
+  --terracotta: #c1663f;
+  --clay: #8b5e3c;
+  --sage: #8a9a7b;
+  --night: #1a2a4a;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-latin);
+}
+
+/* Visible focus rings everywhere — never remove them. */
+:focus-visible {
+  outline: 2px solid var(--brand-blue);
+  outline-offset: 2px;
+}
+
+/*
+ * Marketing-surface entrance animation (WEBSITE_DESIGN.md, "Motion").
+ * Scroll-driven and CSS-only — no Framer Motion, no 'use client', no JS on
+ * the page at all. Browsers without animation-timeline simply show the
+ * content, which is the correct degradation.
+ *
+ * Small distance, slow-ish ease, no bounce. Never applied to Arabic text:
+ * moving vocalised text makes the marks harder to resolve.
+ */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: reveal-in linear both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 26%;
+    }
+  }
+}
+
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Reading surfaces use only short, functional transitions on interactive
+   state — never on Arabic text itself. Respect reduced-motion globally. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
