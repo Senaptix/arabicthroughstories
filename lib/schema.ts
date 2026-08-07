@@ -72,29 +72,44 @@ export const BookSchema = z.object({
    */
   preview_pages: z.number().int().positive().default(0),
   /**
-   * One page presented as a read-along: narration, the animation for that
-   * page, and the line currently being read.
+   * Pages presented as a read-along: narration and the line currently being
+   * read, over the page's animation where one exists and the page image
+   * otherwise.
    *
    * `at` is the second each line begins, measured from the audio rather than
    * estimated. If the narration is ever re-recorded these must be measured
    * again — silently stale timings would highlight the wrong line, which
    * teaches the wrong word.
+   *
+   * Capped at two, for the same reason as `sample_pages`: this is a
+   * companion, not the book. See ACCESS_MODEL.md in the book repo.
    */
-  read_along: z
-    .object({
-      page: z.number().int().positive(),
-      video: z.string().min(1),
-      poster: z.string().min(1),
-      lines: z
-        .array(
-          z.object({
-            at: z.number().nonnegative(),
-            ar: z.string().min(1),
-          }),
-        )
-        .min(1),
-    })
-    .optional(),
+  read_alongs: z
+    .array(
+      z.object({
+        page: z.number().int().positive(),
+        audio: z.string().min(1),
+        /** The animation, where one has been made for this page. */
+        video: z.string().min(1).optional(),
+        poster: z.string().min(1).optional(),
+        /**
+         * Show this page's new words beside the text — the companion demo:
+         * audio, text and vocabulary, which is what a reader gets for every
+         * page. No artwork; the pictures stay in the book.
+         */
+        words: z.boolean().default(false),
+        lines: z
+          .array(
+            z.object({
+              at: z.number().nonnegative(),
+              ar: z.string().min(1),
+            }),
+          )
+          .min(1),
+      }),
+    )
+    .max(2, "read-alongs are a sample — the site is a companion, not the book")
+    .default([]),
 });
 
 export type VocabEntry = z.infer<typeof VocabEntrySchema>;

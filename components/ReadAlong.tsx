@@ -22,12 +22,20 @@ export default function ReadAlong({
   src,
   video,
   poster,
+  words,
   lines,
   label,
 }: {
   src: string;
-  video: string;
-  poster: string;
+  /** The animation, where one exists for this page. */
+  video?: string;
+  poster?: string;
+  /**
+   * This page's new words. Given instead of an animation, this is the
+   * companion demo — audio, text and vocabulary, which is what a reader
+   * gets for every page. No artwork; the pictures stay in the book.
+   */
+  words?: { ar: string; en: string }[];
   lines: Line[];
   /** What to call this in the UI — e.g. "the opening of the story". The page
    *  number is deliberately not shown: this is where the book begins, and a
@@ -99,22 +107,28 @@ export default function ReadAlong({
 
   return (
     <div className="grid gap-8 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1fr)] lg:items-center lg:gap-12">
-      <div className="border-ink/10 bg-night/5 relative mx-auto w-full max-w-[300px] overflow-hidden rounded-2xl border lg:mx-0 lg:max-w-none">
-        <video
-          ref={videoRef}
-          src={video}
-          poster={poster}
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          aria-hidden="true"
-          tabIndex={-1}
-          className="block h-auto w-full"
-        />
-      </div>
+      {video ? (
+        <div className="border-ink/10 bg-night/5 relative mx-auto w-full max-w-[300px] overflow-hidden rounded-2xl border lg:mx-0 lg:max-w-none">
+          <video
+            ref={videoRef}
+            src={video}
+            poster={poster}
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            aria-hidden="true"
+            tabIndex={-1}
+            className="block h-auto w-full"
+          />
+        </div>
+      ) : null}
 
-      <div>
+      {/* The glossary is rendered after the text in DOM order — under it on a
+          phone, beside it on a wide screen — matching where the box sits on
+          the printed page. `order` is layout only; it never reorders how the
+          text itself is read. */}
+      <div className={video ? undefined : "lg:order-2"}>
         <div className="flex items-center gap-4">
           <button
             type="button"
@@ -177,6 +191,36 @@ export default function ReadAlong({
           onError={() => setUnavailable(true)}
         />
       </div>
+
+      {!video && (
+        <div className="border-ink/10 bg-surface/70 h-fit rounded-2xl border px-5 py-5 lg:order-1">
+          <p
+            lang="ar"
+            dir="rtl"
+            className="text-ink/70"
+            style={{ fontFamily: "var(--font-arabic)", fontSize: "clamp(22px, 4vw, 26px)", lineHeight: 1.8 }}
+          >
+            كَلِمَاتٌ جَدِيدَةٌ
+          </p>
+          <ul className="mt-3 flex flex-col gap-2">
+            {words?.map((w) => (
+              <li key={w.ar} className="flex items-baseline justify-between gap-4">
+                <span
+                  lang="ar"
+                  dir="rtl"
+                  className="text-ink"
+                  style={{ fontFamily: "var(--font-arabic)", fontSize: "clamp(24px, 5vw, 28px)", lineHeight: 1.8 }}
+                >
+                  {w.ar}
+                </span>
+                <span className="text-ink/65 text-right" style={{ fontSize: "15px", lineHeight: 1.7 }}>
+                  {w.en}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }

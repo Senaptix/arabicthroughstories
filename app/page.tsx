@@ -182,7 +182,7 @@ export default function Home() {
       {/* ---------------------------------------------------------------- *
        * Read-along — the narration, the animation, and the line being read
        * ---------------------------------------------------------------- */}
-      {book.read_along && (
+      {book.read_alongs.length > 0 && (
         <section className="bg-sand/25 border-ink/5 border-y">
           <div className="mx-auto w-full max-w-[1100px] px-6 py-16 sm:px-8 lg:py-20">
             <div className="reveal mb-10">
@@ -199,17 +199,40 @@ export default function Home() {
               >
                 This is how the story opens. The line being read lights up as
                 you hear it — so a child can follow where they are without
-                losing the vowels.
+                losing the vowels. Every page of the book is read this way.
               </p>
             </div>
 
-            <ReadAlong
-              label="the opening of the story"
-              src={`/audio/${book.slug}/p${book.read_along.page}.mp3`}
-              video={book.read_along.video}
-              poster={book.read_along.poster}
-              lines={book.read_along.lines}
-            />
+            <div className="flex flex-col gap-16">
+              {book.read_alongs.map((r) => (
+                <div key={r.page}>
+                  {r.words && (
+                    <p
+                      className="text-ink/60 mb-5"
+                      style={{ fontSize: "15px", lineHeight: 1.6 }}
+                    >
+                      And this is what you get for every page — the audio, the
+                      text, and that page&rsquo;s new words. The picture stays
+                      in the book.
+                    </p>
+                  )}
+                  <ReadAlong
+                    label={r.words ? "the next page" : "the opening of the story"}
+                    src={r.audio}
+                    video={r.video}
+                    poster={r.poster}
+                    words={
+                      r.words
+                        ? vocab
+                            .filter((w) => w.page === r.page)
+                            .map((w) => ({ ar: w.ar, en: w.en }))
+                        : undefined
+                    }
+                    lines={r.lines}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         </section>
       )}
@@ -478,16 +501,16 @@ export default function Home() {
               className="text-ink mt-4 max-w-[20ch] font-semibold text-balance"
               style={{ fontSize: "clamp(28px, 5vw, 42px)", lineHeight: 1.15, letterSpacing: "-0.015em" }}
             >
-              A code on the page opens the page.
+              One code in the book. Every page read aloud.
             </h2>
             <p
               className="text-ink/70 mt-4 max-w-[50ch]"
               style={{ fontSize: "clamp(16px, 2.5vw, 18px)", lineHeight: 1.65 }}
             >
-              Each page carries a small code. Scanning it opens that page here —
-              the words, the family, and the page read aloud, with nothing else
-              on screen to tap. No account, no advertising, and it never starts
-              playing on its own.
+              Scan once and the whole book is here to listen to — turn to any
+              page and hear it, with the words and the family beside it. No
+              scanning a fresh code every page, no account, no advertising, and
+              it never starts playing on its own.
             </p>
             {book.audio_status === "none" && (
               <p className="text-ink/50 mt-5" style={{ fontSize: "14px", lineHeight: 1.6 }}>
