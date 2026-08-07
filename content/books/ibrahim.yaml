@@ -31,3 +31,21 @@ sample_pages:
       - "Has Allah commanded you to do this?\""
       - "Ibrahim said, \"Yes!\""
       - "Hajar said, \"Then He will never let us be lost!\""
+
+# Page 3 read-along: narration + animation + the line being read.
+# `at` is the second each line starts, measured from the audio with
+# ffmpeg silencedetect — not estimated. Re-measure if the audio is
+# ever re-recorded.
+read_along:
+  page: 3
+  video: "/video/p3-azar-stall.mp4"
+  poster: "/video/p3-azar-stall-poster.jpg"
+  lines:
+    - at: 0
+      ar: "قَبْلَ أَيَّامٍ كَثِيرَةٍ جِدًّا،"
+    - at: 3.16
+      ar: "كَانَ فِي قَرْيَةٍ رَجُلٌ مَشْهُورٌ جِدًّا."
+    - at: 7
+      ar: "وَكَانَ اسْمُ هَذَا الرَّجُلِ آزَرَ."
+    - at: 10.57
+      ar: "وَكَانَ آزَرُ يَبِيعُ الْأَصْنَامَ."

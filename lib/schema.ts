@@ -63,6 +63,30 @@ export const BookSchema = z.object({
     )
     .max(2, "the site shows at most two sample pages — it is a companion, not the book")
     .default([]),
+  /**
+   * One page presented as a read-along: narration, the animation for that
+   * page, and the line currently being read.
+   *
+   * `at` is the second each line begins, measured from the audio rather than
+   * estimated. If the narration is ever re-recorded these must be measured
+   * again — silently stale timings would highlight the wrong line, which
+   * teaches the wrong word.
+   */
+  read_along: z
+    .object({
+      page: z.number().int().positive(),
+      video: z.string().min(1),
+      poster: z.string().min(1),
+      lines: z
+        .array(
+          z.object({
+            at: z.number().nonnegative(),
+            ar: z.string().min(1),
+          }),
+        )
+        .min(1),
+    })
+    .optional(),
 });
 
 export type VocabEntry = z.infer<typeof VocabEntrySchema>;

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import ReadAlong from "@/components/ReadAlong";
 import { getBook, parseRootFamilies, parseVocabulary } from "@/lib/parse";
 import type { VocabEntry } from "@/lib/schema";
 
@@ -177,6 +178,41 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ---------------------------------------------------------------- *
+       * Read-along — the narration, the animation, and the line being read
+       * ---------------------------------------------------------------- */}
+      {book.read_along && (
+        <section className="bg-sand/25 border-ink/5 border-y">
+          <div className="mx-auto w-full max-w-[1100px] px-6 py-16 sm:px-8 lg:py-20">
+            <div className="reveal mb-10">
+              <Eyebrow>Read along</Eyebrow>
+              <h2
+                className="text-ink mt-4 max-w-[22ch] font-semibold text-balance"
+                style={{ fontSize: "clamp(28px, 5vw, 42px)", lineHeight: 1.15, letterSpacing: "-0.015em" }}
+              >
+                Press play and follow the line.
+              </h2>
+              <p
+                className="text-ink/70 mt-4 max-w-[52ch]"
+                style={{ fontSize: "clamp(16px, 2.5vw, 18px)", lineHeight: 1.65 }}
+              >
+                This is how the story opens. The line being read lights up as
+                you hear it — so a child can follow where they are without
+                losing the vowels.
+              </p>
+            </div>
+
+            <ReadAlong
+              label="the opening of the story"
+              src={`/audio/${book.slug}/p${book.read_along.page}.mp3`}
+              video={book.read_along.video}
+              poster={book.read_along.poster}
+              lines={book.read_along.lines}
+            />
+          </div>
+        </section>
+      )}
 
       {/* ---------------------------------------------------------------- *
        * The thread opens — one word, carried the length of the page
