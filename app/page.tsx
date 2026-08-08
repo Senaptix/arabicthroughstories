@@ -25,17 +25,18 @@ const THREAD_ROOT = "س ج د";
 
 /**
  * A SAMPLE — three pages, not a page browser. This is a landing page; the
- * whole book lives behind the QR codes in the printed copy.
+ * rest of the book stays in print.
  *
- * Artwork is drawn ONLY from pages 3-18. Those are the pages redrawn in the
- * current style; later pages are still the earlier artwork and are not
- * face-compliant yet (page 39 shows Hajar's face). Do not add a page above
- * 18 here until it has been redrawn — checked, not assumed.
+ * ONLY the v2 redraw (pages 3-7) may appear here. Ibrahim is shown from
+ * behind in every one of them — never a face, and never a blank face
+ * either, which the earlier art used and which is no longer acceptable.
+ * Every page above 7 is still the old artwork. Check a page before adding
+ * it; do not assume.
  */
 const SAMPLE_ART = [
-  { page: 5, file: "page-05-ibrahim-watches-worship.png", caption: "Watching them bow" },
-  { page: 7, file: "page-07-fly-and-mouse.png", caption: "A fly and a mouse" },
-  { page: 16, file: "page-16-crowd-ashamed.png", caption: "They looked down" },
+  { page: 4, file: "page-04.png", caption: "The house of idols" },
+  { page: 5, file: "page-05.png", caption: "Watching them bow" },
+  { page: 7, file: "page-07.png", caption: "A fly and a mouse" },
 ];
 
 /** How the series weans the reader off tashkeel, book by book (SERIES_PLAN.md). */
@@ -162,16 +163,16 @@ export default function Home() {
         <div className="relative mx-auto w-full max-w-[420px] lg:max-w-none" aria-hidden="true">
           <div className="relative aspect-[4/3.4]">
             <FloatingPage
-              file="page-11-eid-morning.png"
+              file="page-06.png"
               className="absolute top-[6%] left-0 w-[52%] -rotate-6"
               priority
             />
             <FloatingPage
-              file="page-04-idol-house-worship.png"
+              file="page-04.png"
               className="absolute top-0 right-[2%] w-[46%] rotate-3"
             />
             <FloatingPage
-              file="page-13-axe-idol-aftermath.png"
+              file="page-03.png"
               className="absolute bottom-0 left-[24%] w-[54%] rotate-1"
               priority
             />
@@ -386,7 +387,8 @@ export default function Home() {
           >
             {storyPages} illustrated pages, one scene each. The hard parts of
             the story are told plainly in the text and left undrawn — restraint
-            belongs in the picture, never in the telling. Three of them:
+            belongs in the picture, never in the telling. Ibrahim is always
+            drawn from behind, so his face is never shown. Three of them:
           </p>
         </div>
 
@@ -531,7 +533,7 @@ export default function Home() {
             {[
               ["Fully vowelled", "Every word carries its tashkeel, on every page — the marks are the lesson, not a decoration."],
               ["Nothing cut", "The story follows al-Nadwi's original. Difficult episodes are told plainly rather than removed."],
-              ["No faces", "No prophet is ever depicted. The illustrations are built around that rule, not edited to fit it."],
+              ["Shown from behind", "A prophet's face is never drawn — not featured, and not left blank either. Ibrahim is shown from behind, and the scene is composed that way from the start rather than edited to fit."],
             ].map(([title, body]) => (
               <li key={title} className="border-ink/10 bg-surface/60 rounded-2xl border px-5 py-4">
                 <p className="text-ink font-semibold" style={{ fontSize: "16px", lineHeight: 1.5 }}>
