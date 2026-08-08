@@ -86,6 +86,42 @@ body {
   }
 }
 
+/*
+ * Vocabulary flip cards.
+ *
+ * Driven by a real checkbox rather than JavaScript, so the cards work in a
+ * server component and cost nothing on the page-card route's JS budget.
+ * The checkbox is also why they are keyboard-operable for free: Tab to
+ * focus, Space to flip.
+ *
+ * The Arabic itself never moves during the flip — the CARD rotates, and the
+ * face is hidden until it is square to the reader. Vocalised Arabic in
+ * mid-rotation is unreadable, and the marks are the thing being taught.
+ */
+.flip {
+  perspective: 800px;
+}
+
+.flip-inner {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 320ms cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+.flip input:checked ~ .flip-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-face {
+  backface-visibility: hidden;
+}
+
+.flip-back {
+  position: absolute;
+  inset: 0;
+  transform: rotateY(180deg);
+}
+
 /* Reading surfaces use only short, functional transitions on interactive
    state — never on Arabic text itself. Respect reduced-motion globally. */
 @media (prefers-reduced-motion: reduce) {

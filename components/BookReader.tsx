@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import ReadAlong from "./ReadAlong";
+import VocabCards from "./VocabCards";
 
 /**
  * The on-site book preview: turn pages by clicking them, and open the
@@ -154,39 +155,7 @@ export default function BookReader({
             id="book-vocab"
             className="border-ink/10 bg-surface/70 mt-3 rounded-2xl border px-5 py-4"
           >
-            {page.words.length === 0 ? (
-              <p className="text-ink/55" style={{ fontSize: "15px", lineHeight: 1.6 }}>
-                No new words on this page.
-              </p>
-            ) : (
-              <ul className="flex flex-col gap-2">
-                {page.words.map((w) => (
-                  <li
-                    key={w.ar}
-                    className="flex items-baseline justify-between gap-4"
-                  >
-                    <span
-                      lang="ar"
-                      dir="rtl"
-                      className="text-ink"
-                      style={{
-                        fontFamily: "var(--font-arabic)",
-                        fontSize: "clamp(24px, 5vw, 28px)",
-                        lineHeight: 1.8,
-                      }}
-                    >
-                      {w.ar}
-                    </span>
-                    <span
-                      className="text-ink/65 text-right"
-                      style={{ fontSize: "15px", lineHeight: 1.7 }}
-                    >
-                      {w.en}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            )}
+            <VocabCards words={page.words} idPrefix={`reader-p${page.n}`} />
 
             <a
               href={`/books/${slug}/p${page.n}`}

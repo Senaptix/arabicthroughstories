@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import HomeBar from "@/components/HomeBar";
 import ReadAlong from "@/components/ReadAlong";
-import WordList from "@/components/WordList";
+import VocabCards from "@/components/VocabCards";
 import RootFamily from "@/components/RootFamily";
 import {
   getAllBooks,
@@ -13,11 +14,16 @@ import {
 } from "@/lib/parse";
 
 /**
- * THE QR LANDING ROUTE.
+ * One page of the book: its audio, its text, its words and its families.
  *
  * URL shape is `/books/<slug>/p<NN>` — e.g. /books/ibrahim/p39.
- * This string gets PRINTED INTO PHYSICAL BOOKS and can never change.
- * See WEBSITE_BUILD.md § "The one irreversible decision".
+ *
+ * These URLs are NO LONGER PRINTED. The book now carries a single code to
+ * the book itself rather than one per page (ACCESS_MODEL.md supersedes
+ * AUDIO_PLAN.md on this), so the "can never change" rule in
+ * WEBSITE_BUILD.md § "The one irreversible decision" no longer binds here.
+ * Keep them stable anyway — the printed word-family appendix sends readers
+ * to page numbers, and links already shared should not rot.
  *
  * The `pageSlug` segment is the whole `p39` token (not a nested /p/39),
  * which is why the folder is [pageSlug] and the prefix is parsed here.
@@ -90,7 +96,14 @@ export default async function PageCard({
   const next = page < book.page_count ? page + 1 : null;
 
   return (
-    <main className="mx-auto w-full max-w-[640px] px-6 py-8 sm:px-8">
+    <>
+      {/* The book carries ONE code, to the book — not one per page
+          (ACCESS_MODEL.md). Page cards are reached by turning pages and by
+          following root-family links, so every one of them needs a way back
+          out rather than relying on browser history. */}
+      <HomeBar />
+
+      <main className="mx-auto w-full max-w-[640px] px-6 py-8 sm:px-8">
       {/* Meta bar — page number left, book right */}
       <div className="mb-8 flex items-baseline justify-between gap-4">
         <span className="text-[14px] font-medium text-[var(--brand-blue)]">
@@ -151,7 +164,7 @@ export default async function PageCard({
       {isStoryPage ? (
         <>
           <section className="mb-10">
-            <WordList words={words} />
+            <VocabCards words={words} idPrefix={`p${page}`} />
           </section>
 
           <section className="mb-10">
@@ -194,6 +207,7 @@ export default async function PageCard({
           <span />
         )}
       </nav>
-    </main>
+      </main>
+    </>
   );
 }

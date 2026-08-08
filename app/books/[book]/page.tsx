@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import BookReader, { type ReaderPage } from "@/components/BookReader";
+import HomeBar from "@/components/HomeBar";
 import {
   getAllBooks,
   getBook,
@@ -80,25 +81,10 @@ export default async function BookOverview({
 
   return (
     <>
-      {/*
-       * Sticky, because this page is long — reader, then every word family,
-       * then every page. A back link only at the top means anyone reading
-       * the book is stranded with no way home short of scrolling back up.
-       *
-       * Deliberately NOT added to the page-card route: that is what a QR
-       * scan lands on and WEBSITE_PLAN.md keeps it free of navigation
-       * chrome.
-       */}
-      <div className="border-ink/10 bg-paper/90 sticky top-0 z-10 border-b backdrop-blur">
-        <nav className="mx-auto flex w-full max-w-[640px] items-center px-6 sm:px-8">
-          <Link
-            href="/"
-            className="text-brand-blue inline-flex min-h-[48px] items-center text-[14px] underline-offset-4 hover:underline"
-          >
-            ← Home
-          </Link>
-        </nav>
-      </div>
+      {/* Sticky, because this page is long — reader, then every word family,
+          then every page. A link only at the top strands anyone reading the
+          book with no way home short of scrolling back up. */}
+      <HomeBar />
 
       <main className="mx-auto w-full max-w-[640px] px-6 py-10 sm:px-8">
         <header className="mb-12">
