@@ -139,6 +139,71 @@ export function parseRootFamilies(slug: string): RootFamily[] {
 }
 
 /* ------------------------------------------------------------------ *
+ * Page text
+ * ------------------------------------------------------------------ */
+
+/**
+ * The Arabic body of each page, for reading along with the audio.
+ *
+ * Generated from the book repo — see the header of the .pages.md file. Not
+ * every page is present: pages 5-18 live only in the Canva design and have
+ * never been exported, so they legitimately have no entry. Callers must
+ * handle a missing page rather than assume coverage.
+ *
+ * Arabic only. The English panel stays in the printed book.
+ */
+const PAGE_HEADING = /^##\s+Page\s+(\d+)\s*$/;
+const PAGE_LINE = /^>\s?(.*)$/;
+
+export function parsePageText(slug: string): Map<number, string[]> {
+  const file = path.join(CONTENT, "data", `${slug}.pages.md`);
+  if (!fs.existsSync(file)) return new Map();
+
+  const out = new Map<number, string[]>();
+  let current: number | null = null;
+
+  for (const line of fs.readFileSync(file, "utf8").split(/\r?\n/)) {
+    const h = PAGE_HEADING.exec(line);
+    if (h) {
+      current = Number(h[1]);
+      out.set(current, []);
+      continue;
+    }
+    if (current === null) continue;
+    const q = PAGE_LINE.exec(line);
+    if (!q) continue;
+    const text = q[1].trim();
+    if (text) out.get(current)!.push(text);
+  }
+
+  // A heading with no lines under it would render an empty page body — a
+  // generation bug, not valid data.
+  for (const [page, lines] of out) {
+    if (lines.length === 0) {
+      throw new Error(`Page ${page} in ${slug}.pages.md has a heading but no text.`);
+    }
+  }
+
+  return out;
+}
+
+/**
+ * Which pages have a recorded clip, read from disk rather than tracked in
+ * config. Drop `p7.mp3` into public/audio/<slug>/ and page 7 lights up on
+ * the next build — there is no list to forget to update.
+ */
+export function getRecordedPages(slug: string): Set<number> {
+  const dir = path.join(process.cwd(), "public", "audio", slug);
+  if (!fs.existsSync(dir)) return new Set();
+  const pages = new Set<number>();
+  for (const f of fs.readdirSync(dir)) {
+    const m = /^p(\d+)\.mp3$/.exec(f);
+    if (m) pages.add(Number(m[1]));
+  }
+  return pages;
+}
+
+/* ------------------------------------------------------------------ *
  * Books
  * ------------------------------------------------------------------ */
 
@@ -166,6 +231,10 @@ export type PageContent = {
   words: VocabEntry[];
   families: RootFamily[];
   audioSrc: string;
+  /** Whether a clip actually exists on disk for this page. */
+  hasAudio: boolean;
+  /** The page's Arabic, or [] where the text has never been exported. */
+  text: string[];
 };
 
 /**
@@ -186,6 +255,8 @@ export function getPageContent(slug: string, page: number): PageContent {
     // A family belongs to this page if any of its members first appear here.
     families: allFamilies.filter((f) => f.members.some((m) => m.page === page)),
     audioSrc: `${AUDIO_BASE}/audio/${slug}/p${page}.mp3`,
+    hasAudio: getRecordedPages(slug).has(page),
+    text: parsePageText(slug).get(page) ?? [],
   };
 }
 

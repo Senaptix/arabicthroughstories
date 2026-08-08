@@ -77,11 +77,13 @@ export default async function PageCard({
     notFound();
   }
 
-  const { book, words, families, audioSrc } = content;
+  const { book, words, families, audioSrc, text } = content;
   if (page > book.page_count) notFound();
 
   const isStoryPage = !book.non_story_pages.includes(page);
-  const hasAudio = isStoryPage && book.audio_status !== "none";
+  // Per page, not per book: a clip exists for this page or it does not.
+  // Read from disk, so dropping p7.mp3 in lights page 7 up on next build.
+  const hasAudio = isStoryPage && content.hasAudio;
 
   const prev = page > 1 ? page - 1 : null;
   const next = page < book.page_count ? page + 1 : null;
@@ -108,11 +110,33 @@ export default async function PageCard({
       ) : isStoryPage ? (
         <section className="mb-10 rounded-2xl bg-[var(--surface)]/60 px-5 py-4">
           <p className="text-[15px] text-[var(--ink)]/70">
-            Audio for this book is being recorded. The words below are ready to
-            read now.
+            This page is still being recorded. The text and words below are
+            ready to read now.
           </p>
         </section>
       ) : null}
+
+      {/* The page's Arabic. Sits directly under the player because the audio
+          is a pronunciation model for text the child is looking at — audio
+          alone is a different, worse product (WEBSITE_DESIGN.md). */}
+      {text.length > 0 && (
+        <section className="mb-10">
+          <div
+            lang="ar"
+            dir="rtl"
+            style={{
+              fontFamily: "var(--font-arabic)",
+              fontSize: "clamp(28px, 6vw, 34px)",
+              lineHeight: 1.9,
+              textAlign: "start",
+            }}
+          >
+            {text.map((line, i) => (
+              <p key={i}>{line}</p>
+            ))}
+          </div>
+        </section>
+      )}
 
       {isStoryPage ? (
         <>

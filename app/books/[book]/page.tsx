@@ -6,6 +6,7 @@ import {
   getAllBooks,
   getBook,
   getPageNumbers,
+  getRecordedPages,
   parseRootFamilies,
   parseVocabulary,
 } from "@/lib/parse";
@@ -57,6 +58,7 @@ export default async function BookOverview({
   const storyPages = getPageNumbers(book).filter(
     (n) => !book.non_story_pages.includes(n),
   );
+  const recorded = getRecordedPages(slug);
 
   // Preview pages carry their own glossary in the artwork; the parsed words
   // are what makes the panel linkable, so both come from the same source.
@@ -198,18 +200,36 @@ export default async function BookOverview({
         </section>
 
         <section>
-          <h2 className="mb-4 text-[18px] font-medium">Every page</h2>
+          <h2 className="mb-2 text-[18px] font-medium">Every page</h2>
+          <p className="mb-4 text-[15px] text-[var(--ink)]/70">
+            Every page has its text, words and families. Pages marked in blue
+            can also be heard —{" "}
+            {recorded.size === 0
+              ? "recording has not started"
+              : `${recorded.size} so far, and the rest are being recorded`}
+            .
+          </p>
           <ul className="flex flex-wrap gap-2">
-            {storyPages.map((n) => (
-              <li key={n}>
-                <Link
-                  href={`/books/${book.slug}/p${n}`}
-                  className="inline-flex h-[48px] min-w-[48px] items-center justify-center rounded-[12px] bg-[var(--surface)]/70 px-3 text-[15px] text-[var(--brand-blue)] transition-colors duration-150 ease-out hover:bg-[var(--surface)]"
-                >
-                  {n}
-                </Link>
-              </li>
-            ))}
+            {storyPages.map((n) => {
+              const heard = recorded.has(n);
+              return (
+                <li key={n}>
+                  <Link
+                    href={`/books/${book.slug}/p${n}`}
+                    aria-label={
+                      heard ? `Page ${n}, with audio` : `Page ${n}`
+                    }
+                    className={
+                      heard
+                        ? "inline-flex h-[48px] min-w-[48px] items-center justify-center rounded-[12px] bg-[var(--brand-blue)] px-3 text-[15px] font-medium text-[var(--paper)] transition-transform duration-150 ease-out hover:-translate-y-0.5"
+                        : "inline-flex h-[48px] min-w-[48px] items-center justify-center rounded-[12px] bg-[var(--surface)]/70 px-3 text-[15px] text-[var(--brand-blue)] transition-colors duration-150 ease-out hover:bg-[var(--surface)]"
+                    }
+                  >
+                    {n}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </section>
       </main>

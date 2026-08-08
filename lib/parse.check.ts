@@ -7,7 +7,13 @@
  * parses successfully but comes out altered.
  */
 import assert from "node:assert/strict";
-import { getBook, parseRootFamilies, parseVocabulary } from "./parse";
+import {
+  getBook,
+  getRecordedPages,
+  parsePageText,
+  parseRootFamilies,
+  parseVocabulary,
+} from "./parse";
 
 const book = getBook("ibrahim");
 
@@ -42,6 +48,31 @@ for (const m of sajada.members) {
     vocab.some((v) => v.ar === m.ar),
     `${m.ar} is in a root family but not in the vocabulary index`,
   );
+}
+
+// Page text: every story page must have some, or a page card renders a
+// player with nothing to read along to.
+const pageText = parsePageText("ibrahim");
+for (let n = 3; n <= 52; n++) {
+  assert.ok(pageText.has(n), `page ${n} has no text in ibrahim.pages.md`);
+  assert.ok(pageText.get(n)!.length > 0, `page ${n} text is empty`);
+}
+
+// The page text and the read-along must be the same words. They come from
+// different files, so drift between them would show a child one thing on
+// the page card and another in the read-along.
+for (const r of book.read_alongs) {
+  const strip = (s: string[]) => s.join("").replace(/\s+/g, "");
+  assert.equal(
+    strip(pageText.get(r.page)!),
+    strip(r.lines.map((l) => l.ar)),
+    `page ${r.page}: page text and read-along text have drifted apart`,
+  );
+}
+
+// Every recorded clip must correspond to a page that has text.
+for (const n of getRecordedPages("ibrahim")) {
+  assert.ok(pageText.has(n), `audio exists for page ${n} but no text does`);
 }
 
 console.log("parse checks passed");
