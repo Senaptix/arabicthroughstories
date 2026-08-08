@@ -27,15 +27,16 @@ const THREAD_ROOT = "س ج د";
  * A SAMPLE — three pages, not a page browser. This is a landing page; the
  * rest of the book stays in print.
  *
- * ONLY the v2 redraw (pages 3-7) may appear here. Ibrahim is shown from
- * behind in every one of them — never a face, and never a blank face
- * either, which the earlier art used and which is no longer acceptable.
- * Every page above 7 is still the old artwork. Check a page before adding
- * it; do not assume.
+ * ONLY the no-Prophet POV set (pages 3-7) may appear here. Ibrahim is not
+ * drawn at all — not featured, not blank-faced, not shown from behind
+ * either. Scenes he is part of are shot as what he sees, so the camera
+ * stands in for him rather than any figure doing so. Every page above 7 is
+ * still older artwork under an earlier, now-superseded standard. Check a
+ * page before adding it; do not assume.
  */
 const SAMPLE_ART = [
   { page: 4, file: "page-04.png", caption: "The house of idols" },
-  { page: 5, file: "page-05.png", caption: "Watching them bow" },
+  { page: 5, file: "page-05.png", caption: "What Ibrahim saw" },
   { page: 7, file: "page-07.png", caption: "A fly and a mouse" },
 ];
 
@@ -387,8 +388,9 @@ export default function Home() {
           >
             {storyPages} illustrated pages, one scene each. The hard parts of
             the story are told plainly in the text and left undrawn — restraint
-            belongs in the picture, never in the telling. Ibrahim is always
-            drawn from behind, so his face is never shown. Three of them:
+            belongs in the picture, never in the telling. Ibrahim himself is
+            never drawn; where he takes part in a scene, it is shown as what
+            he sees. Three of them:
           </p>
         </div>
 
@@ -533,7 +535,7 @@ export default function Home() {
             {[
               ["Fully vowelled", "Every word carries its tashkeel, on every page — the marks are the lesson, not a decoration."],
               ["Nothing cut", "The story follows al-Nadwi's original. Difficult episodes are told plainly rather than removed."],
-              ["Shown from behind", "A prophet's face is never drawn — not featured, and not left blank either. Ibrahim is shown from behind, and the scene is composed that way from the start rather than edited to fit."],
+              ["Never drawn", "Ibrahim is not depicted at all — not featured, not blank-faced, not shown from behind. Where he is part of a scene, the picture shows what he sees rather than standing in a figure for him."],
             ].map(([title, body]) => (
               <li key={title} className="border-ink/10 bg-surface/60 rounded-2xl border px-5 py-4">
                 <p className="text-ink font-semibold" style={{ fontSize: "16px", lineHeight: 1.5 }}>
