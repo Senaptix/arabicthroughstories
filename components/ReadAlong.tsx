@@ -105,8 +105,18 @@ export default function ReadAlong({
     );
   }
 
+  // With neither an animation nor a glossary there is only one pane, so the
+  // two-column grid would leave the text stranded at 72% width.
+  const twoPane = Boolean(video || words);
+
   return (
-    <div className="grid gap-8 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1fr)] lg:items-center lg:gap-12">
+    <div
+      className={
+        twoPane
+          ? "grid gap-8 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1fr)] lg:items-center lg:gap-12"
+          : "grid gap-8"
+      }
+    >
       {video ? (
         <div className="border-ink/10 bg-night/5 relative mx-auto w-full max-w-[300px] overflow-hidden rounded-2xl border lg:mx-0 lg:max-w-none">
           <video
@@ -192,7 +202,9 @@ export default function ReadAlong({
         />
       </div>
 
-      {!video && (
+      {/* `words &&`, not just `!video`: without it a page that has neither
+          renders an empty glossary card with a heading and no words. */}
+      {!video && words && words.length > 0 && (
         <div className="border-ink/10 bg-surface/70 h-fit rounded-2xl border px-5 py-5 lg:order-1">
           <p
             lang="ar"

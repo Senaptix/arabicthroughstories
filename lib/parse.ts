@@ -188,6 +188,37 @@ export function parsePageText(slug: string): Map<number, string[]> {
 }
 
 /**
+ * Where each line of a page starts in its recording, in seconds. Generated
+ * by measuring the audio — see the header of the .timings.json file. Stale
+ * timings highlight the wrong line, so these are regenerated whenever a clip
+ * is re-recorded, never adjusted by hand.
+ */
+export function parseTimings(slug: string): Map<number, number[]> {
+  const file = path.join(CONTENT, "data", `${slug}.timings.json`);
+  if (!fs.existsSync(file)) return new Map();
+  const raw: Record<string, number[]> = JSON.parse(fs.readFileSync(file, "utf8"));
+  return new Map(Object.entries(raw).map(([k, v]) => [Number(k), v]));
+}
+
+export type ReadAlongLines = { src: string; lines: { at: number; ar: string }[] };
+
+/**
+ * The read-along for one page: its clip plus the line cues. Null unless the
+ * page has audio, text, and one cue per line — a partial set would leave
+ * lines that never highlight.
+ */
+export function getReadAlong(slug: string, page: number): ReadAlongLines | null {
+  if (!getRecordedPages(slug).has(page)) return null;
+  const text = parsePageText(slug).get(page);
+  const at = parseTimings(slug).get(page);
+  if (!text || !at || at.length !== text.length) return null;
+  return {
+    src: `${AUDIO_BASE}/audio/${slug}/p${page}.mp3`,
+    lines: text.map((ar, i) => ({ at: at[i], ar })),
+  };
+}
+
+/**
  * Which pages have a recorded clip, read from disk rather than tracked in
  * config. Drop `p7.mp3` into public/audio/<slug>/ and page 7 lights up on
  * the next build — there is no list to forget to update.

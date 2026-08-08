@@ -6,6 +6,7 @@ import {
   getAllBooks,
   getBook,
   getPageNumbers,
+  getReadAlong,
   getRecordedPages,
   parseRootFamilies,
   parseVocabulary,
@@ -72,6 +73,7 @@ export default async function BookOverview({
         words: vocab
           .filter((w) => w.page === n)
           .map((w) => ({ ar: w.ar, en: w.en })),
+        readAlong: getReadAlong(slug, n),
       };
     },
   );

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
+import ReadAlong from "./ReadAlong";
 
 /**
  * The on-site book preview: turn pages by clicking them, and open the
@@ -20,6 +21,8 @@ export type ReaderPage = {
   n: number;
   src: string;
   words: { ar: string; en: string }[];
+  /** The clip and line cues, where this page has been recorded. */
+  readAlong: { src: string; lines: { at: number; ar: string }[] } | null;
 };
 
 export default function BookReader({
@@ -120,7 +123,21 @@ export default function BookReader({
         </button>
       </div>
 
-      <div className="mt-4 w-full max-w-[440px]">
+      {/* Read-along for the page you are on. Keyed by page so turning a page
+          tears down the old audio element rather than leaving the previous
+          page's narration playing under the new one. */}
+      {page.readAlong && (
+        <div className="mt-8 w-full max-w-[440px]">
+          <ReadAlong
+            key={page.n}
+            src={page.readAlong.src}
+            lines={page.readAlong.lines}
+            label={`page ${page.n}`}
+          />
+        </div>
+      )}
+
+      <div className="mt-8 w-full max-w-[440px]">
         <button
           type="button"
           onClick={() => setShowVocab((v) => !v)}

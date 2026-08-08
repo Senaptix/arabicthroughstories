@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import AudioPlayer from "@/components/AudioPlayer";
+import ReadAlong from "@/components/ReadAlong";
 import WordList from "@/components/WordList";
 import RootFamily from "@/components/RootFamily";
 import {
@@ -9,6 +9,7 @@ import {
   getBook,
   getPageContent,
   getPageNumbers,
+  getReadAlong,
 } from "@/lib/parse";
 
 /**
@@ -77,13 +78,13 @@ export default async function PageCard({
     notFound();
   }
 
-  const { book, words, families, audioSrc, text } = content;
+  const { book, words, families, text } = content;
   if (page > book.page_count) notFound();
 
   const isStoryPage = !book.non_story_pages.includes(page);
   // Per page, not per book: a clip exists for this page or it does not.
   // Read from disk, so dropping p7.mp3 in lights page 7 up on next build.
-  const hasAudio = isStoryPage && content.hasAudio;
+  const readAlong = isStoryPage ? getReadAlong(slug, page) : null;
 
   const prev = page > 1 ? page - 1 : null;
   const next = page < book.page_count ? page + 1 : null;
@@ -103,39 +104,48 @@ export default async function PageCard({
         </Link>
       </div>
 
-      {hasAudio ? (
+      {/* With audio, the text and the player are one thing: the line being
+          read highlights as it plays. The audio is a pronunciation model for
+          text the child is looking at, so they belong together and never on
+          separate screens (WEBSITE_DESIGN.md). */}
+      {readAlong ? (
         <section className="mb-10">
-          <AudioPlayer src={audioSrc} label={`Page ${page} audio`} />
+          <ReadAlong
+            src={readAlong.src}
+            lines={readAlong.lines}
+            label={`page ${page}`}
+          />
         </section>
-      ) : isStoryPage ? (
-        <section className="mb-10 rounded-2xl bg-[var(--surface)]/60 px-5 py-4">
-          <p className="text-[15px] text-[var(--ink)]/70">
-            This page is still being recorded. The text and words below are
-            ready to read now.
-          </p>
-        </section>
-      ) : null}
+      ) : (
+        <>
+          {isStoryPage && (
+            <section className="mb-10 rounded-2xl bg-[var(--surface)]/60 px-5 py-4">
+              <p className="text-[15px] text-[var(--ink)]/70">
+                This page is still being recorded. The text and words below are
+                ready to read now.
+              </p>
+            </section>
+          )}
 
-      {/* The page's Arabic. Sits directly under the player because the audio
-          is a pronunciation model for text the child is looking at — audio
-          alone is a different, worse product (WEBSITE_DESIGN.md). */}
-      {text.length > 0 && (
-        <section className="mb-10">
-          <div
-            lang="ar"
-            dir="rtl"
-            style={{
-              fontFamily: "var(--font-arabic)",
-              fontSize: "clamp(28px, 6vw, 34px)",
-              lineHeight: 1.9,
-              textAlign: "start",
-            }}
-          >
-            {text.map((line, i) => (
-              <p key={i}>{line}</p>
-            ))}
-          </div>
-        </section>
+          {text.length > 0 && (
+            <section className="mb-10">
+              <div
+                lang="ar"
+                dir="rtl"
+                style={{
+                  fontFamily: "var(--font-arabic)",
+                  fontSize: "clamp(28px, 6vw, 34px)",
+                  lineHeight: 1.9,
+                  textAlign: "start",
+                }}
+              >
+                {text.map((line, i) => (
+                  <p key={i}>{line}</p>
+                ))}
+              </div>
+            </section>
+          )}
+        </>
       )}
 
       {isStoryPage ? (
