@@ -164,6 +164,13 @@ export default function Home() {
             >
               Open the book
             </Link>
+            <Link
+              href={`/books/${book.slug}#every-page`}
+              className="border-ink/15 text-ink hover:border-ink/35 inline-flex min-h-[48px] items-center rounded-2xl border px-6 font-medium transition-colors duration-150 ease-out"
+              style={{ fontSize: "16px" }}
+            >
+              Page by page
+            </Link>
           </div>
         </div>
 

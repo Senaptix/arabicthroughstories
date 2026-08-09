@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -17,6 +18,21 @@ import {
  * Book overview — effectively the printed word-family appendix, but
  * complete (every family, not the twelve chosen for paper) and clickable.
  */
+
+/**
+ * A small illustrated taste above the plain page-number grid — the grid
+ * itself stays exactly as it was; this is additive, not a replacement.
+ *
+ * Same rule as the landing page's art: only from the reviewed no-depiction
+ * set (book repo generated/passed-pages-03-24-review-v2). Check a page
+ * individually before adding it here; the source folder's own QA.md has
+ * been wrong before (see app/page.tsx's SAMPLE_ART comment).
+ */
+const SAMPLE_THUMBS = [
+  { page: 3, file: "page-03.png", caption: "Azar's stall" },
+  { page: 14, file: "page-14.png", caption: "The broken idols" },
+  { page: 18, file: "page-18.png", caption: "The fire" },
+];
 
 type Params = { book: string };
 
@@ -190,6 +206,23 @@ export default async function BookOverview({
         {/* scroll-mt: the sticky HomeBar would otherwise cover this heading
             when reached via the "Page by page" link's #every-page jump. */}
         <section id="every-page" className="scroll-mt-20">
+          <ul className="mb-6 grid grid-cols-3 gap-3">
+            {SAMPLE_THUMBS.map((t) => (
+              <li key={t.page}>
+                <Link href={`/books/${book.slug}/p${t.page}`} className="group block">
+                  <Image
+                    src={`/art/${t.file}`}
+                    alt={`Page ${t.page} — ${t.caption}`}
+                    width={688}
+                    height={968}
+                    sizes="(max-width: 640px) 30vw, 180px"
+                    className="border-ink/10 w-full rounded-xl border transition-transform duration-150 ease-out group-hover:-translate-y-0.5"
+                  />
+                </Link>
+              </li>
+            ))}
+          </ul>
+
           <h2 className="mb-2 text-[18px] font-medium">Every page</h2>
           <p className="mb-4 text-[15px] text-[var(--ink)]/70">
             Every page has its text, words and families. Pages marked in blue
@@ -211,11 +244,11 @@ export default async function BookOverview({
                     }
                     className={
                       heard
-                        ? "inline-flex h-[48px] items-center justify-center rounded-[12px] bg-[var(--brand-blue)] px-4 text-[15px] font-medium text-[var(--paper)] transition-transform duration-150 ease-out hover:-translate-y-0.5"
-                        : "inline-flex h-[48px] items-center justify-center rounded-[12px] bg-[var(--surface)]/70 px-4 text-[15px] text-[var(--brand-blue)] transition-colors duration-150 ease-out hover:bg-[var(--surface)]"
+                        ? "inline-flex h-[48px] min-w-[48px] items-center justify-center rounded-[12px] bg-[var(--brand-blue)] px-3 text-[15px] font-medium text-[var(--paper)] transition-transform duration-150 ease-out hover:-translate-y-0.5"
+                        : "inline-flex h-[48px] min-w-[48px] items-center justify-center rounded-[12px] bg-[var(--surface)]/70 px-3 text-[15px] text-[var(--brand-blue)] transition-colors duration-150 ease-out hover:bg-[var(--surface)]"
                     }
                   >
-                    Page {n}
+                    {n}
                   </Link>
                 </li>
               );
