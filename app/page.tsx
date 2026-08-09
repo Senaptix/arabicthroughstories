@@ -27,17 +27,23 @@ const THREAD_ROOT = "س ج د";
  * A SAMPLE — three pages, not a page browser. This is a landing page; the
  * rest of the book stays in print.
  *
- * ONLY the no-Prophet POV set (pages 3-7) may appear here. Ibrahim is not
- * drawn at all — not featured, not blank-faced, not shown from behind
- * either. Scenes he is part of are shot as what he sees, so the camera
- * stands in for him rather than any figure doing so. Every page above 7 is
- * still older artwork under an earlier, now-superseded standard. Check a
- * page before adding it; do not assume.
+ * ONLY generated/passed-pages-03-24-review-v2 (book repo) may appear here —
+ * the reviewed set covering pages 3-24. Ibrahim is not drawn at all: not
+ * featured, not blank-faced, not shown from behind either. Scenes he takes
+ * part in are shot as what he sees, or leave him out of frame entirely (he
+ * stayed home, he was thrown in the fire and isn't shown landing in it,
+ * etc). Checked every page used here individually rather than trusting the
+ * source folder's own QA.md — that document claimed pages 3-24 were clear,
+ * but page 10 in the same batch turned out to show a rear-view figure
+ * gesturing in Ibrahim's position, which is the old superseded standard,
+ * not this one. Page 10 is deliberately not used here for that reason. If a
+ * page above 24 or outside this folder is ever added, check it the same
+ * way before assuming.
  */
 const SAMPLE_ART = [
   { page: 4, file: "page-04.png", caption: "The house of idols" },
-  { page: 5, file: "page-05.png", caption: "What Ibrahim saw" },
-  { page: 7, file: "page-07.png", caption: "A fly and a mouse" },
+  { page: 19, file: "page-19.png", caption: "A star in the night sky" },
+  { page: 21, file: "page-21.png", caption: "The sun, rising" },
 ];
 
 /** How the series weans the reader off tashkeel, book by book (SERIES_PLAN.md). */
@@ -164,12 +170,12 @@ export default function Home() {
         <div className="relative mx-auto w-full max-w-[420px] lg:max-w-none" aria-hidden="true">
           <div className="relative aspect-[4/3.4]">
             <FloatingPage
-              file="page-06.png"
+              file="page-14.png"
               className="absolute top-[6%] left-0 w-[52%] -rotate-6"
               priority
             />
             <FloatingPage
-              file="page-04.png"
+              file="page-18.png"
               className="absolute top-0 right-[2%] w-[46%] rotate-3"
             />
             <FloatingPage
@@ -389,8 +395,8 @@ export default function Home() {
             {storyPages} illustrated pages, one scene each. The hard parts of
             the story are told plainly in the text and left undrawn — restraint
             belongs in the picture, never in the telling. Ibrahim himself is
-            never drawn; where he takes part in a scene, it is shown as what
-            he sees. Three of them:
+            never drawn — a scene is either shown as what he sees, or staged
+            so he simply is not in it. Three of them:
           </p>
         </div>
 
@@ -535,7 +541,7 @@ export default function Home() {
             {[
               ["Fully vowelled", "Every word carries its tashkeel, on every page — the marks are the lesson, not a decoration."],
               ["Nothing cut", "The story follows al-Nadwi's original. Difficult episodes are told plainly rather than removed."],
-              ["Never drawn", "Ibrahim is not depicted at all — not featured, not blank-faced, not shown from behind. Where he is part of a scene, the picture shows what he sees rather than standing in a figure for him."],
+              ["Never drawn", "Ibrahim is not depicted at all — not featured, not blank-faced, not shown from behind. A scene is either shown as what he sees, or staged so he simply isn't in the frame."],
             ].map(([title, body]) => (
               <li key={title} className="border-ink/10 bg-surface/60 rounded-2xl border px-5 py-4">
                 <p className="text-ink font-semibold" style={{ fontSize: "16px", lineHeight: 1.5 }}>
