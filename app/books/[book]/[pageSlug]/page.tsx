@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import Eyebrow from "@/components/Eyebrow";
 import HomeBar from "@/components/HomeBar";
 import ReadAlong from "@/components/ReadAlong";
 import VocabCards from "@/components/VocabCards";
@@ -104,109 +105,129 @@ export default async function PageCard({
       <HomeBar bookSlug={book.slug} />
 
       <main className="mx-auto w-full max-w-[640px] px-6 py-8 sm:px-8">
-      {/* Meta bar — page number left, book right */}
-      <div className="mb-8 flex items-baseline justify-between gap-4">
-        <span className="text-[14px] font-medium text-[var(--brand-blue)]">
-          Page {page}
-        </span>
-        <Link
-          href={`/books/${book.slug}`}
-          className="text-[14px] text-[var(--brand-blue)] underline-offset-4 hover:underline"
-        >
-          {book.title_en}
-        </Link>
-      </div>
+        {/* Meta bar — page number left, book right */}
+        <div className="mb-8 flex items-baseline justify-between gap-4">
+          <span className="text-[14px] font-medium text-[var(--brand-blue)]">
+            Page {page}
+          </span>
+          <Link
+            href={`/books/${book.slug}`}
+            className="text-[14px] text-[var(--brand-blue)] underline-offset-4 hover:underline"
+          >
+            {book.title_en}
+          </Link>
+        </div>
 
-      {/* With audio, the text and the player are one thing: the line being
+        {/* With audio, the text and the player are one thing: the line being
           read highlights as it plays. The audio is a pronunciation model for
           text the child is looking at, so they belong together and never on
-          separate screens (WEBSITE_DESIGN.md). */}
-      {readAlong ? (
-        <section className="mb-10">
-          <ReadAlong
-            src={readAlong.src}
-            lines={readAlong.lines}
-            label={`page ${page}`}
-          />
-        </section>
-      ) : (
-        <>
-          {isStoryPage && (
-            <section className="mb-10 rounded-2xl bg-[var(--surface)]/60 px-5 py-4">
-              <p className="text-[15px] text-[var(--ink)]/70">
-                This page is still being recorded. The text and words below are
-                ready to read now.
-              </p>
-            </section>
-          )}
+          separate screens (WEBSITE_DESIGN.md). No card around this zone —
+          ReadAlong is already visually rich (play button, highlighted
+          lines); the eyebrow is enough to title it. */}
+        {readAlong ? (
+          <section className="mb-10">
+            <Eyebrow>Read along</Eyebrow>
+            <div className="mt-4">
+              <ReadAlong
+                src={readAlong.src}
+                lines={readAlong.lines}
+                label={`page ${page}`}
+              />
+            </div>
+          </section>
+        ) : (
+          <>
+            {isStoryPage && (
+              <section className="mb-6 rounded-2xl bg-[var(--surface)]/60 px-5 py-4">
+                <p className="text-[15px] text-[var(--ink)]/70">
+                  This page is still being recorded. The text and words below
+                  are ready to read now.
+                </p>
+              </section>
+            )}
 
-          {text.length > 0 && (
-            <section className="mb-10">
-              <div
-                lang="ar"
-                dir="rtl"
-                style={{
-                  fontFamily: "var(--font-arabic)",
-                  fontSize: "clamp(28px, 6vw, 34px)",
-                  lineHeight: 1.9,
-                  textAlign: "start",
-                }}
-              >
-                {text.map((line, i) => (
-                  <p key={i}>{line}</p>
-                ))}
+            {text.length > 0 && (
+              <section className="mb-10">
+                <Eyebrow>The text</Eyebrow>
+                <div
+                  lang="ar"
+                  dir="rtl"
+                  className="mt-4"
+                  style={{
+                    fontFamily: "var(--font-arabic)",
+                    fontSize: "clamp(28px, 6vw, 34px)",
+                    lineHeight: 1.9,
+                    textAlign: "start",
+                  }}
+                >
+                  {text.map((line, i) => (
+                    <p key={i}>{line}</p>
+                  ))}
+                </div>
+              </section>
+            )}
+          </>
+        )}
+
+        {isStoryPage ? (
+          <>
+            {/* Card boundary — the two blocks a reader most needs to
+              distinguish from each other and from the text above. */}
+            <section className="border-ink/10 bg-surface/50 mb-6 rounded-2xl border px-5 py-4">
+              <Eyebrow>New words</Eyebrow>
+              <div className="mt-4">
+                <VocabCards words={words} idPrefix={`p${page}`} />
               </div>
             </section>
-          )}
-        </>
-      )}
 
-      {isStoryPage ? (
-        <>
-          <section className="mb-10">
-            <VocabCards words={words} idPrefix={`p${page}`} />
-          </section>
-
-          <section className="mb-10">
-            <RootFamily
-              families={families}
-              bookSlug={book.slug}
-              currentPage={page}
-            />
-          </section>
-        </>
-      ) : (
-        <section className="mb-10">
-          <p className="text-[15px] text-[var(--ink)]/70">
-            This page has no new words — it&rsquo;s part of the front or back of
-            the book.
-          </p>
-        </section>
-      )}
-
-      {/* Page-to-page navigation */}
-      <nav className="mt-12 flex items-center justify-between border-t border-[var(--ink)]/10 pt-6">
-        {prev ? (
-          <Link
-            href={`/books/${book.slug}/p${prev}`}
-            className="inline-flex min-h-[48px] items-center text-[15px] text-[var(--brand-blue)] underline-offset-4 hover:underline"
-          >
-            ← Page {prev}
-          </Link>
+            <section className="border-ink/10 bg-surface/50 mb-10 rounded-2xl border px-5 py-4">
+              <Eyebrow>Word family</Eyebrow>
+              <div className="mt-4">
+                <RootFamily
+                  families={families}
+                  bookSlug={book.slug}
+                  currentPage={page}
+                />
+              </div>
+            </section>
+          </>
         ) : (
-          <span />
+          <section className="mb-10">
+            <p className="text-[15px] text-[var(--ink)]/70">
+              This page has no new words — it&rsquo;s part of the front or back
+              of the book.
+            </p>
+          </section>
         )}
-        {next ? (
-          <Link
-            href={`/books/${book.slug}/p${next}`}
-            className="inline-flex min-h-[48px] items-center text-[15px] text-[var(--brand-blue)] underline-offset-4 hover:underline"
-          >
-            Page {next} →
-          </Link>
-        ) : (
-          <span />
-        )}
-      </nav>
+
+        {/* Page-to-page navigation. Divider first (a break from the sections
+          above), then the label, then the links — a label sitting above its
+          own divider reads oddly. */}
+        <div className="mt-4 border-t border-[var(--ink)]/10 pt-6">
+          <Eyebrow>Explore more</Eyebrow>
+          <nav className="mt-4 flex items-center justify-between">
+            {prev ? (
+              <Link
+                href={`/books/${book.slug}/p${prev}`}
+                className="inline-flex min-h-[48px] items-center text-[15px] text-[var(--brand-blue)] underline-offset-4 hover:underline"
+              >
+                ← Page {prev}
+              </Link>
+            ) : (
+              <span />
+            )}
+            {next ? (
+              <Link
+                href={`/books/${book.slug}/p${next}`}
+                className="inline-flex min-h-[48px] items-center text-[15px] text-[var(--brand-blue)] underline-offset-4 hover:underline"
+              >
+                Page {next} →
+              </Link>
+            ) : (
+              <span />
+            )}
+          </nav>
+        </div>
       </main>
     </>
   );

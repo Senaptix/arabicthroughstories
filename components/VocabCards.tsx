@@ -32,6 +32,23 @@ export default function VocabCards({
 
   return (
     <div>
+      {/* Arabic-only, matching RootFamily's heading — a recurring phrase a
+          child learns to recognise as "this section" without an English
+          crutch (WEBSITE_DESIGN.md's page-card mockup). */}
+      <h2
+        lang="ar"
+        dir="rtl"
+        className="text-brand-blue mb-3 font-semibold"
+        style={{
+          fontFamily: "var(--font-arabic)",
+          fontSize: "clamp(24px, 5vw, 30px)",
+          lineHeight: 1.8,
+          textAlign: "start",
+        }}
+      >
+        كَلِمَاتٌ جَدِيدَةٌ
+      </h2>
+
       <p
         className="text-ink/55 mb-3"
         style={{ fontSize: "14px", lineHeight: 1.5 }}
