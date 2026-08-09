@@ -29,16 +29,18 @@ const THREAD_ROOT = "س ج د";
  *
  * ONLY generated/passed-pages-03-24-review-v2 (book repo) may appear here —
  * the reviewed set covering pages 3-24. Ibrahim is not drawn at all: not
- * featured, not blank-faced, not shown from behind either. Scenes he takes
- * part in are shot as what he sees, or leave him out of frame entirely (he
- * stayed home, he was thrown in the fire and isn't shown landing in it,
- * etc). Checked every page used here individually rather than trusting the
- * source folder's own QA.md — that document claimed pages 3-24 were clear,
- * but page 10 in the same batch turned out to show a rear-view figure
- * gesturing in Ibrahim's position, which is the old superseded standard,
- * not this one. Page 10 is deliberately not used here for that reason. If a
- * page above 24 or outside this folder is ever added, check it the same
- * way before assuming.
+ * featured, not blank-faced, not shown from behind either. Not every scene
+ * uses the same device — some are shot as what he sees, others are simply
+ * staged so he isn't in frame (he stayed home, he was thrown in the fire
+ * and isn't shown landing in it) — whichever reads best for that page, not
+ * a rule applied mechanically to all of them.
+ *
+ * Check each page individually before adding it; don't trust the source
+ * folder's own QA.md sight unseen. (An earlier note here wrongly flagged
+ * this folder's page 10 as a rear-view depiction of Ibrahim — that was a
+ * mix-up with a same-numbered file from a different, composed-book-page
+ * batch. This folder's page 10 is a POV shot of people walking away from
+ * him and is fine; corrected 2026-08-09.)
  */
 const SAMPLE_ART = [
   { page: 4, file: "page-04.png", caption: "The house of idols" },
@@ -395,8 +397,8 @@ export default function Home() {
             {storyPages} illustrated pages, one scene each. The hard parts of
             the story are told plainly in the text and left undrawn — restraint
             belongs in the picture, never in the telling. Ibrahim himself is
-            never drawn — a scene is either shown as what he sees, or staged
-            so he simply is not in it. Three of them:
+            never drawn: some pages show what he sees, on others he simply
+            is not in the frame. Three of them:
           </p>
         </div>
 
@@ -541,7 +543,7 @@ export default function Home() {
             {[
               ["Fully vowelled", "Every word carries its tashkeel, on every page — the marks are the lesson, not a decoration."],
               ["Nothing cut", "The story follows al-Nadwi's original. Difficult episodes are told plainly rather than removed."],
-              ["Never drawn", "Ibrahim is not depicted at all — not featured, not blank-faced, not shown from behind. A scene is either shown as what he sees, or staged so he simply isn't in the frame."],
+              ["Never drawn", "Ibrahim is not depicted at all — not featured, not blank-faced, not shown from behind. Some pages show what he sees; on others he simply isn't in the frame."],
             ].map(([title, body]) => (
               <li key={title} className="border-ink/10 bg-surface/60 rounded-2xl border px-5 py-4">
                 <p className="text-ink font-semibold" style={{ fontSize: "16px", lineHeight: 1.5 }}>
