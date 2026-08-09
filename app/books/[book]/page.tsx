@@ -84,7 +84,7 @@ export default async function BookOverview({
       {/* Sticky, because this page is long — reader, then every word family,
           then every page. A link only at the top strands anyone reading the
           book with no way home short of scrolling back up. */}
-      <HomeBar />
+      <HomeBar bookSlug={book.slug} />
 
       <main className="mx-auto w-full max-w-[640px] px-6 py-10 sm:px-8">
         <header className="mb-12">
@@ -187,7 +187,9 @@ export default async function BookOverview({
           </ul>
         </section>
 
-        <section>
+        {/* scroll-mt: the sticky HomeBar would otherwise cover this heading
+            when reached via the "Page by page" link's #every-page jump. */}
+        <section id="every-page" className="scroll-mt-20">
           <h2 className="mb-2 text-[18px] font-medium">Every page</h2>
           <p className="mb-4 text-[15px] text-[var(--ink)]/70">
             Every page has its text, words and families. Pages marked in blue
@@ -209,11 +211,11 @@ export default async function BookOverview({
                     }
                     className={
                       heard
-                        ? "inline-flex h-[48px] min-w-[48px] items-center justify-center rounded-[12px] bg-[var(--brand-blue)] px-3 text-[15px] font-medium text-[var(--paper)] transition-transform duration-150 ease-out hover:-translate-y-0.5"
-                        : "inline-flex h-[48px] min-w-[48px] items-center justify-center rounded-[12px] bg-[var(--surface)]/70 px-3 text-[15px] text-[var(--brand-blue)] transition-colors duration-150 ease-out hover:bg-[var(--surface)]"
+                        ? "inline-flex h-[48px] items-center justify-center rounded-[12px] bg-[var(--brand-blue)] px-4 text-[15px] font-medium text-[var(--paper)] transition-transform duration-150 ease-out hover:-translate-y-0.5"
+                        : "inline-flex h-[48px] items-center justify-center rounded-[12px] bg-[var(--surface)]/70 px-4 text-[15px] text-[var(--brand-blue)] transition-colors duration-150 ease-out hover:bg-[var(--surface)]"
                     }
                   >
-                    {n}
+                    Page {n}
                   </Link>
                 </li>
               );

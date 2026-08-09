@@ -1,7 +1,8 @@
 import Link from "next/link";
 
 /**
- * A slim sticky bar with one link home.
+ * A slim sticky bar with a link home and, where a book is in context, a
+ * link to that book's full page index ("Every page" — see BookOverview).
  *
  * WEBSITE_PLAN.md originally said the QR landing page should carry no
  * navigation chrome at all — "a page a parent hands a five-year-old
@@ -10,18 +11,30 @@ import Link from "next/link";
  * nothing when the scan opened a fresh tab. One link out, in the same place
  * on every page, is the smallest thing that fixes that.
  *
- * Server component — it is a link, not an interaction.
+ * The index itself stays where it already lives, at the bottom of the book
+ * page — this only adds a one-click way to reach it from a page card
+ * without scrolling back up through the whole book overview first.
+ *
+ * Server component — it is links, not an interaction.
  */
-export default function HomeBar() {
+export default function HomeBar({ bookSlug }: { bookSlug?: string }) {
   return (
     <div className="border-ink/10 bg-paper/90 sticky top-0 z-10 border-b backdrop-blur">
-      <nav className="mx-auto flex w-full max-w-[640px] items-center px-6 sm:px-8">
+      <nav className="mx-auto flex w-full max-w-[640px] items-center gap-5 px-6 sm:px-8">
         <Link
           href="/"
           className="text-brand-blue inline-flex min-h-[48px] items-center text-[14px] underline-offset-4 hover:underline"
         >
           ← Home
         </Link>
+        {bookSlug && (
+          <Link
+            href={`/books/${bookSlug}#every-page`}
+            className="text-brand-blue inline-flex min-h-[48px] items-center text-[14px] underline-offset-4 hover:underline"
+          >
+            Page by page
+          </Link>
+        )}
       </nav>
     </div>
   );

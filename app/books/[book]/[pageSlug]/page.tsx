@@ -101,7 +101,7 @@ export default async function PageCard({
           (ACCESS_MODEL.md). Page cards are reached by turning pages and by
           following root-family links, so every one of them needs a way back
           out rather than relying on browser history. */}
-      <HomeBar />
+      <HomeBar bookSlug={book.slug} />
 
       <main className="mx-auto w-full max-w-[640px] px-6 py-8 sm:px-8">
       {/* Meta bar — page number left, book right */}
