@@ -1,8 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import Eyebrow from "@/components/Eyebrow";
+import Practice from "@/components/Practice";
 import ReadAlong from "@/components/ReadAlong";
-import { getBook, parseRootFamilies, parseVocabulary } from "@/lib/parse";
+import {
+  getBook,
+  parseExercises,
+  parseRootFamilies,
+  parseVocabulary,
+} from "@/lib/parse";
 import type { VocabEntry } from "@/lib/schema";
 
 /**
@@ -10,8 +16,11 @@ import type { VocabEntry } from "@/lib/schema";
  *
  * Per WEBSITE_DESIGN.md ("Motion") entrance animation is welcome here, so it
  * is done with a scroll-driven CSS animation (`.reveal` in globals.css)
- * rather than Framer Motion. That keeps this route a pure server component
- * shipping no client JS at all.
+ * rather than Framer Motion. That is what keeps the STATIC sections of this
+ * route needing no client JS of their own — the live ReadAlong and Practice
+ * demos embedded below are each already 'use client' regardless, the same
+ * as they are on the page card. This route was never actually zero-JS; the
+ * two live demos are the point of putting them here.
  *
  * EVERY Arabic string on this page is parsed from the book's own source data
  * — none of it is typed by hand. A wrong vowel changes the word, and
@@ -19,6 +28,11 @@ import type { VocabEntry } from "@/lib/schema";
  */
 
 const SLUG = "ibrahim";
+
+/** The page whose exercises are demoed live on the landing page. Chosen
+ *  because it is the one page with all four exercise types, so a first-time
+ *  visitor sees the full range in one sitting, not just "match the word". */
+const PRACTICE_DEMO_PAGE = 4;
 
 /** The family the whole page is built around: يَسْجُدُ (p4) -> الْمَسْجِدُ (p52).
  *  ROOTS.md calls this one of the two families that justify the appendix. */
@@ -99,6 +113,17 @@ export default function Home() {
 
   const sampleWords = vocab.filter((v) => v.page === SAMPLE_PAGE);
   const storyPages = book.page_count - book.non_story_pages.length;
+
+  const exercisesByPage = parseExercises(SLUG);
+  const practiceDemo = exercisesByPage.get(PRACTICE_DEMO_PAGE);
+  if (!practiceDemo) {
+    throw new Error(
+      `Page ${PRACTICE_DEMO_PAGE} has no exercises; pick a different PRACTICE_DEMO_PAGE.`,
+    );
+  }
+  const practiceWords = vocab.filter((v) => v.page === PRACTICE_DEMO_PAGE);
+  const practicePageCount = exercisesByPage.size;
+  const practicePages = [...exercisesByPage.keys()].sort((a, b) => a - b);
 
   return (
     <div className="overflow-x-hidden">
@@ -672,6 +697,66 @@ export default function Home() {
               </li>
             ))}
           </ul>
+        </div>
+      </section>
+
+      {/* ---------------------------------------------------------------- *
+       * Practice — the other standout feature, alongside the audio. A real
+       * embedded exercise, not a screenshot: same Practice component the
+       * page-card route uses, same data.
+       * ---------------------------------------------------------------- */}
+      <section className="bg-sand/25 border-ink/5 border-y">
+        <div className="mx-auto w-full max-w-[1100px] px-6 py-16 sm:px-8 lg:py-20">
+          <div className="reveal mb-10 grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-start lg:gap-16">
+            <div>
+              <Eyebrow>Practice</Eyebrow>
+              <h2
+                className="text-ink mt-4 max-w-[20ch] font-semibold text-balance"
+                style={{
+                  fontSize: "clamp(28px, 5vw, 42px)",
+                  lineHeight: 1.15,
+                  letterSpacing: "-0.015em",
+                }}
+              >
+                Reading it is one thing. Try producing it.
+              </h2>
+              <p
+                className="text-ink/70 mt-4 max-w-[52ch]"
+                style={{
+                  fontSize: "clamp(16px, 2.5vw, 18px)",
+                  lineHeight: 1.65,
+                }}
+              >
+                Every practised page has its own exercises, built from that
+                page&rsquo;s own words and sentences — match the meaning, finish
+                the sentence, put the words in order, or build a new sentence
+                just like it. This is the real thing, live, from page{" "}
+                {PRACTICE_DEMO_PAGE}:
+              </p>
+              <p
+                className="text-ink/50 mt-5"
+                style={{ fontSize: "14px", lineHeight: 1.6 }}
+              >
+                {practicePageCount} pages have exercises so far (pages{" "}
+                {practicePages[0]}–{practicePages[practicePages.length - 1]}),
+                with more on the way.
+              </p>
+              <Link
+                href={`/books/${book.slug}/p${PRACTICE_DEMO_PAGE}/practice`}
+                className="text-brand-blue mt-6 inline-flex min-h-[48px] items-center font-medium underline-offset-4 hover:underline"
+                style={{ fontSize: "16px" }}
+              >
+                Practice page {PRACTICE_DEMO_PAGE} on its own screen →
+              </Link>
+            </div>
+
+            <div>
+              <Practice
+                exercises={practiceDemo}
+                words={practiceWords.map((w) => ({ ar: w.ar, en: w.en }))}
+              />
+            </div>
+          </div>
         </div>
       </section>
 
