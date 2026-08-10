@@ -10,6 +10,7 @@ import assert from "node:assert/strict";
 import {
   getBook,
   getRecordedPages,
+  parseExercises,
   parsePageText,
   parseRootFamilies,
   parseVocabulary,
@@ -75,4 +76,98 @@ for (const n of getRecordedPages("ibrahim")) {
   assert.ok(pageText.has(n), `audio exists for page ${n} but no text does`);
 }
 
-console.log("parse checks passed");
+/* ------------------------------------------------------------------ *
+ * Exercises — the corpus guard
+ *
+ * Exercise Arabic is the only Arabic on the site that was composed rather
+ * than copied wholesale from a source file: a blank is a sentence minus a
+ * word, a pattern exercise recombines verified words into a new sentence.
+ * This asserts every token still exists in the verified corpus, so a typo
+ * or an invented word fails the build.
+ *
+ * NOTE what this does and does not prove. It proves each WORD is real and
+ * correctly spelled, including its vowel marks. It does NOT prove a new
+ * COMBINATION is grammatically correct — a case ending that is right in
+ * isolation can be wrong in a new position. The `pattern` exercises still
+ * need a native read. The guard is a floor, not a substitute for review.
+ * ------------------------------------------------------------------ */
+
+/** Trailing punctuation is not part of the word. */
+const bare = (s: string) => s.replace(/[.،:؟!]+$/u, "").trim();
+
+const corpus = new Set<string>();
+for (const lines of parsePageText("ibrahim").values()) {
+  for (const line of lines)
+    for (const w of line.split(/\s+/)) corpus.add(bare(w));
+}
+for (const v of vocab) for (const w of v.ar.split(/\s+/)) corpus.add(bare(w));
+
+const exercises = parseExercises("ibrahim");
+assert.ok(exercises.size > 0, "no exercises parsed");
+
+function assertInCorpus(s: string, where: string) {
+  for (const w of s.split(/\s+/)) {
+    const t = bare(w);
+    if (!t) continue;
+    assert.ok(
+      corpus.has(t),
+      `${where}: "${t}" is not in the verified corpus (pages.md / vocabulary.md). ` +
+        `Exercise Arabic must be drawn from words the book actually uses.`,
+    );
+  }
+}
+
+for (const [page, list] of exercises) {
+  assert.ok(
+    pageText.has(page),
+    `exercises exist for page ${page} but no text does`,
+  );
+
+  for (const ex of list) {
+    const where = `page ${page} ${ex.type}`;
+    if (ex.type === "choose") {
+      for (const w of ex.sentence) assertInCorpus(w, where);
+      for (const o of ex.options) assertInCorpus(o, where);
+      assert.ok(
+        ex.options.includes(ex.answer),
+        `${where}: the answer is not among its own options`,
+      );
+      assert.ok(
+        ex.gap < ex.sentence.length,
+        `${where}: gap ${ex.gap} is past the end of the sentence`,
+      );
+      assert.equal(
+        bare(ex.sentence[ex.gap]),
+        ex.answer,
+        `${where}: the answer does not match the word it replaces`,
+      );
+      assert.equal(
+        new Set(ex.options).size,
+        ex.options.length,
+        `${where}: duplicate options make more than one answer correct`,
+      );
+    }
+    if (ex.type === "order") {
+      for (const w of ex.answer) assertInCorpus(w, where);
+      // Must be a real line of that page, or the "correct" order is invented.
+      assert.ok(
+        pageText.get(page)!.some((l) => l === ex.answer.join(" ")),
+        `${where}: the answer is not a line of page ${page}`,
+      );
+    }
+    if (ex.type === "pattern") {
+      for (const w of ex.stem) assertInCorpus(w, where);
+      for (const o of ex.options) assertInCorpus(o.ar, where);
+      assert.equal(
+        new Set(ex.options.map((o) => o.ar)).size,
+        ex.options.length,
+        `${where}: duplicate options`,
+      );
+    }
+  }
+}
+
+console.log(
+  `parse checks passed (${exercises.size} pages of exercises, ` +
+    `${corpus.size} corpus words)`,
+);

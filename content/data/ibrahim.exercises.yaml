@@ -1,0 +1,335 @@
+# Practice exercises — pages 3-12
+#
+# GENERATED, then reviewed. Every Arabic string here was resolved from the
+# verified corpus (ibrahim.pages.md / ibrahim.vocabulary.md), never typed.
+# lib/parse.check.ts re-checks every token against that corpus on each
+# build, so a typo or an invented word fails the build.
+#
+# The guard proves each WORD is real and correctly spelled. It does NOT
+# prove a new COMBINATION is grammatically correct — a case ending right
+# in isolation can be wrong in a new position. The `pattern` exercises
+# recombine words and still need a native read before they are final.
+#
+# `match` carries no content: it is built at render time from that page's
+# vocabulary entries (capped at 5 pairs so it stays usable on a phone).
+pages:
+  - page: 3
+    exercises:
+      - type: match
+      - type: choose
+        gap: 2
+        answer: "يَبِيعُ"
+        sentence:
+          - "وَكَانَ"
+          - "آزَرُ"
+          - "يَبِيعُ"
+          - "الْأَصْنَامَ."
+        options:
+          - "يَبِيعُ"
+          - "مَشْهُورٌ"
+          - "أَيَّامٍ"
+      - type: order
+        answer:
+          - "كَانَ"
+          - "فِي"
+          - "قَرْيَةٍ"
+          - "رَجُلٌ"
+          - "مَشْهُورٌ"
+          - "جِدًّا."
+  - page: 4
+    exercises:
+      - type: match
+      - type: choose
+        gap: 2
+        answer: "يَسْجُدُونَ"
+        sentence:
+          - "وَكَانَ"
+          - "النَّاسُ"
+          - "يَسْجُدُونَ"
+          - "لِهٰذِهِ"
+          - "الْأَصْنَامِ."
+        options:
+          - "يَسْجُدُونَ"
+          - "بَيْتٌ"
+          - "كَبِيرٌ"
+      - type: order
+        answer:
+          - "وَكَانَ"
+          - "آزَرُ"
+          - "يَسْجُدُ"
+          - "لِهٰذِهِ"
+          - "الْأَصْنَامِ."
+      - type: pattern
+        stem:
+          - "وَكَانَ"
+          - "آزَرُ"
+        options:
+          - ar: "يَسْجُدُ"
+            en: "he prostrates"
+          - ar: "يَعْبُدُ"
+            en: "he worships"
+          - ar: "يَبِيعُ"
+            en: "sells"
+  - page: 5
+    exercises:
+      - type: match
+      - type: choose
+        gap: 2
+        answer: "وَلَدٌ"
+        sentence:
+          - "وَكانَ"
+          - "لِآزَرَ"
+          - "وَلَدٌ"
+          - "رَشِيدٌ"
+          - "جِدًّا."
+        options:
+          - "وَلَدٌ"
+          - "رَشِيدٌ"
+          - "يَرَى"
+      - type: order
+        answer:
+          - "وَيَرَى"
+          - "النَّاسَ"
+          - "يَعْبُدُونَ"
+          - "الأَصْنَامَ."
+  - page: 6
+    exercises:
+      - type: match
+      - type: choose
+        gap: 5
+        answer: "تَتَكَلَّمُ"
+        sentence:
+          - "وَكَانَ"
+          - "يَعْرِفُ"
+          - "أَنَّ"
+          - "الْأَصْنَامَ"
+          - "لَا"
+          - "تَتَكَلَّمُ"
+          - "وَلَا"
+          - "تَسْمَعُ."
+        options:
+          - "تَتَكَلَّمُ"
+          - "تَضُرُّ"
+          - "يَعْرِفُ"
+      - type: order
+        answer:
+          - "وَكَانَ"
+          - "إِبْرَاهِيمُ"
+          - "يَعْرِفُ"
+          - "أَنَّ"
+          - "الْأَصْنَامَ"
+          - "حِجَارَةٌ."
+  - page: 7
+    exercises:
+      - type: match
+      - type: choose
+        gap: 2
+        answer: "الْفَأْرَ"
+        sentence:
+          - "وَكَانَ"
+          - "يَرَى"
+          - "الْفَأْرَ"
+          - "يَأْكُلُ"
+          - "طَعَامَ"
+          - "الْأَصْنَامِ"
+          - "فَلَا"
+          - "تَمْنَعُ."
+        options:
+          - "الْفَأْرَ"
+          - "الذُّبَابَ"
+          - "طَعَامَ"
+      - type: order
+        answer:
+          - "وَكَانَ"
+          - "إِبْرَاهِيمُ"
+          - "يَسْأَلُ"
+          - "نَفْسَهُ:"
+          - "لِمَاذَا"
+          - "يَسْأَلُ"
+          - "النَّاسُ"
+          - "الْأَصْنَامَ؟"
+      - type: pattern
+        stem:
+          - "وَكَانَ"
+          - "إِبْرَاهِيمُ"
+        options:
+          - ar: "يَرَى"
+            en: "sees"
+          - ar: "يَعْرِفُ"
+            en: "knows"
+          - ar: "يَسْأَلُ"
+            en: "asks"
+  - page: 8
+    exercises:
+      - type: match
+      - type: choose
+        gap: 3
+        answer: "تَعْبُدُ"
+        sentence:
+          - "يَا"
+          - "أَبِي،"
+          - "لِمَاذَا"
+          - "تَعْبُدُ"
+          - "هٰذِهِ"
+          - "الأَصْنَامَ؟"
+        options:
+          - "تَعْبُدُ"
+          - "تَسْجُدُ"
+          - "تَسْأَلُ"
+      - type: order
+        answer:
+          - "وَيَا"
+          - "أَبِي،"
+          - "لِمَاذَا"
+          - "تَسْجُدُ"
+          - "لِهٰذِهِ"
+          - "الأَصْنَامَ؟"
+      - type: pattern
+        stem:
+          - "وَكَانَ"
+          - "إِبْرَاهِيمُ"
+        options:
+          - ar: "يَقُولُ"
+            en: "says"
+          - ar: "يَسْأَلُ"
+            en: "asks"
+          - ar: "يَرَى"
+            en: "sees"
+  - page: 9
+    exercises:
+      - type: match
+      - type: choose
+        gap: 2
+        answer: "تَضَعُ"
+        sentence:
+          - "وَلِأَيِّ"
+          - "شَيْءٍ"
+          - "تَضَعُ"
+          - "لَهَا"
+          - "الطَّعَامَ"
+          - "وَالشَّرَابَ؟"
+        options:
+          - "تَضَعُ"
+          - "تَتَكَلَّمُ"
+          - "تَضُرُّ"
+      - type: order
+        answer:
+          - "وَإِنَّ"
+          - "هٰذِهِ"
+          - "الأَصْنَامَ"
+          - "لَا"
+          - "تَضُرُّ"
+          - "وَلَا"
+          - "تَنْفَعُ."
+      - type: pattern
+        stem:
+          - "وَكَانَ"
+          - "آزَرُ"
+        options:
+          - ar: "يَغْضَبُ"
+            en: "he gets angry"
+          - ar: "يَفْهَمُ"
+            en: "he understands"
+          - ar: "يَسْجُدُ"
+            en: "he prostrates"
+  - page: 10
+    exercises:
+      - type: match
+      - type: choose
+        gap: 2
+        answer: "يَنْصَحُ"
+        sentence:
+          - "وَكَانَ"
+          - "إِبْرَاهِيمُ"
+          - "يَنْصَحُ"
+          - "قَوْمَهُ،"
+        options:
+          - "يَنْصَحُ"
+          - "يَغْضَبُونَ"
+          - "يَفْهَمُ"
+      - type: order
+        answer:
+          - "إِنِّي"
+          - "لَأَكْسِرَنَّ"
+          - "الأَصْنَامَ"
+          - "إِذَا"
+          - "ذَهَبَ"
+          - "النَّاسُ،"
+      - type: pattern
+        stem:
+          - "وَكَانَ"
+          - "إِبْرَاهِيمُ"
+        options:
+          - ar: "يَنْصَحُ"
+            en: "he advises"
+          - ar: "يَقُولُ"
+            en: "says"
+          - ar: "يَعْرِفُ"
+            en: "knows"
+  - page: 11
+    exercises:
+      - type: match
+      - type: choose
+        gap: 2
+        answer: "وَبَقِيَ"
+        sentence:
+          - "وَذَهَبَ"
+          - "النَّاسُ،"
+          - "وَبَقِيَ"
+          - "إِبْرَاهِيمُ"
+          - "فِي"
+          - "الْبَيْتِ"
+        options:
+          - "وَبَقِيَ"
+          - "وَذَهَبَ"
+          - "وَخَرَجَ"
+      - type: order
+        answer:
+          - "قَالَ"
+          - "إِبْرَاهِيمُ:"
+          - "أَنَا"
+          - "سَقِيمٌ."
+      - type: pattern
+        stem:
+          - "وَخَرَجَ"
+        options:
+          - ar: "النَّاسُ"
+            en: "the people"
+          - ar: "الْأَطْفَالُ"
+            en: "the children"
+          - ar: "رَجُلٌ"
+            en: "man"
+  - page: 12
+    exercises:
+      - type: match
+      - type: choose
+        gap: 2
+        answer: "لِأَنَّهَا"
+        sentence:
+          - "وَسَكَتَتِ"
+          - "الأَصْنَامُ،"
+          - "لِأَنَّهَا"
+          - "حِجَارَةٌ"
+          - "لَا"
+          - "تَنْطِقُ."
+        options:
+          - "لِأَنَّهَا"
+          - "حِجَارَةٌ"
+          - "مَا"
+      - type: order
+        answer:
+          - "هٰذَا"
+          - "طَعَامٌ"
+          - "وَشَرَابٌ،"
+          - "أَلَا"
+          - "تَأْكُلُونَ؟"
+      - type: pattern
+        stem:
+          - "أَلَا"
+        options:
+          - ar: "تَتَكَلَّمُ"
+            en: "speaks"
+          - ar: "تَسْمَعُ"
+            en: "hears"
+          - ar: "تَشْرَبُ"
+            en: "she/it drinks"

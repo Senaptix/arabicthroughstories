@@ -12,6 +12,7 @@ import {
   getPageContent,
   getPageNumbers,
   getReadAlong,
+  parseExercises,
 } from "@/lib/parse";
 
 /**
@@ -95,6 +96,7 @@ export default async function PageCard({
 
   const prev = page > 1 ? page - 1 : null;
   const next = page < book.page_count ? page + 1 : null;
+  const hasPractice = (parseExercises(slug).get(page)?.length ?? 0) > 0;
 
   return (
     <>
@@ -205,6 +207,19 @@ export default async function PageCard({
           own divider reads oddly. */}
         <div className="mt-4 border-t border-[var(--ink)]/10 pt-6">
           <Eyebrow>Explore more</Eyebrow>
+
+          {/* Practice is its own screen: the text and words above would
+              otherwise be the answer key sitting next to the question. */}
+          {hasPractice && (
+            <Link
+              href={`/books/${book.slug}/p${page}/practice`}
+              className="bg-brand-blue text-paper mt-4 inline-flex min-h-[48px] w-full items-center justify-center rounded-xl px-5 font-medium"
+              style={{ fontSize: "16px" }}
+            >
+              Practice these words
+            </Link>
+          )}
+
           <nav className="mt-4 flex items-center justify-between">
             {prev ? (
               <Link

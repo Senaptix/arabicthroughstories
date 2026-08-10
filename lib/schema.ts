@@ -32,6 +32,55 @@ export const RootFamilySchema = z.object({
   members: z.array(FamilyMemberSchema).min(2),
 });
 
+/**
+ * Practice exercises for one page. See content/data/<slug>.exercises.yaml.
+ *
+ * Every Arabic string is resolved from the verified corpus rather than
+ * typed; lib/parse.check.ts re-checks each token on every build.
+ */
+export const ExerciseSchema = z.discriminatedUnion("type", [
+  /** Match each word to its meaning. Built at render time from the page's
+   *  vocabulary, so it carries no content of its own. */
+  z.object({ type: z.literal("match") }),
+
+  /** Choose the word that finishes the sentence. `gap` indexes `sentence`. */
+  z.object({
+    type: z.literal("choose"),
+    gap: z.number().int().nonnegative(),
+    answer: z.string().min(1),
+    sentence: z.array(z.string().min(1)).min(2),
+    options: z.array(z.string().min(1)).min(2),
+  }),
+
+  /** Put the words in order. The words are shuffled for display. */
+  z.object({
+    type: z.literal("order"),
+    answer: z.array(z.string().min(1)).min(3),
+  }),
+
+  /**
+   * Make a new sentence like this one. UNGRADED: every option produces a
+   * valid sentence, which is the point — it is production practice, not a
+   * test with a single right answer.
+   */
+  z.object({
+    type: z.literal("pattern"),
+    stem: z.array(z.string().min(1)).min(1),
+    options: z
+      .array(z.object({ ar: z.string().min(1), en: z.string().min(1) }))
+      .min(2),
+  }),
+]);
+
+export const ExercisePageSchema = z.object({
+  page: z.number().int().positive(),
+  exercises: z.array(ExerciseSchema).min(1),
+});
+
+export const ExercisesFileSchema = z.object({
+  pages: z.array(ExercisePageSchema).min(1),
+});
+
 export const BookSchema = z.object({
   slug: z.string().regex(/^[a-z0-9-]+$/, "slug must be url-safe lowercase"),
   title_en: z.string().min(1),
@@ -61,7 +110,10 @@ export const BookSchema = z.object({
         en: z.array(z.string().min(1)).min(1),
       }),
     )
-    .max(2, "the site shows at most two sample pages — it is a companion, not the book")
+    .max(
+      2,
+      "the site shows at most two sample pages — it is a companion, not the book",
+    )
     .default([]),
   /**
    * How many pages of the book can be read on the site, from page 1.
@@ -112,6 +164,8 @@ export const BookSchema = z.object({
     .default([]),
 });
 
+export type Exercise = z.infer<typeof ExerciseSchema>;
+export type ExercisePage = z.infer<typeof ExercisePageSchema>;
 export type VocabEntry = z.infer<typeof VocabEntrySchema>;
 export type FamilyMember = z.infer<typeof FamilyMemberSchema>;
 export type RootFamily = z.infer<typeof RootFamilySchema>;

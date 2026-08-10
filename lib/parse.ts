@@ -3,9 +3,11 @@ import path from "node:path";
 import * as yaml from "js-yaml";
 import {
   BookSchema,
+  ExercisesFileSchema,
   RootFamilySchema,
   VocabEntrySchema,
   type Book,
+  type Exercise,
   type RootFamily,
   type VocabEntry,
 } from "./schema";
@@ -180,7 +182,9 @@ export function parsePageText(slug: string): Map<number, string[]> {
   // generation bug, not valid data.
   for (const [page, lines] of out) {
     if (lines.length === 0) {
-      throw new Error(`Page ${page} in ${slug}.pages.md has a heading but no text.`);
+      throw new Error(
+        `Page ${page} in ${slug}.pages.md has a heading but no text.`,
+      );
     }
   }
 
@@ -196,18 +200,26 @@ export function parsePageText(slug: string): Map<number, string[]> {
 export function parseTimings(slug: string): Map<number, number[]> {
   const file = path.join(CONTENT, "data", `${slug}.timings.json`);
   if (!fs.existsSync(file)) return new Map();
-  const raw: Record<string, number[]> = JSON.parse(fs.readFileSync(file, "utf8"));
+  const raw: Record<string, number[]> = JSON.parse(
+    fs.readFileSync(file, "utf8"),
+  );
   return new Map(Object.entries(raw).map(([k, v]) => [Number(k), v]));
 }
 
-export type ReadAlongLines = { src: string; lines: { at: number; ar: string }[] };
+export type ReadAlongLines = {
+  src: string;
+  lines: { at: number; ar: string }[];
+};
 
 /**
  * The read-along for one page: its clip plus the line cues. Null unless the
  * page has audio, text, and one cue per line — a partial set would leave
  * lines that never highlight.
  */
-export function getReadAlong(slug: string, page: number): ReadAlongLines | null {
+export function getReadAlong(
+  slug: string,
+  page: number,
+): ReadAlongLines | null {
   if (!getRecordedPages(slug).has(page)) return null;
   const text = parsePageText(slug).get(page);
   const at = parseTimings(slug).get(page);
@@ -216,6 +228,19 @@ export function getReadAlong(slug: string, page: number): ReadAlongLines | null 
     src: `${AUDIO_BASE}/audio/${slug}/p${page}.mp3`,
     lines: text.map((ar, i) => ({ at: at[i], ar })),
   };
+}
+
+/**
+ * Practice exercises per page. Empty map when the book has no exercises
+ * file yet — a book without them simply shows no practice link.
+ */
+export function parseExercises(slug: string): Map<number, Exercise[]> {
+  const file = path.join(CONTENT, "data", `${slug}.exercises.yaml`);
+  if (!fs.existsSync(file)) return new Map();
+  const parsed = ExercisesFileSchema.parse(
+    yaml.load(fs.readFileSync(file, "utf8")),
+  );
+  return new Map(parsed.pages.map((p) => [p.page, p.exercises]));
 }
 
 /**
