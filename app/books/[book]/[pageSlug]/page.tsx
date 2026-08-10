@@ -62,7 +62,7 @@ export async function generateMetadata({
     const book = getBook(slug);
     return {
       title: `Page ${page} — ${book.title_en}`,
-      description: `Audio, new words and word families for page ${page}.`,
+      description: `Audio, new words and related words for page ${page}.`,
     };
   } catch {
     return {};
@@ -183,8 +183,21 @@ export default async function PageCard({
             </section>
 
             <section className="border-ink/10 bg-surface/50 mb-10 rounded-2xl border px-5 py-4">
-              <Eyebrow>Word family</Eyebrow>
+              <Eyebrow>Related words</Eyebrow>
               <div className="mt-4">
+                <h2
+                  lang="ar"
+                  dir="rtl"
+                  className="text-brand-blue mb-4 font-semibold"
+                  style={{
+                    fontFamily: "var(--font-arabic)",
+                    fontSize: "clamp(24px, 5vw, 30px)",
+                    lineHeight: 1.8,
+                    textAlign: "start",
+                  }}
+                >
+                  أُسْرَةُ الْكَلِمَةِ
+                </h2>
                 <RootFamily
                   families={families}
                   bookSlug={book.slug}

@@ -27,7 +27,7 @@ const latin = Lexend_Deca({
 export const metadata: Metadata = {
   title: "Qisas — Arabic reading for children",
   description:
-    "Audio, vocabulary and word families for a bilingual Arabic/English reading series for children.",
+    "Audio, vocabulary and word roots for a bilingual Arabic/English reading series for children.",
 };
 
 export default function RootLayout({

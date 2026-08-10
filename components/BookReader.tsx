@@ -162,7 +162,7 @@ export default function BookReader({
               className="text-brand-blue mt-4 inline-flex min-h-[48px] items-center underline-offset-4 hover:underline"
               style={{ fontSize: "15px" }}
             >
-              Word families and audio for this page →
+              Related words and audio for this page →
             </a>
           </div>
         )}

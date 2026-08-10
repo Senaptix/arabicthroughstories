@@ -2,13 +2,30 @@ import Link from "next/link";
 import type { RootFamily as RootFamilyType } from "@/lib/schema";
 
 /**
- * The root-family box — the site's distinctive component. The root letters
- * sit in a badge (letter-spaced so they read as separate letters, not a
- * word); each family member's page number is a followable link, which is
- * what makes this better than the printed appendix. See
- * WEBSITE_DESIGN.md ("Root family box").
+ * Related words, grouped by the root they share.
  *
- * Server component — plain links, no client state needed.
+ * Reader feedback (an Arabic teacher, 2026-08-09) on the earlier version:
+ *  - "I'm still not sure what 'word family' means" — the metaphor did not
+ *    land in English. Section is now labelled by the caller as "Related
+ *    words", and each group is titled "Root N" with the letters beside it.
+ *  - "The (here) isn't clear to me" — replaced with "this page".
+ *  - "just make the words clickable / they don't need to know the page
+ *    number exactly" — so the WORD is the link now, and the bare page
+ *    number is gone.
+ *
+ * Each root collapses, because a page card can carry several and the book
+ * overview carries all 32 — an open list of every member buried the page.
+ * Uses <details>, so it is native, keyboard-operable and needs no
+ * JavaScript, keeping this a server component.
+ *
+ * NOTE the print edition still calls this "Word Families" (contents row 17,
+ * appendix pages 53-54). Site and book now use different names for the same
+ * idea — see the note in ROOTS.md before the appendix goes to print.
+ *
+ * The Arabic heading is the CALLER's, not this component's: a page card
+ * shows one page's group (أُسْرَةُ الْكَلِمَةِ, singular) while the book
+ * overview shows all of them (أُسَرُ الْكَلِمَاتِ, plural, as the printed
+ * contents page has it). One component cannot pick correctly between them.
  */
 export default function RootFamily({
   families,
@@ -17,51 +34,66 @@ export default function RootFamily({
 }: {
   families: RootFamilyType[];
   bookSlug: string;
+  /** Page being viewed, so its own word is marked rather than linked.
+   *  Pass 0 where there is no current page (the book overview). */
   currentPage: number;
 }) {
-  return (
-    <section aria-label="Word family" className="flex flex-col gap-4">
-      <h2
-        lang="ar"
-        dir="rtl"
-        className="text-brand-blue font-semibold"
-        style={{
-          fontFamily: "var(--font-arabic)",
-          fontSize: "clamp(24px, 5vw, 30px)",
-          lineHeight: 1.8,
-          textAlign: "start",
-        }}
+  if (families.length === 0) {
+    return (
+      <p
+        lang="en"
+        className="text-ink/70"
+        style={{ fontSize: "15px", lineHeight: 1.7 }}
       >
-        أُسْرَةُ الْكَلِمَةِ
-      </h2>
+        No related words on this page.
+      </p>
+    );
+  }
 
-      {families.length === 0 ? (
-        <p lang="en" className="text-ink/70" style={{ fontSize: "15px", lineHeight: 1.7 }}>
-          No word family on this page.
-        </p>
-      ) : (
-        <div className="flex flex-col gap-5">
-          {families.map((family) => (
-            <div key={family.root} className="flex flex-wrap items-center gap-3">
-              <span
-                lang="ar"
-                dir="rtl"
-                className="bg-brand-blue text-paper inline-flex shrink-0 items-center justify-center rounded-[12px] px-3 py-1.5"
-                style={{
-                  fontFamily: "var(--font-arabic)",
-                  fontSize: "clamp(22px, 4vw, 28px)",
-                  lineHeight: 1.4,
-                  letterSpacing: "0.15em",
-                }}
-              >
-                {family.root}
-              </span>
+  return (
+    <div className="flex flex-col gap-3">
+      {families.map((family, i) => (
+        <details
+          key={family.root}
+          className="border-ink/10 bg-paper rounded-xl border"
+        >
+          <summary
+            className="flex min-h-[48px] cursor-pointer list-none items-center gap-3 px-3 py-2 [&::-webkit-details-marker]:hidden"
+            aria-label={`Root ${i + 1}, ${family.members.length} related words`}
+          >
+            <span
+              className="text-ink/55 shrink-0"
+              style={{ fontSize: "13px", letterSpacing: "0.06em" }}
+            >
+              Root {i + 1}
+            </span>
 
-              <ul className="flex flex-wrap items-center gap-x-4 gap-y-2">
-                {family.members.map((member) => {
-                  const isHere = member.page === currentPage;
-                  return (
-                    <li key={`${member.ar}-${member.page}`} className="flex items-baseline gap-1.5">
+            <span
+              lang="ar"
+              dir="rtl"
+              className="bg-brand-blue text-paper inline-flex shrink-0 items-center justify-center rounded-[10px] px-3 py-1"
+              style={{
+                fontFamily: "var(--font-arabic)",
+                fontSize: "clamp(20px, 4vw, 26px)",
+                lineHeight: 1.4,
+                letterSpacing: "0.15em",
+              }}
+            >
+              {family.root}
+            </span>
+
+            <span className="text-ink/45 ml-auto" style={{ fontSize: "13px" }}>
+              {family.members.length} words
+            </span>
+          </summary>
+
+          <ul className="flex flex-col gap-1 px-3 pt-1 pb-3">
+            {family.members.map((member) => {
+              const isHere = member.page === currentPage;
+              return (
+                <li key={`${member.ar}-${member.page}`}>
+                  {isHere ? (
+                    <span className="flex min-h-[44px] items-baseline gap-2">
                       <span
                         lang="ar"
                         dir="rtl"
@@ -70,38 +102,42 @@ export default function RootFamily({
                           fontFamily: "var(--font-arabic)",
                           fontSize: "clamp(24px, 5vw, 30px)",
                           lineHeight: 1.8,
-                          textAlign: "start",
                         }}
                       >
                         {member.ar}
                       </span>
-                      {isHere ? (
-                        <span
-                          lang="en"
-                          aria-current="location"
-                          className="text-brand-blue font-semibold underline decoration-dotted"
-                          style={{ fontSize: "14px" }}
-                        >
-                          {member.page} (here)
-                        </span>
-                      ) : (
-                        <Link
-                          href={`/books/${bookSlug}/p${member.page}`}
-                          lang="en"
-                          className="text-brand-blue underline transition-colors duration-150 ease-out hover:text-ink"
-                          style={{ fontSize: "14px" }}
-                        >
-                          {member.page}
-                        </Link>
-                      )}
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          ))}
-        </div>
-      )}
-    </section>
+                      <span
+                        lang="en"
+                        aria-current="location"
+                        className="text-ink/50"
+                        style={{ fontSize: "13px" }}
+                      >
+                        this page
+                      </span>
+                    </span>
+                  ) : (
+                    /* The word itself is the link — a reader does not need
+                       the page number, only a way to go and see it. */
+                    <Link
+                      href={`/books/${bookSlug}/p${member.page}`}
+                      lang="ar"
+                      dir="rtl"
+                      className="text-brand-blue hover:text-ink flex min-h-[44px] items-center underline decoration-dotted underline-offset-4 transition-colors duration-150 ease-out"
+                      style={{
+                        fontFamily: "var(--font-arabic)",
+                        fontSize: "clamp(24px, 5vw, 30px)",
+                        lineHeight: 1.8,
+                      }}
+                    >
+                      {member.ar}
+                    </Link>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </details>
+      ))}
+    </div>
   );
 }
