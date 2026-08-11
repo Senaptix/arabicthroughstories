@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { RootFamily as RootFamilyType } from "@/lib/schema";
 
@@ -12,6 +13,13 @@ import type { RootFamily as RootFamilyType } from "@/lib/schema";
  *  - "just make the words clickable / they don't need to know the page
  *    number exactly" — so the WORD is the link now, and the bare page
  *    number is gone.
+ *
+ * Same teacher, 2026-08-10, on this version once it was live:
+ *  - "some kind of chevron so people know these are accordion style" —
+ *    added to each <summary>, flipped by the `group-open:` variant. No JS:
+ *    <details> already drives the open state this reads off of.
+ *  - "the page image/graphic at the top... will keep it engaging" — see
+ *    `pageImage` below.
  *
  * Each root collapses, because a page card can carry several and the book
  * overview carries all 32 — an open list of every member buried the page.
@@ -31,12 +39,19 @@ export default function RootFamily({
   families,
   bookSlug,
   currentPage,
+  pageImage,
 }: {
   families: RootFamilyType[];
   bookSlug: string;
   /** Page being viewed, so its own word is marked rather than linked.
    *  Pass 0 where there is no current page (the book overview). */
   currentPage: number;
+  /**
+   * This page's own artwork, to sit above the roots. Only the page card has
+   * one page to show — the book overview's roots each span many pages, so
+   * it never passes this.
+   */
+  pageImage?: { src: string; alt: string };
 }) {
   if (families.length === 0) {
     return (
@@ -52,10 +67,21 @@ export default function RootFamily({
 
   return (
     <div className="flex flex-col gap-3">
+      {pageImage && (
+        <Image
+          src={pageImage.src}
+          alt={pageImage.alt}
+          width={688}
+          height={968}
+          sizes="200px"
+          className="border-ink/10 mb-1 w-[160px] rounded-xl border"
+        />
+      )}
+
       {families.map((family, i) => (
         <details
           key={family.root}
-          className="border-ink/10 bg-paper rounded-xl border"
+          className="group border-ink/10 bg-paper rounded-xl border"
         >
           <summary
             className="flex min-h-[48px] cursor-pointer list-none items-center gap-3 px-3 py-2 [&::-webkit-details-marker]:hidden"
@@ -85,6 +111,23 @@ export default function RootFamily({
             <span className="text-ink/45 ml-auto" style={{ fontSize: "13px" }}>
               {family.members.length} words
             </span>
+
+            {/* Accordion affordance — points down closed, flips open. */}
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 20 20"
+              className="text-ink/40 shrink-0 transition-transform duration-150 ease-out group-open:rotate-180"
+              style={{ width: 16, height: 16 }}
+            >
+              <path
+                d="M5 7.5L10 12.5L15 7.5"
+                stroke="currentColor"
+                strokeWidth="1.75"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                fill="none"
+              />
+            </svg>
           </summary>
 
           <ul className="flex flex-col gap-1 px-3 pt-1 pb-3">
