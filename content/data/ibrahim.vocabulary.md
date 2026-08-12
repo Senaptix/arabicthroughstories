@@ -109,7 +109,7 @@ Covers pages 3–52. Pages 3–34 verified against the live Canva design; pages 
 | 101 | أَهَانَ            | he insulted / humiliated                  | 17         |
 | 102 | عِقَابٌ            | punishment                                | 17         |
 | 103 | جَوَابٌ            | answer / reply                            | 17         |
-| 104 | أَحْرِقُوهُ        | burn him!                                 | 17         |
+| 104 | حَرِّقُوهُ         | burn him!                                 | 17         |
 | 105 | اُنْصُرُوا         | support / help (plural command)           | 17         |
 | 106 | أَوْقَدُوا         | they kindled / lit                        | 17         |
 | 107 | نَارًا             | a fire                                    | 17         |

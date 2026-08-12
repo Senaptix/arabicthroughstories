@@ -10,7 +10,7 @@ see the last section for the two exceptions.
 ## Why roots and not forms
 
 Roots are the one insight that turns Arabic vocabulary from memorisation into
-pattern recognition, and a child can *see* it — three letters, a family of
+pattern recognition, and a child can _see_ it — three letters, a family of
 words. Verb forms are a table to be learned, which is exactly the grammar
 textbook this book is not.
 
@@ -18,10 +18,10 @@ The evidence is in the book's own vocabulary. Clustering all 285 glossary
 words by root gives **~30 families covering ~85 words — about 30% of
 everything taught.** Two of them carry a genuine "oh!" for a 9-year-old:
 
-> **س ج د** — يَسْجُدُ *he prostrates* (p4) · **الْمَسْجِدُ** *the masjid* (p52)
+> **س ج د** — يَسْجُدُ _he prostrates_ (p4) · **الْمَسْجِدُ** _the masjid_ (p52)
 > A masjid is the place where you do sujud. Same three letters.
 
-> **س ل م** — سَلَامٌ *peace* · سَالِمٌ *safe* · **أَسْلَمَ** *he submitted* · **الْمُسْلِمُونَ** *the Muslims*
+> **س ل م** — سَلَامٌ _peace_ · سَالِمٌ _safe_ · **أَسْلَمَ** _he submitted_ · **الْمُسْلِمُونَ** _the Muslims_
 > Islam, Muslim, salaam and safe are one family. The child works out what
 > "Muslim" means from letters they already know.
 
@@ -31,7 +31,7 @@ Those two alone justify the appendix.
 
 Not as grammar. As **"words come in families."**
 
-No terminology — no *root*, *triliteral*, *form*, *pattern*, *ﻭﺯﻥ*. Three
+No terminology — no _root_, _triliteral_, _form_, _pattern_, _ﻭﺯﻥ_. Three
 letters in a box, the family beneath, and the page where each was met, so the
 child can flip back to the picture it belongs to.
 
@@ -65,68 +65,81 @@ Worth confirming before it goes into the KDP setup.
 >
 > **Bidi note for anyone editing these:** Arabic columns use
 > `textAlign: "start"`, not `"end"`. In an RTL run Canva treats `end` as the
-> *left* edge, which pushed the words away from their root. Cost one
+> _left_ edge, which pushed the words away from their root. Cost one
 > round-trip to find; don't re-invert it.
+
+> **RETITLED 2026-08-12.** The teacher and other reviewers didn't recognise
+> "usratul kalimaat" (أُسْرَةُ الْكَلِمَةِ, "word family") as real Arabic
+> pedagogy terminology — other teaching sources build this around الجذر
+> (the root) instead. Page 53's title is now «كَلِمَاتٌ مِنْ نَفْسِ
+> الْجِذْرِ» / "Words That Share a Root", its intro line drops "belong to
+> one family... twelve families" for "have related meanings... twelve
+> roots", and page 54 closes with «هَلْ تَجِدُ جِذْرًا آخَرَ؟» / "Can you
+> find another root in this book?" (masculine جِذْر, not feminine أُسْرَة —
+> the CTA's grammar changed with it, not just the noun). Contents row 17
+> now reads «الْجُذُورُ» rather than «أُسَرُ الْكَلِمَاتِ», matching the
+> site. The per-root letter boxes and word lists on both pages are
+> untouched — only the framing prose changed.
 
 ## The twelve for the printed appendix
 
 Chosen for payoff, not for size — a family teaches something only if the
 connection is visible to a child.
 
-| Root | Family | Why it earns its place |
-|---|---|---|
-| **س ل م** | سَلَامًا p18 · سَالِمٌ p18 · سَلَامٌ عَلَيْكَ p34 · أَسْلَمَ p45 · الْمُسْلِمُونَ p47 | What "Muslim" actually means |
-| **س ج د** | يَسْجُدُ p4 · يَسْجُدُونَ p4 · الْمَسْجِدُ p52 | What "masjid" actually means |
+| Root      | Family                                                                                   | Why it earns its place                                            |
+| --------- | ---------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| **س ل م** | سَلَامًا p18 · سَالِمٌ p18 · سَلَامٌ عَلَيْكَ p34 · أَسْلَمَ p45 · الْمُسْلِمُونَ p47    | What "Muslim" actually means                                      |
+| **س ج د** | يَسْجُدُ p4 · يَسْجُدُونَ p4 · الْمَسْجِدُ p52                                           | What "masjid" actually means                                      |
 | **ع ب د** | يَعْبُدُ p4 · يَعْبُدُونَ p5 · عِبَادَةٌ p24 · نَعْبُدُ p25 · أَعْبُدُ p27 · اعْبُدِ p33 | Largest family; a whole conjugation the story delivered by itself |
-| **ط ع م** | طَعَامٌ p7 *food* · يُطْعِمُنِي p28 *He feeds me* | Noun → verb, instantly obvious |
-| **ح ي ي** | حَيٌّ p23 *alive* · يُحْيِي p30 *He gives life* · حَيَوَانٌ p38 *animal* | An animal is a living thing |
-| **م و ت** | يَمُوتُ p23 · يُمِيتُ p30 | Sits opposite ح ي ي on the same page — pair them |
-| **ذ ب ح** | يَذْبَحُ p44 · أَذْبَحُكَ p44 · اذْبَحْ p47 | The Isma'il episode in three words |
-| **أ ب و** | يَا أَبِي p8 · آبَاءَنَا p26 · يَا أَبَتِ p45 · أَبُوهُ p52 | Spans the whole book, father to father |
-| **ن ص ر** | اُنْصُرُوا p17 · نَصَرَ p18 · يَنْصُرُنِي p22 | People call for help, Allah gives it — three pages apart |
-| **ر أ ي** | يَرَى p5 · رَأَى p18 · أَرَى p44 | One verb, three tenses, three moments |
-| **ك ب ر** | كَبِيرٌ p4 *big* · الْأَكْبَرَ p13 *the biggest* · كَبِرَ p43 *he grew up* | Growing up is becoming big |
-| **ش ر ب** | شَرَابٌ p9 · تَشْرَبُ p9 · شَرِبَ p42 · هَلْ شَرِبْتَ؟ p42 | Zamzam pays off a word from page 9 |
+| **ط ع م** | طَعَامٌ p7 _food_ · يُطْعِمُنِي p28 _He feeds me_                                        | Noun → verb, instantly obvious                                    |
+| **ح ي ي** | حَيٌّ p23 _alive_ · يُحْيِي p30 _He gives life_ · حَيَوَانٌ p38 _animal_                 | An animal is a living thing                                       |
+| **م و ت** | يَمُوتُ p23 · يُمِيتُ p30                                                                | Sits opposite ح ي ي on the same page — pair them                  |
+| **ذ ب ح** | يَذْبَحُ p44 · أَذْبَحُكَ p44 · اذْبَحْ p47                                              | The Isma'il episode in three words                                |
+| **أ ب و** | يَا أَبِي p8 · آبَاءَنَا p26 · يَا أَبَتِ p45 · أَبُوهُ p52                              | Spans the whole book, father to father                            |
+| **ن ص ر** | اُنْصُرُوا p17 · نَصَرَ p18 · يَنْصُرُنِي p22                                            | People call for help, Allah gives it — three pages apart          |
+| **ر أ ي** | يَرَى p5 · رَأَى p18 · أَرَى p44                                                         | One verb, three tenses, three moments                             |
+| **ك ب ر** | كَبِيرٌ p4 _big_ · الْأَكْبَرَ p13 _the biggest_ · كَبِرَ p43 _he grew up_               | Growing up is becoming big                                        |
+| **ش ر ب** | شَرَابٌ p9 · تَشْرَبُ p9 · شَرِبَ p42 · هَلْ شَرِبْتَ؟ p42                               | Zamzam pays off a word from page 9                                |
 
 ## Full list — all families in Book 1
 
 Kept for the series index. Hand-checked; a crude script missed roughly a third
 of these, so **do not regenerate this by regex.**
 
-| Root | Words | Pages |
-|---|---|---|
+| Root  | Words                                                              | Pages           |
+| ----- | ------------------------------------------------------------------ | --------------- |
 | ع ب د | يَعْبُدُ · يَعْبُدُونَ · عِبَادَةٌ · نَعْبُدُ · أَعْبُدُ · اعْبُدِ | 4,5,24,25,27,33 |
-| س ل م | سَلَامًا · سَالِمٌ · سَلَامٌ عَلَيْكَ · أَسْلَمَ · الْمُسْلِمُونَ | 18,18,34,45,47 |
-| أ م ر | أَمَرَ · أَمَرَكَ · تُؤْمَرُ · أَمْرٌ | 24,39,45,45 |
-| د ع و | دَعَا · دَعَوْتُمْ · أَدْعُو · يَدْعُوَ | 25,26,34,35 |
-| ف ع ل | فَعَلَ · نَفْعَلُ · يَفْعَلُونَ · افْعَلْ | 14,17,26,45 |
-| ش ر ب | شَرَابٌ · تَشْرَبُ · شَرِبَ · هَلْ شَرِبْتَ؟ | 9,9,42,42 |
-| أ ب و | يَا أَبِي · آبَاءَنَا · يَا أَبَتِ · أَبُوهُ | 8,26,45,52 |
-| س م ع | تَسْمَعُ · سَمِعَ · السَّمِيعُ | 6,29,50 |
-| ن ص ر | اُنْصُرُوا · نَصَرَ · يَنْصُرُنِي | 17,18,22 |
-| ر أ ي | يَرَى · رَأَى · أَرَى | 5,18,44 |
-| ك ب ر | كَبِيرٌ · الْأَكْبَرَ · كَبِرَ | 4,13,43 |
-| ت ر ك | تَرَكَ · اتْرُكْنِي · أَتَتْرُكُنِي | 13,34,39 |
-| س ج د | يَسْجُدُ · يَسْجُدُونَ · الْمَسْجِدُ | 4,4,52 |
-| ذ ب ح | يَذْبَحُ · أَذْبَحُكَ · اذْبَحْ | 44,44,47 |
-| ح ي ي | حَيٌّ · يُحْيِي · حَيَوَانٌ | 23,30,38 |
-| ط ع م | طَعَامٌ · يُطْعِمُنِي | 7,28 |
-| م و ت | يَمُوتُ · يُمِيتُ | 23,30 |
-| ف ه م | يَفْهَمُ · يُفَهِّمَ | 9,32 |
-| ح ز ن | حَزِنَ · حُزْنٌ | 14,35 |
-| ض ر ب | ضَرَبَ · أَضْرِبُكَ | 13,34 |
-| م ن ع | تَمْنَعُ · يَمْنَعَ | 7,24 |
-| س ق ي | يَسْقِينِ · تَسْقِيَ | 28,40 |
-| ق ب ل | قَبْلَ · تَقَبَّلْ | 3,50 |
-| ق و ل | يَقُولُ · قَالَ | 8,10 |
-| غ ي ب | غَابَ · يَغِيبُ | 19,20 |
-| ص ب ح | الصَّبَاحُ · الصُّبْحُ | 21,22 |
-| ب ق ي | بَقِيَ · بَاقٍ | 11,23 |
-| ب ن ي | يَبْنِيَ · بَنَى | 48,49 |
-| ب ي ت | بَيْتٌ · الْبُيُوتُ | 4,48 |
-| ن ب أ | نَبِيٌّ · الْأَنْبِيَاءُ | 24,44 |
-| و ل د | وَلَدٌ · وَالِدِهِ | 5,8 |
-| ع ل م | تَعْلَمُ · الْعَلِيمُ | 16,50 |
+| س ل م | سَلَامًا · سَالِمٌ · سَلَامٌ عَلَيْكَ · أَسْلَمَ · الْمُسْلِمُونَ  | 18,18,34,45,47  |
+| أ م ر | أَمَرَ · أَمَرَكَ · تُؤْمَرُ · أَمْرٌ                              | 24,39,45,45     |
+| د ع و | دَعَا · دَعَوْتُمْ · أَدْعُو · يَدْعُوَ                            | 25,26,34,35     |
+| ف ع ل | فَعَلَ · نَفْعَلُ · يَفْعَلُونَ · افْعَلْ                          | 14,17,26,45     |
+| ش ر ب | شَرَابٌ · تَشْرَبُ · شَرِبَ · هَلْ شَرِبْتَ؟                       | 9,9,42,42       |
+| أ ب و | يَا أَبِي · آبَاءَنَا · يَا أَبَتِ · أَبُوهُ                       | 8,26,45,52      |
+| س م ع | تَسْمَعُ · سَمِعَ · السَّمِيعُ                                     | 6,29,50         |
+| ن ص ر | اُنْصُرُوا · نَصَرَ · يَنْصُرُنِي                                  | 17,18,22        |
+| ر أ ي | يَرَى · رَأَى · أَرَى                                              | 5,18,44         |
+| ك ب ر | كَبِيرٌ · الْأَكْبَرَ · كَبِرَ                                     | 4,13,43         |
+| ت ر ك | تَرَكَ · اتْرُكْنِي · أَتَتْرُكُنِي                                | 13,34,39        |
+| س ج د | يَسْجُدُ · يَسْجُدُونَ · الْمَسْجِدُ                               | 4,4,52          |
+| ذ ب ح | يَذْبَحُ · أَذْبَحُكَ · اذْبَحْ                                    | 44,44,47        |
+| ح ي ي | حَيٌّ · يُحْيِي · حَيَوَانٌ                                        | 23,30,38        |
+| ط ع م | طَعَامٌ · يُطْعِمُنِي                                              | 7,28            |
+| م و ت | يَمُوتُ · يُمِيتُ                                                  | 23,30           |
+| ف ه م | يَفْهَمُ · يُفَهِّمَ                                               | 9,32            |
+| ح ز ن | حَزِنَ · حُزْنٌ                                                    | 14,35           |
+| ض ر ب | ضَرَبَ · أَضْرِبُكَ                                                | 13,34           |
+| م ن ع | تَمْنَعُ · يَمْنَعَ                                                | 7,24            |
+| س ق ي | يَسْقِينِ · تَسْقِيَ                                               | 28,40           |
+| ق ب ل | قَبْلَ · تَقَبَّلْ                                                 | 3,50            |
+| ق و ل | يَقُولُ · قَالَ                                                    | 8,10            |
+| غ ي ب | غَابَ · يَغِيبُ                                                    | 19,20           |
+| ص ب ح | الصَّبَاحُ · الصُّبْحُ                                             | 21,22           |
+| ب ق ي | بَقِيَ · بَاقٍ                                                     | 11,23           |
+| ب ن ي | يَبْنِيَ · بَنَى                                                   | 48,49           |
+| ب ي ت | بَيْتٌ · الْبُيُوتُ                                                | 4,48            |
+| ن ب أ | نَبِيٌّ · الْأَنْبِيَاءُ                                           | 24,44           |
+| و ل د | وَلَدٌ · وَالِدِهِ                                                 | 5,8             |
+| ع ل م | تَعْلَمُ · الْعَلِيمُ                                              | 16,50           |
 
 ## Verb forms — what to include
 
@@ -137,11 +150,13 @@ But two shape-changes occur in this book's own vocabulary and are worth three
 lines each, phrased without any grammar term:
 
 **Doubling the middle letter = making someone else do it**
-- يَفْهَمُ *he understands* (p9) → يُفَهِّمَ *to make understand* (p32)
+
+- يَفْهَمُ _he understands_ (p9) → يُفَهِّمَ _to make understand_ (p32)
 
 **Adding أ at the front = doing it to someone else**
-- طَعَامٌ *food* (p7) → يُطْعِمُنِي *He feeds me* (p28)
-- حَيٌّ *alive* (p23) → يُحْيِي *He gives life* (p30)
+
+- طَعَامٌ _food_ (p7) → يُطْعِمُنِي _He feeds me_ (p28)
+- حَيٌّ _alive_ (p23) → يُحْيِي _He gives life_ (p30)
 
 Both are concrete, both are already on the page, and neither requires the word
 "form". Anything beyond these two waits for a later book.
@@ -156,7 +171,7 @@ as well as a page.
 
 It also feeds the graded-vowelling plan in [SERIES_PLAN.md](SERIES_PLAN.md):
 "familiar word" for the purpose of dropping vowels can reasonably mean
-*familiar family*, not just familiar word.
+_familiar family_, not just familiar word.
 
 **Book 2 gets this better than Book 1 can.** Its pages are not laid out yet, so
 a small word-family box can sit on the page where the second member of a family

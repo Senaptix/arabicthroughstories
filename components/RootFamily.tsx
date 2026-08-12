@@ -33,8 +33,8 @@ import type { RootFamily as RootFamilyType } from "@/lib/schema";
  * الْجُذُورُ ("the roots"), singular/plural ambiguity and all — same word
  * works for a page card's one group or the overview's thirty-two, the same
  * way "Root 1 / Root 2" already does in English. Canva's appendix pages
- * 53-54 still use the old "family" framing throughout and were NOT touched
- * here — that's a bigger copy/pedagogy rewrite, not a label swap.
+ * 53-54 (title, intro line and the closing prompt) were reworded the same
+ * day, on the same "root" terminology — see ROOTS.md for the exact copy.
  *
  * The Arabic heading is still the CALLER's, not this component's: a page
  * card and the book overview render different amounts of content around it
