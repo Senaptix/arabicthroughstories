@@ -86,12 +86,13 @@ export default async function PageCard({
     notFound();
   }
 
-  const { book, words, families, text } = content;
+  const { book, words, families, text, hasAudio } = content;
   if (page > book.page_count) notFound();
 
   const isStoryPage = !book.non_story_pages.includes(page);
   // Per page, not per book: a clip exists for this page or it does not.
   // Read from disk, so dropping p7.mp3 in lights page 7 up on next build.
+  // A clip WITHOUT measured line cues still plays — see the player below.
   const readAlong = isStoryPage ? getReadAlong(slug, page) : null;
 
   const prev = page > 1 ? page - 1 : null;
@@ -139,11 +140,34 @@ export default async function PageCard({
           </section>
         ) : (
           <>
-            {isStoryPage && (
+            {isStoryPage && !hasAudio && (
               <section className="mb-6 rounded-2xl bg-[var(--surface)]/60 px-5 py-4">
                 <p className="text-[15px] text-[var(--ink)]/70">
                   This page is still being recorded. The text and words below
                   are ready to read now.
+                </p>
+              </section>
+            )}
+
+            {/* Recorded, but the line cues have not been measured yet. Play
+                the clip plainly rather than guess where each line starts:
+                a cue that is even a second out highlights the wrong line
+                while the child is looking at it, which teaches the wrong
+                word. scripts/measure-timings.ts explains why these cannot
+                be derived from the audio alone. */}
+            {isStoryPage && hasAudio && (
+              <section className="mb-8">
+                <Eyebrow>Hear this page</Eyebrow>
+                <audio
+                  controls
+                  preload="none"
+                  src={`/audio/${book.slug}/p${page}.mp3`}
+                  aria-label={`Page ${page} read aloud`}
+                  className="mt-4 w-full"
+                />
+                <p className="mt-3 text-[14px] text-[var(--ink)]/55">
+                  Follow the words below as you listen — this page does not
+                  highlight each line yet.
                 </p>
               </section>
             )}
