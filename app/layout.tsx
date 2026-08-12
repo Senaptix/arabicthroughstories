@@ -25,7 +25,12 @@ const latin = Lexend_Deca({
 });
 
 export const metadata: Metadata = {
-  title: "Qisas — Arabic reading for children",
+  // Qasas, not Qisas: the title is قَصَص (the masdar, as in سورة القصص), and
+  // the published Zam Zam edition romanises it "Qasas un Nabiyyeen" too.
+  // "Qisas" would be قِصَص, the plural of قِصَّة — a common misreading. The
+  // repo name and the `series` slug still say qisas; those are identifiers,
+  // not reader-facing text.
+  title: "Qasas — Arabic reading for children",
   description:
     "Audio, vocabulary and word roots for a bilingual Arabic/English reading series for children.",
 };

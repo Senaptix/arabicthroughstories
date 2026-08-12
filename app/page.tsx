@@ -177,7 +177,7 @@ export default function Home() {
           >
             An illustrated retelling of the story of Ibrahim{" "}
             <span className="whitespace-nowrap">(AS)</span>, following
-            al-Nadwi&rsquo;s <i>Qisas an-Nabiyyin</i>. Every page carries fully
+            al-Nadwi&rsquo;s <i>Qasas an-Nabiyyin</i>. Every page carries fully
             vowelled Arabic, the English underneath, and the new words gathered
             where a child can find them.
           </p>
@@ -910,7 +910,7 @@ export default function Home() {
             style={{ fontSize: "14px", lineHeight: 1.6 }}
           >
             {book.title_en} — book {book.series_order} of the{" "}
-            <i>Qisas an-Nabiyyin</i> readers.
+            <i>Qasas an-Nabiyyin</i> readers.
           </p>
           <p
             className="text-ink/45"
