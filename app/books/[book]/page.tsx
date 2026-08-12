@@ -154,7 +154,7 @@ export default async function BookOverview({
             className="mb-4 font-[family-name:var(--font-arabic)]"
             style={{ fontSize: "clamp(24px, 5vw, 30px)", lineHeight: 1.8 }}
           >
-            أُسَرُ الْكَلِمَاتِ
+            الْجُذُورُ
           </h2>
 
           <RootFamily

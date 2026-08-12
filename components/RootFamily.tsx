@@ -26,14 +26,20 @@ import type { RootFamily as RootFamilyType } from "@/lib/schema";
  * Uses <details>, so it is native, keyboard-operable and needs no
  * JavaScript, keeping this a server component.
  *
- * NOTE the print edition still calls this "Word Families" (contents row 17,
- * appendix pages 53-54). Site and book now use different names for the same
- * idea — see the note in ROOTS.md before the appendix goes to print.
+ * Same teacher, 2026-08-12: "no one is sure about this phrase usratul
+ * kalimaat" (أُسْرَةُ الْكَلِمَةِ, "word family") — not a term other Arabic
+ * teaching sources use. They build this around الجذر (the root) instead, so
+ * both Arabic headings and the Canva contents row (row 17) now read simply
+ * الْجُذُورُ ("the roots"), singular/plural ambiguity and all — same word
+ * works for a page card's one group or the overview's thirty-two, the same
+ * way "Root 1 / Root 2" already does in English. Canva's appendix pages
+ * 53-54 still use the old "family" framing throughout and were NOT touched
+ * here — that's a bigger copy/pedagogy rewrite, not a label swap.
  *
- * The Arabic heading is the CALLER's, not this component's: a page card
- * shows one page's group (أُسْرَةُ الْكَلِمَةِ, singular) while the book
- * overview shows all of them (أُسَرُ الْكَلِمَاتِ, plural, as the printed
- * contents page has it). One component cannot pick correctly between them.
+ * The Arabic heading is still the CALLER's, not this component's: a page
+ * card and the book overview render different amounts of content around it
+ * (one page's group vs. all of them), even though the heading text itself
+ * is now identical either way.
  */
 export default function RootFamily({
   families,

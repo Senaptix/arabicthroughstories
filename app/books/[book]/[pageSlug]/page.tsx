@@ -196,7 +196,7 @@ export default async function PageCard({
                     textAlign: "start",
                   }}
                 >
-                  أُسْرَةُ الْكَلِمَةِ
+                  الْجُذُورُ
                 </h2>
                 <RootFamily
                   families={families}
