@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "check": "tsx lib/parse.check.ts",
+    "prebuild": "npm run check",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
