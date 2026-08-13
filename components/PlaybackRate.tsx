@@ -8,10 +8,11 @@
  * would need a label to say what value it is on. Four fixed steps are a
  * bigger tap target and are self-describing.
  *
- * 0.5× is the one that actually matters here: it is how a learner hears the
- * tashkeel — the short vowels are the thing being taught, and at full speed
- * they blur together for a beginner. The faster steps are for re-listening
- * to a page already known.
+ * 0.75× is the slow step, not 0.5×: half speed was tried and judged too
+ * slow to follow — it stretches the words far enough apart that the sentence
+ * stops hanging together, which defeats the point. 0.75× still separates the
+ * short vowels, which is what a learner needs to hear. The faster steps are
+ * for re-listening to a page already known.
  *
  * Pitch is left alone. Browsers default `preservesPitch` to true, so slowing
  * down does not drop the reciter into a growl; the recording has to stay a
@@ -21,7 +22,7 @@
  * media element, so this never needs a ref passed across a boundary.
  */
 
-export const RATES = [0.5, 1, 1.5, 2] as const;
+export const RATES = [0.75, 1, 1.5, 2] as const;
 
 export default function PlaybackRate({
   rate,

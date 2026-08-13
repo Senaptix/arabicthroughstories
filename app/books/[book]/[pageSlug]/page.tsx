@@ -224,14 +224,6 @@ export default async function PageCard({
                   families={families}
                   bookSlug={book.slug}
                   currentPage={page}
-                  pageImage={
-                    page <= book.preview_pages
-                      ? {
-                          src: `/book/${book.slug}/${String(page).padStart(2, "0")}.webp`,
-                          alt: `Page ${page}`,
-                        }
-                      : undefined
-                  }
                 />
               </div>
             </section>

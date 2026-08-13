@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { RootFamily as RootFamilyType } from "@/lib/schema";
 
@@ -18,8 +17,10 @@ import type { RootFamily as RootFamilyType } from "@/lib/schema";
  *  - "some kind of chevron so people know these are accordion style" —
  *    added to each <summary>, flipped by the `group-open:` variant. No JS:
  *    <details> already drives the open state this reads off of.
- *  - "the page image/graphic at the top... will keep it engaging" — see
- *    `pageImage` below.
+ *  - "the page image/graphic at the top... will keep it engaging" — this was
+ *    built and then REMOVED on 2026-08-13 at the author's request, along
+ *    with the sample thumbnails on the book overview. The pictures stay in
+ *    the book. Don't reinstate either without asking.
  *
  * Each root collapses, because a page card can carry several and the book
  * overview carries all 32 — an open list of every member buried the page.
@@ -45,19 +46,12 @@ export default function RootFamily({
   families,
   bookSlug,
   currentPage,
-  pageImage,
 }: {
   families: RootFamilyType[];
   bookSlug: string;
   /** Page being viewed, so its own word is marked rather than linked.
    *  Pass 0 where there is no current page (the book overview). */
   currentPage: number;
-  /**
-   * This page's own artwork, to sit above the roots. Only the page card has
-   * one page to show — the book overview's roots each span many pages, so
-   * it never passes this.
-   */
-  pageImage?: { src: string; alt: string };
 }) {
   if (families.length === 0) {
     return (
@@ -73,17 +67,6 @@ export default function RootFamily({
 
   return (
     <div className="flex flex-col gap-3">
-      {pageImage && (
-        <Image
-          src={pageImage.src}
-          alt={pageImage.alt}
-          width={688}
-          height={968}
-          sizes="200px"
-          className="border-ink/10 mb-1 w-[160px] rounded-xl border"
-        />
-      )}
-
       {families.map((family, i) => (
         <details
           key={family.root}

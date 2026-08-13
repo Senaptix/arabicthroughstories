@@ -13,8 +13,8 @@ import PlaybackRate from "./PlaybackRate";
  *
  * The speed buttons are here because native controls do not expose speed
  * consistently: Chrome hides it behind an overflow menu, and several mobile
- * browsers omit it entirely. 0.5× is the point of the feature for a learner,
- * so it cannot be left to chance.
+ * browsers omit it entirely. The slow step is the point of the feature for a
+ * learner, so it cannot be left to chance.
  *
  * See scripts/measure-timings.ts for why these pages have no cues and why
  * they are not simply guessed at.
