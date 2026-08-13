@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Eyebrow from "@/components/Eyebrow";
 import HomeBar from "@/components/HomeBar";
+import PagePlayer from "@/components/PagePlayer";
 import ReadAlong from "@/components/ReadAlong";
 import VocabCards from "@/components/VocabCards";
 import RootFamily from "@/components/RootFamily";
@@ -158,12 +159,9 @@ export default async function PageCard({
             {isStoryPage && hasAudio && (
               <section className="mb-8">
                 <Eyebrow>Hear this page</Eyebrow>
-                <audio
-                  controls
-                  preload="none"
+                <PagePlayer
                   src={`/audio/${book.slug}/p${page}.mp3`}
-                  aria-label={`Page ${page} read aloud`}
-                  className="mt-4 w-full"
+                  page={page}
                 />
                 <p className="mt-3 text-[14px] text-[var(--ink)]/55">
                   Follow the words below as you listen — this page does not

@@ -200,7 +200,7 @@ Covers pages 3–52. Pages 3–34 verified against the live Canva design; pages 
 | 192 | سَلَامٌ عَلَيْكَ   | peace be upon you                         | 34         |
 | 193 | أَدْعُو            | I pray                                    | 34         |
 | 194 | حُزْنٌ             | sadness                                   | 35         |
-| 195 | أُخْرَىٰ           | another                                   | 35         |
+| 195 | أُخْرٰى           | another                                   | 35         |
 | 196 | يَدْعُوَ           | to call                                   | 35         |
 | 197 | وَدَّعَ            | he said goodbye                           | 36         |
 | 198 | مَكَّةُ            | Makkah                                    | 37         |
@@ -268,7 +268,7 @@ Covers pages 3–52. Pages 3–34 verified against the live Canva design; pages 
 | 260 | الْجَنَّةُ         | Paradise                                  | 47         |
 | 261 | اذْبَحْ            | sacrifice!                                | 47         |
 | 262 | الْمُسْلِمُونَ     | the Muslims                               | 47         |
-| 263 | عِيدُ الْأَضْحَىٰ  | Eid al-Adha                               | 47         |
+| 263 | عِيدُ الْأَضْحٰى  | Eid al-Adha                               | 47         |
 | 264 | يَبْنِيَ           | to build                                  | 48         |
 | 265 | الْبُيُوتُ         | the houses                                | 48         |
 | 266 | نَقَلَ             | he carried                                | 49         |
