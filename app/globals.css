@@ -50,6 +50,15 @@ body {
   font-family: var(--font-latin);
 }
 
+/* U+FD3E/U+FD3F are bidi-mirrored punctuation. Left in the surrounding RTL
+   run, browsers swap their visual forms and the Qur'an quotation appears to
+   have backwards brackets. QuranicText gives each glyph an LTR isolate; this
+   rule makes that boundary explicit without changing the source text. */
+.quran-bracket {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
 /* Visible focus rings everywhere — never remove them. */
 :focus-visible {
   outline: 2px solid var(--brand-blue);

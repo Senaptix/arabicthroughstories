@@ -7,6 +7,7 @@ import PagePlayer from "@/components/PagePlayer";
 import ReadAlong from "@/components/ReadAlong";
 import VocabCards from "@/components/VocabCards";
 import RootFamily from "@/components/RootFamily";
+import QuranicText from "@/components/QuranicText";
 import {
   getAllBooks,
   getBook,
@@ -185,7 +186,9 @@ export default async function PageCard({
                   }}
                 >
                   {text.map((line, i) => (
-                    <p key={i}>{line}</p>
+                    <p key={i}>
+                      <QuranicText text={line} />
+                    </p>
                   ))}
                 </div>
               </section>

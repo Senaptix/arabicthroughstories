@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import PlaybackRate from "./PlaybackRate";
+import QuranicText from "./QuranicText";
 
 /**
  * Narration + animation + the line being read, for one page.
@@ -292,7 +293,7 @@ export default function ReadAlong({
                   textAlign: "start",
                 }}
               >
-                {line.ar}
+                <QuranicText text={line.ar} />
               </button>
             </li>
           ))}
