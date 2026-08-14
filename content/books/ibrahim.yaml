@@ -50,11 +50,11 @@ read_alongs:
     lines:
       - at: 0
         ar: "قَبْلَ أَيَّامٍ كَثِيرَةٍ جِدًّا،"
-      - at: 3.16
+      - at: 4.31
         ar: "كَانَ فِي قَرْيَةٍ رَجُلٌ مَشْهُورٌ جِدًّا."
-      - at: 7
+      - at: 8.99
         ar: "وَكَانَ اسْمُ هَذَا الرَّجُلِ آزَرَ."
-      - at: 10.57
+      - at: 13.01
         ar: "وَكَانَ آزَرُ يَبِيعُ الْأَصْنَامَ."
   # Page 4 is the companion demo: audio + text + that page's new words,
   # exactly what a reader gets for every page. No artwork — the pictures
