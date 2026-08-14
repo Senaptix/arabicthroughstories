@@ -93,12 +93,27 @@ for (const n of getRecordedPages("ibrahim")) {
  * ------------------------------------------------------------------ */
 
 /** Trailing punctuation is not part of the word. */
-const bare = (s: string) => s.replace(/[.،:؟!]+$/u, "").trim();
+const bare = (s: string) =>
+  s
+    // Ornate Qur'an brackets sit flush against the first and last word of a
+    // quoted span (`﴿مَنْ`, `بِآلِهَتِنَا﴾`). Without stripping them those
+    // arrive as distinct corpus entries, which both pollutes the corpus and
+    // weakens the guard: an exercise containing the invented token `﴿مَنْ`
+    // would otherwise pass.
+    .replace(/[﴾﴿]/gu, "")
+    .replace(/[.،:؟!]+$/u, "")
+    .trim();
+
+/** `[الْأَنْبِيَاء: ٥٩]` — a reference, not words of the story. */
+const CITATION = /\[[^\]]*\]/gu;
 
 const corpus = new Set<string>();
 for (const lines of parsePageText("ibrahim").values()) {
   for (const line of lines)
-    for (const w of line.split(/\s+/)) corpus.add(bare(w));
+    for (const w of line.replace(CITATION, " ").split(/\s+/)) {
+      const t = bare(w);
+      if (t) corpus.add(t);
+    }
 }
 for (const v of vocab) for (const w of v.ar.split(/\s+/)) corpus.add(bare(w));
 
