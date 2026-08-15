@@ -66,7 +66,7 @@ Covers pages 3–52. Pages 3–34 verified against the live Canva design; pages 
 | 58  | فَرِحَ             | he rejoiced / was happy                   | 11         |
 | 59  | خَرَجَ             | he went out                               | 11         |
 | 60  | الْأَطْفَالُ       | the children                              | 11         |
-| 61  | مَعًا              | together                                  | 11         |
+| 61  | مَعَنَا              | with us                                  | 11         |
 | 62  | سَقِيمٌ            | sick / ill                                | 11         |
 | 63  | بَقِيَ             | he stayed / remained                      | 11         |
 | 64  | أَلَا              | do you not? / will you not?               | 12         |
