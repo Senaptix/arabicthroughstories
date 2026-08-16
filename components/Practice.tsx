@@ -45,12 +45,26 @@ const ar = {
   lineHeight: 1.8,
 } as const;
 
+/** What each exercise is called on the results list. */
+const TYPE_LABEL = {
+  match: "Match the words",
+  choose: "Finish the sentence",
+  order: "Put the words in order",
+  pattern: "Make a new sentence",
+} as const;
+
 export default function Practice({ exercises, words }: Props) {
   const [step, setStep] = useState(0);
-  const [correct, setCorrect] = useState(0);
+  /** Per exercise: true right, false wrong, undefined not answered yet.
+   *  Indexed by step, so a single one can be retried without losing the
+   *  others — which is the point of the results list. */
+  const [results, setResults] = useState<(boolean | undefined)[]>([]);
   const [answered, setAnswered] = useState(false);
   /** Bumped on retry to reset every child exercise's internal state. */
   const [run, setRun] = useState(0);
+  /** Set while re-doing ONE exercise from the results list, so finishing it
+   *  goes back to the results rather than marching on through the rest. */
+  const [retryOf, setRetryOf] = useState<number | null>(null);
 
   // `match` is built here so the YAML carries no duplicated vocabulary.
   const usable = useMemo(
@@ -58,42 +72,136 @@ export default function Practice({ exercises, words }: Props) {
     [exercises, words.length],
   );
 
-  const graded = usable.filter((e) => e.type !== "pattern").length;
+  const isGraded = (i: number) => usable[i].type !== "pattern";
+  const graded = usable.filter((_, i) => isGraded(i)).length;
+  const correct = usable.filter(
+    (_, i) => isGraded(i) && results[i] === true,
+  ).length;
+  const wrong = usable.filter((_, i) => isGraded(i) && results[i] === false);
   const done = step >= usable.length;
 
-  function finish(wasCorrect: boolean) {
+  function record(i: number, wasCorrect: boolean | undefined) {
+    setResults((r) => {
+      const next = [...r];
+      next[i] = wasCorrect;
+      return next;
+    });
     setAnswered(true);
-    if (wasCorrect) setCorrect((c) => c + 1);
   }
 
   function next() {
     setAnswered(false);
-    setStep((s) => s + 1);
+    if (retryOf !== null) {
+      setRetryOf(null);
+      setStep(usable.length); // straight back to the results
+    } else {
+      setStep((s) => s + 1);
+    }
+  }
+
+  function retry(i: number) {
+    setResults((r) => {
+      const copy = [...r];
+      copy[i] = undefined;
+      return copy;
+    });
+    setAnswered(false);
+    setRetryOf(i);
+    setStep(i);
+    setRun((r) => r + 1); // reset that exercise's own internal state
   }
 
   if (done) {
     return (
-      <div className="border-ink/10 bg-surface/50 rounded-2xl border px-5 py-8 text-center">
-        <p className="text-ink" style={{ fontSize: "18px", lineHeight: 1.5 }}>
-          {correct} out of {graded}
+      <div className="border-ink/10 bg-surface/50 rounded-2xl border px-5 py-6">
+        <p
+          className="text-ink text-center font-medium"
+          style={{ fontSize: "18px", lineHeight: 1.5 }}
+        >
+          {correct} out of {graded} right
         </p>
         <p
-          className="text-ink/60 mt-2"
+          className="text-ink/60 mt-2 text-center"
           style={{ fontSize: "15px", lineHeight: 1.6 }}
         >
-          {correct === graded
+          {wrong.length === 0
             ? "Every one right."
-            : "Try the ones you missed again."}
+            : "Tap “Try again” on any you want another go at."}
         </p>
+
+        {/* Every exercise is listed, including the ungraded one. Leaving it
+            out is what made the score look wrong — four exercises, then a
+            total out of three with nothing explaining the difference. */}
+        <ul className="mt-6 flex flex-col gap-2">
+          {usable.map((ex, i) => {
+            const state = !isGraded(i)
+              ? "ungraded"
+              : results[i] === true
+                ? "right"
+                : results[i] === false
+                  ? "wrong"
+                  : "unanswered";
+            return (
+              <li
+                key={i}
+                className="border-ink/10 bg-paper flex items-center gap-3 rounded-xl border px-3 py-2"
+              >
+                <span
+                  aria-hidden="true"
+                  className={
+                    state === "right"
+                      ? "text-brand-blue"
+                      : state === "wrong"
+                        ? "text-terracotta"
+                        : "text-ink/35"
+                  }
+                  style={{ fontSize: "17px", lineHeight: 1 }}
+                >
+                  {state === "right" ? "✓" : state === "wrong" ? "✗" : "•"}
+                </span>
+
+                <span className="min-w-0 flex-1">
+                  <span
+                    className="text-ink block"
+                    style={{ fontSize: "15px", lineHeight: 1.4 }}
+                  >
+                    {TYPE_LABEL[ex.type]}
+                  </span>
+                  {state === "ungraded" && (
+                    <span
+                      className="text-ink/50 block"
+                      style={{ fontSize: "13px", lineHeight: 1.4 }}
+                    >
+                      not scored — every answer makes a good sentence
+                    </span>
+                  )}
+                </span>
+
+                {state === "wrong" && (
+                  <button
+                    type="button"
+                    onClick={() => retry(i)}
+                    className="border-brand-blue text-brand-blue inline-flex min-h-[44px] shrink-0 items-center rounded-lg border px-3 font-medium"
+                    style={{ fontSize: "14px" }}
+                  >
+                    Try again
+                  </button>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+
         <button
           type="button"
           onClick={() => {
             setStep(0);
-            setCorrect(0);
+            setResults([]);
             setAnswered(false);
+            setRetryOf(null);
             setRun((r) => r + 1);
           }}
-          className="bg-brand-blue text-paper mt-6 inline-flex min-h-[48px] items-center rounded-xl px-6 font-medium"
+          className="bg-brand-blue text-paper mt-6 inline-flex min-h-[48px] w-full items-center justify-center rounded-xl px-6 font-medium"
           style={{ fontSize: "16px" }}
         >
           Start again
@@ -107,7 +215,9 @@ export default function Practice({ exercises, words }: Props) {
   return (
     <div>
       <p className="text-ink/55 mb-4" style={{ fontSize: "14px" }}>
-        {step + 1} of {usable.length}
+        {retryOf !== null
+          ? `Another go at ${TYPE_LABEL[ex.type].toLowerCase()}`
+          : `${step + 1} of ${usable.length}`}
       </p>
 
       <div className="border-ink/10 bg-surface/50 rounded-2xl border px-5 py-5">
@@ -116,7 +226,7 @@ export default function Practice({ exercises, words }: Props) {
             key={`${run}-${step}`}
             words={words.slice(0, 5)}
             seed={step + 1}
-            onDone={finish}
+            onDone={(ok) => record(step, ok)}
             answered={answered}
           />
         )}
@@ -125,7 +235,7 @@ export default function Practice({ exercises, words }: Props) {
             key={`${run}-${step}`}
             ex={ex}
             seed={step + 1}
-            onDone={finish}
+            onDone={(ok) => record(step, ok)}
             answered={answered}
           />
         )}
@@ -134,15 +244,17 @@ export default function Practice({ exercises, words }: Props) {
             key={`${run}-${step}`}
             ex={ex}
             seed={step + 1}
-            onDone={finish}
+            onDone={(ok) => record(step, ok)}
             answered={answered}
           />
         )}
         {ex.type === "pattern" && (
+          /* undefined, not false: this one has no wrong answer, and the
+             results list says so rather than quietly leaving it out. */
           <Pattern
             key={`${run}-${step}`}
             ex={ex}
-            onDone={() => setAnswered(true)}
+            onDone={() => record(step, undefined)}
           />
         )}
       </div>
@@ -154,7 +266,11 @@ export default function Practice({ exercises, words }: Props) {
           className="bg-brand-blue text-paper mt-5 inline-flex min-h-[48px] w-full items-center justify-center rounded-xl px-6 font-medium"
           style={{ fontSize: "16px" }}
         >
-          {step + 1 === usable.length ? "See how you did" : "Next"}
+          {retryOf !== null
+            ? "Back to results"
+            : step + 1 === usable.length
+              ? "See how you did"
+              : "Next"}
         </button>
       )}
     </div>
