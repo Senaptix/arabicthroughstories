@@ -60,9 +60,17 @@ read_alongs:
   # exactly what a reader gets for every page. No artwork — the pictures
   # stay in the book.
   #
-  # ⚠️ Open item inherited from AUDIO_PLAN.md: whether the narrator actually
-  # voices the repeated أَصْنَامٌ (lines 2-3). Chunk lengths say yes; Whisper
-  # heard it once. If a human ear says once, merge lines 2-3 and drop 9.12.
+  # RESOLVED 2026-08-17 — the narrator does voice the repeated أَصْنَامٌ, so
+  # lines 2-3 stay split at 9.12. Three independent things agree:
+  #   - the printed text carries أَصْنَامٌ twice (pages.md line 2);
+  #   - the speech between the pauses paces at 1.01 s/word read as three
+  #     words, against a 0.90 s/word average for this page. Read as two
+  #     words it would be 1.52 s/word — 69% slower than the narrator goes
+  #     anywhere else here;
+  #   - page 3's identical doubled word (كَثِيرَةٍ. كَثِيرَةٍ) was confirmed BY
+  #     EAR as spoken twice, and there it was the page TEXT that was wrong.
+  # Whisper's "heard it once" is the known ASR failure on repeated words and
+  # is outweighed. Kept on record as the one dissent rather than deleted.
   - page: 4
     audio: "/audio/ibrahim/p4.mp3"
     words: true
