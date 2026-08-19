@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import BrandLockup from "@/components/BrandLockup";
 import Eyebrow from "@/components/Eyebrow";
 import Practice from "@/components/Practice";
 import ReadAlong from "@/components/ReadAlong";
@@ -130,8 +131,9 @@ export default function Home() {
       {/* ---------------------------------------------------------------- *
        * Hero
        * ---------------------------------------------------------------- */}
-      <header className="mx-auto w-full max-w-[1100px] px-6 pt-10 sm:px-8">
-        <p className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+      <header className="brand-home border-ink/10 mx-auto flex w-full max-w-[1100px] flex-wrap items-center justify-between gap-x-8 gap-y-3 border-b px-6 py-5 sm:px-8">
+        <BrandLockup size="hero" priority />
+        <p className="flex flex-wrap items-baseline gap-x-3 gap-y-1 sm:justify-end">
           <span
             lang="ar"
             dir="rtl"
@@ -156,7 +158,7 @@ export default function Home() {
         </p>
       </header>
 
-      <section className="mx-auto grid w-full max-w-[1100px] items-center gap-12 px-6 pt-12 pb-8 sm:px-8 lg:grid-cols-[1.05fr_1fr] lg:gap-16 lg:pt-20">
+      <section className="mx-auto grid w-full max-w-[1100px] items-center gap-12 px-6 pt-10 pb-8 sm:px-8 lg:grid-cols-[1.05fr_1fr] lg:gap-16 lg:pt-16">
         <div>
           <h1
             className="text-ink font-semibold text-balance"
@@ -904,20 +906,23 @@ export default function Home() {
       </section>
 
       <footer className="mx-auto w-full max-w-[1100px] px-6 py-12 sm:px-8">
-        <div className="border-ink/10 flex flex-col gap-3 border-t pt-8 sm:flex-row sm:items-baseline sm:justify-between">
-          <p
-            className="text-ink/60"
-            style={{ fontSize: "14px", lineHeight: 1.6 }}
-          >
-            {book.title_en} — book {book.series_order} of the{" "}
-            <i>Qasas an-Nabiyyin</i> readers.
-          </p>
-          <p
-            className="text-ink/45"
-            style={{ fontSize: "14px", lineHeight: 1.6 }}
-          >
-            Ages {book.age_range} · Arabic and English
-          </p>
+        <div className="border-ink/10 flex flex-col gap-5 border-t pt-8 sm:flex-row sm:items-center sm:justify-between">
+          <BrandLockup size="footer" />
+          <div className="sm:text-right">
+            <p
+              className="text-ink/60"
+              style={{ fontSize: "14px", lineHeight: 1.6 }}
+            >
+              {book.title_en} — book {book.series_order} of the{" "}
+              <i>Qasas an-Nabiyyin</i> readers.
+            </p>
+            <p
+              className="text-ink/45 mt-1"
+              style={{ fontSize: "14px", lineHeight: 1.6 }}
+            >
+              Ages {book.age_range} · Arabic and English
+            </p>
+          </div>
         </div>
       </footer>
     </div>

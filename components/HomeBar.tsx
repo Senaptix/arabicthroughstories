@@ -1,4 +1,5 @@
 import Link from "next/link";
+import BrandLockup from "@/components/BrandLockup";
 
 /**
  * A slim sticky bar with a link home and, where a book is in context, a
@@ -20,13 +21,8 @@ import Link from "next/link";
 export default function HomeBar({ bookSlug }: { bookSlug?: string }) {
   return (
     <div className="border-ink/10 bg-paper/90 sticky top-0 z-10 border-b backdrop-blur">
-      <nav className="mx-auto flex w-full max-w-[640px] items-center gap-5 px-6 sm:px-8">
-        <Link
-          href="/"
-          className="text-brand-blue inline-flex min-h-[48px] items-center text-[14px] underline-offset-4 hover:underline"
-        >
-          ← Home
-        </Link>
+      <nav className="mx-auto flex min-h-[58px] w-full max-w-[640px] items-center justify-between gap-4 px-6 sm:px-8">
+        <BrandLockup />
         {bookSlug && (
           <Link
             href={`/books/${bookSlug}#every-page`}

@@ -30,9 +30,24 @@ export const metadata: Metadata = {
   // "Qisas" would be قِصَص, the plural of قِصَّة — a common misreading. The
   // repo name and the `series` slug still say qisas; those are identifiers,
   // not reader-facing text.
-  title: "Qasas — Arabic reading for children",
+  applicationName: "Qasas Kids",
+  title: {
+    default: "Qasas Kids — Arabic stories for children",
+    template: "%s | Qasas Kids",
+  },
   description:
     "Audio, vocabulary and word roots for a bilingual Arabic/English reading series for children.",
+  icons: {
+    icon: "/brand/qasas-kids-icon.png",
+    apple: "/brand/qasas-kids-icon.png",
+  },
+  openGraph: {
+    type: "website",
+    siteName: "Qasas Kids",
+    title: "Qasas Kids — Arabic stories for children",
+    description:
+      "Audio, vocabulary and word roots for a bilingual Arabic/English reading series for children.",
+  },
 };
 
 export default function RootLayout({
