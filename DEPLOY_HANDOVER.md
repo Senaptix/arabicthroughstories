@@ -226,14 +226,21 @@ server {
     # Audio is the bulk of this site: 14MB across 50 clips, replayed often
     # by children. Long-cache immutable build output and media; let HTML
     # revalidate.
+    # proxy_hide_header is REQUIRED, not decoration. add_header APPENDS to
+    # what the upstream sent, and Next.js serves public/ files with
+    # "Cache-Control: public, max-age=0". Without hiding that first, the
+    # response carries BOTH headers, clients act on the max-age=0, and the
+    # audio re-downloads every visit — the opposite of the intent here.
     location /_next/static/ {
         proxy_pass http://127.0.0.1:3000;
-        add_header Cache-Control "public, max-age=31536000, immutable";
+        proxy_hide_header Cache-Control;
+        add_header Cache-Control "public, max-age=31536000, immutable" always;
     }
 
     location /audio/ {
         proxy_pass http://127.0.0.1:3000;
-        add_header Cache-Control "public, max-age=2592000";
+        proxy_hide_header Cache-Control;
+        add_header Cache-Control "public, max-age=2592000" always;
     }
 
     location / {
@@ -323,8 +330,15 @@ blue/green deployment for a children's book companion.
    with the narration. These are the only two configured read-alongs.
 8. **Range requests work** — seek to the middle of a clip and confirm it
    plays. Missing `Accept-Ranges` breaks scrubbing.
-9. `/books/ibrahim/p3/practice` end to end: answer all four exercises,
-   confirm the results list and per-exercise "Try again".
+8b. **Caching actually applies** — `curl -I` an audio file and a
+   `/_next/static/` asset and confirm **exactly one** `Cache-Control`
+   header on each. Two headers means `proxy_hide_header` is missing and
+   the long cache is not in force. Passing check 8 does not imply this.
+9. `/books/ibrahim/p3/practice` end to end: answer **every exercise the
+   page actually has** — page 3 has **three** (match, choose, order), not
+   four. `EXERCISE_SPEC.md` rule 8 skips a type rather than forcing it, and
+   names pages 3, 5 and 6 as having three. Confirm the results list and
+   per-exercise "Try again".
 10. **`reboot`, then confirm the site returns unattended.** This is what
     proves the systemd unit is enabled, and it is the check most often
     skipped.
