@@ -1,212 +1,184 @@
 # Deploy handover — qasaskids.com on a Hostinger VPS
 
-Written 2026-08-19 for Codex to execute. Everything needed is in this file;
-you should not need the conversation that produced it.
+For Codex to pick up and finish. Everything needed is in this file.
 
 The site is the **Qasas companion** — audio, vocabulary, word families and
-practice exercises for the printed book *Who Broke the Idols*. Repo:
-`Senaptix/arabicthroughstories`, branch `master`.
+practice exercises for the printed book *Who Broke the Idols*.
+Repo: `Senaptix/arabicthroughstories`, branch `master`.
 
 ---
 
-## 0. Read this before provisioning anything
+## 0. STATE — what is already done
 
-**The site is 100% static today.** Every route prerenders — 109 pages, all
-`○` or `●` in the build output. There are no API routes, no server actions,
-no middleware, no environment variables and no database. Confirmed
-2026-08-19:
+**Verified live on the box 2026-08-19 22:32 UTC. Do not redo these.**
+
+### The server
+
+| | |
+|---|---|
+| IP | **191.215.35.21** |
+| OS | Ubuntu 24.04.4 LTS, clean, no control panel |
+| Plan | Hostinger KVM 1 — 1 vCPU, 4 GB RAM, 48 GB disk (47 GB free), 4 TB bandwidth |
+| Access | `ssh root@191.215.35.21` — **key auth works** |
+
+### Done and verified
+
+- ✅ **SSH key auth working.** An ed25519 key was added at provision time.
+  Comment `qasaskids-vps`, fingerprint
+  `SHA256:xM5flUI6Zxxz61R8ggg+r7W+aNC0mwlJIZCJVvHdNdw`. The private key is
+  passphrase-protected and held in the Windows `ssh-agent` service on the
+  owner's machine (service set to Automatic and started).
+- ✅ **DNS done and propagated.** Confirmed against `8.8.8.8`:
+  - `qasaskids.com` → `191.215.35.21`
+  - `www.qasaskids.com` → `191.215.35.21`
+  - Nameservers: `apollo.dns-parking.com`, `athena.dns-parking.com`
+    (Hostinger). Records are managed in the Hostinger domain panel.
+  - The old parking A record (`2.57.91.91`) is gone.
+- ✅ `apt update && apt upgrade` completed.
+- ✅ Installed: **nginx 1.24.0**, **git 2.43.0**, `ufw`, `curl`.
+- ✅ **Firewall active** and enabled at boot:
+  ```
+  [1] OpenSSH       ALLOW IN  Anywhere
+  [2] Nginx Full    ALLOW IN  Anywhere
+  [3] OpenSSH (v6)  ALLOW IN  Anywhere (v6)
+  [4] Nginx Full (v6) ALLOW IN Anywhere (v6)
+  ```
+
+### Not done — this is the remaining work
+
+- ❌ Node not installed
+- ❌ `qasas` service user not created; `/srv` is empty
+- ❌ Repo not cloned, never built on this box
+- ❌ `output: "standalone"` not yet set in `next.config.ts` (§2)
+- ❌ nanoid advisory not cleared (§3)
+- ❌ No systemd unit; nginx still serving only the default site
+- ❌ No TLS — certbot not installed
+- ❌ **SSH still accepts passwords** (§7)
+
+### One finding to act on
+
+`sshd` has two conflicting drop-ins, and OpenSSH takes the **first** value it
+reads, so password login is currently **enabled**:
 
 ```
-Route (app)
-┌ ○ /
-├ ○ /_not-found
-├   /books/[book]              └ ● /books/ibrahim
-├   /books/[book]/[pageSlug]   ├ ● /books/ibrahim/p1  └ ● [+51 more]
-└   /books/[book]/[pageSlug]/practice  ├ ● …/p3/practice  └ ● [+47 more]
+/etc/ssh/sshd_config.d/50-cloud-init.conf:        PasswordAuthentication yes   ← wins
+/etc/ssh/sshd_config.d/60-cloudimg-settings.conf: PasswordAuthentication no
 ```
 
-**So a VPS is more than this site currently needs**, and that is worth
-saying plainly before money is spent. A static host (Cloudflare Pages,
-Netlify) would serve this for free, from a global CDN, with automatic SSL
-and zero maintenance — strictly faster and cheaper than one VPS in one
-datacentre, for exactly the site that exists today.
-
-**The VPS is nevertheless a defensible call, for one reason:** the planned
-student-accounts feature (see the plan in
-`~/.claude/plans/student-accounts-and-vocab-progress.md`) adds sign-in,
-per-student progress and a "My Words" page. Those routes must read a
-session cookie, so they cannot be static. When that lands, this site needs
-a Node server. Provisioning the VPS now avoids migrating later.
-
-**The owner has chosen the VPS. Proceed with it.** This section exists so
-the tradeoff is on record, not to reopen the decision.
-
-> If the owner would rather defer the cost: deploy to Cloudflare Pages
-> today (free, ~15 minutes), and revisit the VPS when accounts are actually
-> being built. Nothing in this repo would need to change either way.
+Hardening in §7 must edit **`50-cloud-init.conf`**. Editing the 60- file or
+`sshd_config` itself will appear to work and change nothing.
 
 ---
 
-## 1. What the owner must do first (Codex cannot)
+## 1. Remaining work, in order
 
-These need account access and a payment method. Codex should stop and ask
-for the results rather than attempt them.
+1. Node 22 LTS (§4.1)
+2. `qasas` user, clone, build (§4.2)
+3. `standalone` config change (§2) and the nanoid fix (§3) — **commit these
+   to the repo, not just on the server**
+4. systemd unit (§4.4)
+5. nginx site (§4.5)
+6. TLS (§4.6)
+7. SSH hardening (§7)
+8. Verification (§6) — all of it
 
-1. **Buy the VPS.** Hostinger → VPS (*not* shared hosting — the "How do you
-   want to build your website?" wizard with AI Builder / WordPress / Node.js
-   / PHP options is the **shared hosting** onboarding and does not apply.
-   A VPS gives a bare Ubuntu box and no wizard).
-   - **OS: Ubuntu 24.04 LTS**, clean, no control panel.
-   - Smallest plan is ample (1–2 vCPU / 4GB). This site is 22MB of assets
-     and a small Node process.
-2. **Provide the VPS public IPv4 address.**
-3. **Confirm where `qasaskids.com`'s DNS is managed** — Hostinger's own
-   nameservers, or elsewhere. Codex needs to know which panel holds the
-   records, and the owner must make the DNS change (§4) themselves or grant
-   access.
-4. **Create an SSH key pair and add the public key to the VPS.** Do not
-   deploy with password authentication.
-
-**Do not ask the owner to paste passwords, private keys, or API tokens into
-chat.** SSH access should be arranged by the owner adding a public key.
+Accounts, sign-in and student progress are a **later phase** and out of scope
+here. That plan is [ACCOUNTS_PLAN.md](ACCOUNTS_PLAN.md); do not start it
+until the static site is live and verified.
 
 ---
 
-## 2. The build-mode decision — use `standalone`, not `export`
+## 2. Build mode — `standalone`, not `export`
 
-Two options exist. Pick **`standalone`**.
+The site is **100% static today**: 109 routes, all `○`/`●`, no API routes, no
+server actions, no middleware, no env vars, no database.
 
-| | `output: "export"` | `output: "standalone"` ← use this |
+So a VPS is more than this site currently needs, and that is recorded here
+deliberately — a free static host would serve today's site faster. **The VPS
+is justified by the planned sign-in work** ([ACCOUNTS_PLAN.md](ACCOUNTS_PLAN.md)),
+whose routes must read a session cookie and therefore cannot be static. The
+owner has chosen this path; the note exists so the tradeoff is not
+rediscovered later.
+
+| | `output: "export"` | `output: "standalone"` ← use |
 |---|---|---|
-| Runtime | None. nginx serves files | Node process behind nginx |
-| `next/image` | Breaks unless `unoptimized: true` | Works as-is |
-| Accounts later | Needs a rebuild to add | Already correct |
-| Complexity | Lower | Slightly higher |
+| Runtime | none, nginx serves files | Node behind nginx |
+| `next/image` | breaks without `unoptimized: true` | works |
+| Accounts later | needs redoing | already right |
 
-**Why `standalone` wins here:** `next/image` is used in
-[app/page.tsx](app/page.tsx) and [components/BookReader.tsx](components/BookReader.tsx).
-A static export would force `images: { unoptimized: true }`, shipping the
-full-size `public/art` (5.8MB) and `public/book` (1.2MB) to every visitor —
-a real regression on mobile, which is the primary device for this audience.
-`standalone` also matches the intent already recorded in
-[next.config.ts](next.config.ts) and does not need redoing when accounts land.
-
-**The change is one line.** In [next.config.ts](next.config.ts):
+**Why:** `next/image` is used in [app/page.tsx](app/page.tsx) and
+[components/BookReader.tsx](components/BookReader.tsx). A static export would
+force `unoptimized: true`, shipping full-size `public/art` (5.8 MB) and
+`public/book` (1.2 MB) to every visitor — a real regression on the phones
+this audience reads on.
 
 ```ts
+// next.config.ts
 const nextConfig: NextConfig = {
   output: "standalone",
 };
 ```
 
-The existing comment in that file says this is "verified to build" — **do
-not take that on trust, build it and confirm** before deploying.
+**Build it and confirm before deploying.** The existing comment in that file
+claims standalone is "verified to build" — treat that as unverified.
 
 ---
 
-## 3. Fix the known vulnerability first
-
-`npm audit` reports one high-severity advisory, a transitive dependency:
+## 3. Clear the vulnerability first
 
 ```
-nanoid  <3.3.18   high
-nanoid: custom generators can loop indefinitely when size is zero
-GHSA-2v37-7h3g-55p8
+nanoid <3.3.18   high   GHSA-2v37-7h3g-55p8
+custom generators can loop indefinitely when size is zero
 ```
 
-Run `npm audit fix`, then re-run the full verification in §7. Commit the
-lockfile change separately from the deploy work so it is easy to revert on
-its own. Do not use `--force`; if the clean fix does not resolve it, report
-back rather than escalating.
+Transitive. Run `npm audit fix` (not `--force`), commit the lockfile change
+**on its own** so it can be reverted independently, then re-verify. If the
+clean fix does not resolve it, report back rather than escalating.
 
 ---
 
-## 4. DNS for qasaskids.com
+## 4. Server setup
 
-Point the apex and `www` at the VPS:
+### 4.1 Node 22 LTS
 
-| Type | Name | Value | TTL |
-|---|---|---|---|
-| A | `@` | *VPS IPv4* | 3600 |
-| A | `www` | *VPS IPv4* | 3600 |
-
-Propagation is usually minutes but allow up to a few hours. **Verify before
-attempting SSL** — Let's Encrypt validates over HTTP against the live
-record, so certbot fails confusingly if DNS has not landed:
-
-```bash
-dig +short qasaskids.com
-```
-
-Decide and stick to one canonical host. **Recommend apex** (`qasaskids.com`)
-with `www` permanently redirecting to it — shorter, and it is what will be
-printed alongside the book's QR code.
-
----
-
-## 5. Server setup
-
-All commands as a **non-root sudo user**. Do not run the app as root.
-
-### 5.1 Base
-
-```bash
-sudo apt update && sudo apt upgrade -y
-sudo apt install -y nginx git ufw
-```
-
-### 5.2 Firewall
-
-```bash
-sudo ufw allow OpenSSH
-sudo ufw allow 'Nginx Full'
-sudo ufw enable
-```
-
-Port 3000 stays closed to the world — nginx reaches it over localhost.
-
-### 5.3 Node
-
-Use **Node 22 LTS**. (Local development is on Node 24; pin the server to LTS
-rather than matching it.)
+Local dev is on Node 24; pin the server to LTS.
 
 ```bash
 curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
-sudo apt install -y nodejs
+apt-get install -y nodejs
 node --version
 ```
 
-### 5.4 Application user and checkout
+### 4.2 App user and first build
 
 ```bash
-sudo adduser --system --group --home /srv/qasas qasas
+adduser --system --group --home /srv/qasas qasas
 sudo -u qasas git clone https://github.com/Senaptix/arabicthroughstories.git /srv/qasas/app
 cd /srv/qasas/app
 sudo -u qasas npm ci
 sudo -u qasas npm run build
 ```
 
-`npm run build` runs `prebuild` → `npm run check` → `lib/parse.check.ts`,
-the content guard. **A failing guard means the content is wrong, not that
-the guard should be bypassed.** Never deploy with `--ignore-scripts` or by
-skipping `prebuild`.
+`npm run build` runs `prebuild` → `npm run check` → `lib/parse.check.ts`, the
+content guard. **A failing guard means the content is wrong, not that the
+guard should be skipped.** Never use `--ignore-scripts` or bypass `prebuild`.
 
-### 5.5 The standalone output
+On 1 vCPU expect roughly 3–5 minutes.
 
-`output: "standalone"` emits a self-contained server at
-`.next/standalone/`, but **it does not copy `public/` or `.next/static/`** —
-this is the single most common way a standalone deploy ends up with a
-working page and no CSS, images or audio:
+### 4.3 The standalone copy step
+
+`output: "standalone"` does **not** copy `public/` or `.next/static/`. This
+is the usual way one of these deploys ends up live with working HTML and no
+CSS, images or audio:
 
 ```bash
-sudo -u qasas cp -r public .next/standalone/public
-sudo -u qasas cp -r .next/static .next/standalone/.next/static
+cp -r public .next/standalone/public
+cp -r .next/static .next/standalone/.next/static
 ```
 
-Fold these two lines into the deploy script (§6) so they cannot be
-forgotten.
+Put these in the deploy script (§5) so they cannot be forgotten.
 
-### 5.6 systemd service
+### 4.4 systemd
 
 `/etc/systemd/system/qasas.service`:
 
@@ -230,33 +202,32 @@ RestartSec=5
 WantedBy=multi-user.target
 ```
 
-`HOSTNAME=127.0.0.1` binds to localhost only, so the Node process is not
-reachable except through nginx.
+`HOSTNAME=127.0.0.1` binds to localhost, so Node is reachable only through
+nginx. Port 3000 is closed at the firewall anyway.
 
 ```bash
-sudo systemctl daemon-reload
-sudo systemctl enable --now qasas
-sudo systemctl status qasas
+systemctl daemon-reload
+systemctl enable --now qasas
+systemctl status qasas
 ```
 
-**Use systemd, not PM2.** It is already on the box, it survives reboot
-without extra setup, and it is one less dependency to keep patched.
+**Use systemd, not PM2** — already present, survives reboot without extra
+setup, one less thing to patch.
 
-### 5.7 nginx
+### 4.5 nginx
 
-`/etc/nginx/sites-available/qasaskids.com`:
+Remove the default site. `/etc/nginx/sites-available/qasaskids.com`:
 
 ```nginx
 server {
     listen 80;
     server_name qasaskids.com www.qasaskids.com;
 
-    # Audio is the bulk of this site: 14MB across 50 clips, served to
-    # children who may replay a page many times. Long-cache the immutable
-    # build output and the media; let HTML revalidate.
+    # Audio is the bulk of this site: 14MB across 50 clips, replayed often
+    # by children. Long-cache immutable build output and media; let HTML
+    # revalidate.
     location /_next/static/ {
         proxy_pass http://127.0.0.1:3000;
-        proxy_cache_valid 200 1y;
         add_header Cache-Control "public, max-age=31536000, immutable";
     }
 
@@ -280,30 +251,34 @@ server {
 ```
 
 ```bash
-sudo ln -s /etc/nginx/sites-available/qasaskids.com /etc/nginx/sites-enabled/
-sudo rm -f /etc/nginx/sites-enabled/default
-sudo nginx -t && sudo systemctl reload nginx
+ln -s /etc/nginx/sites-available/qasaskids.com /etc/nginx/sites-enabled/
+rm -f /etc/nginx/sites-enabled/default
+nginx -t && systemctl reload nginx
 ```
 
-### 5.8 SSL
+### 4.6 TLS
 
-Only after §4 verifies:
+DNS is already live (§0), so this can run immediately.
 
 ```bash
-sudo apt install -y certbot python3-certbot-nginx
-sudo certbot --nginx -d qasaskids.com -d www.qasaskids.com
+apt-get install -y certbot python3-certbot-nginx
+certbot --nginx -d qasaskids.com -d www.qasaskids.com
 ```
 
-Choose redirect-HTTP-to-HTTPS when prompted. Confirm auto-renewal:
+Choose redirect-HTTP-to-HTTPS. Then confirm renewal actually works:
 
 ```bash
-sudo systemctl list-timers | grep certbot
-sudo certbot renew --dry-run
+systemctl list-timers | grep certbot
+certbot renew --dry-run
 ```
+
+**Canonical host is the apex**, `qasaskids.com`, with `www` redirecting to
+it. This is what will be printed beside the book's QR code, so it should not
+change afterwards.
 
 ---
 
-## 6. Deploying updates
+## 5. Deploy script
 
 `/srv/qasas/deploy.sh`, owned by `qasas`, `chmod +x`:
 
@@ -323,77 +298,100 @@ cp -r .next/static .next/standalone/.next/static
 sudo systemctl restart qasas
 ```
 
-`set -euo pipefail` matters: without it a failed build still restarts the
+`set -euo pipefail` matters — without it a failed build still restarts the
 service and can put a broken tree live.
 
-There is a brief drop while the service restarts. That is acceptable for
-this site; do not build blue/green deployment for a children's book
-companion unless downtime actually becomes a problem.
+There is a brief drop during restart. Acceptable here; do not build
+blue/green deployment for a children's book companion.
 
 ---
 
-## 7. Verification — all of it, before reporting done
+## 6. Verification — all of it
 
-1. `npm run build` completes and the route table still shows **109 pages**,
-   all `○`/`●`. Any route turning dynamic (`ƒ`) is a regression — nothing in
-   this deploy should change rendering.
+1. `npm run build` shows **109 routes, all `○`/`●`**. Any route turning `ƒ`
+   is a regression: nothing in this deploy should change rendering.
 2. `npm run lint` and `npx tsc --noEmit` clean.
-3. `npm audit` — the nanoid advisory is gone (§3).
-4. `https://qasaskids.com` loads over TLS with a valid certificate.
-5. `http://qasaskids.com` redirects to HTTPS.
-6. `www.qasaskids.com` redirects to the apex.
-7. **Arabic renders with full diacritics** in the Scheherazade New face.
-   `next/font` self-hosts at build time, so this proves the font shipped.
-   Garbled or unvowelled Arabic is a blocking failure — the vowel marks are
-   the thing being taught.
-8. **Audio plays and the read-along highlights.** Open
-   `/books/ibrahim/p3` and `/books/ibrahim/p4`; press play; confirm the
-   highlighted line advances with the narration. These two pages are the
-   only configured read-alongs.
-9. **Audio serves with HTTP range support** — seek to the middle of a clip
-   and confirm it plays. A missing `Accept-Ranges` breaks scrubbing.
-10. A practice screen works end to end: `/books/ibrahim/p3/practice`,
-    answer all four exercises, confirm the results list and the per-exercise
-    "Try again".
-11. `sudo reboot`, then confirm the site returns **without manual
-    intervention** — this is what proves the systemd unit is enabled, and it
-    is the check most often skipped.
-12. Mobile width (375px): no horizontal scroll, tap targets usable.
+3. `npm audit` — nanoid advisory gone.
+4. `https://qasaskids.com` loads with a valid certificate.
+5. `http://` redirects to `https://`; `www` redirects to the apex.
+6. **Arabic renders with full diacritics** in Scheherazade New. `next/font`
+   self-hosts at build time, so this proves the font shipped. Garbled or
+   unvowelled Arabic is a **blocking failure** — the vowel marks are the
+   thing being taught.
+7. **Audio plays and the read-along highlights.** Open `/books/ibrahim/p3`
+   and `/books/ibrahim/p4`, press play, confirm the highlighted line advances
+   with the narration. These are the only two configured read-alongs.
+8. **Range requests work** — seek to the middle of a clip and confirm it
+   plays. Missing `Accept-Ranges` breaks scrubbing.
+9. `/books/ibrahim/p3/practice` end to end: answer all four exercises,
+   confirm the results list and per-exercise "Try again".
+10. **`reboot`, then confirm the site returns unattended.** This is what
+    proves the systemd unit is enabled, and it is the check most often
+    skipped.
+11. Mobile width 375px: no horizontal scroll, tap targets usable.
 
 ---
 
-## 8. Do not do these
+## 7. SSH hardening — do this last
 
-- **Do not run `npm run dev` on the server.** Production is the built
-  output behind systemd.
+Do it **after** §6 passes, so a mistake here cannot be tangled up with a
+broken deploy. Keep the current session open while testing, so a new
+terminal can verify before the old one is closed.
+
+Per §0, edit **`/etc/ssh/sshd_config.d/50-cloud-init.conf`** — it is the file
+that wins:
+
+```
+PasswordAuthentication no
+```
+
+```bash
+sshd -t && systemctl restart ssh
+```
+
+**Then, in a NEW terminal**, confirm `ssh root@191.215.35.21` still works on
+the key before closing the existing session. A public IP starts collecting
+automated password-guessing within hours; key-only auth makes it pointless.
+
+Consider also creating a non-root sudo user for day-to-day access and
+disabling `PermitRootLogin`. Not required, and not to be done in the same
+change as the above — verify one, then the other.
+
+---
+
+## 8. Do not
+
+- **Do not run `npm run dev` on the server.**
 - **Do not bypass the content guard.** `prebuild` → `lib/parse.check.ts`
   exists because a wrong Arabic vowel changes the word. A red guard is a
   content bug to fix, never a check to disable.
-- **Do not edit content on the server.** `content/data/` is source, edited
-  in the repo and deployed. A server-side edit will be silently destroyed by
-  the next `git pull --ff-only`.
-- **Do not add analytics, cookie banners, chat widgets or ad scripts.**
-  This site is used by children; anything of that kind is the owner's
-  decision, not a deploy-time addition.
-- **Do not install a control panel** (cPanel/Plesk/CloudPanel) on top of
-  this setup. It will fight the hand-written nginx config.
-- **Do not commit secrets.** The site needs none today. When accounts land,
-  Supabase keys belong in an environment file readable only by the `qasas`
-  user, never in the repo.
+- **Do not edit content on the server.** `content/data/` is source, edited in
+  the repo. A server-side edit is silently destroyed by the next
+  `git pull --ff-only`.
+- **Do not add analytics, cookie banners, chat widgets or ad scripts.** This
+  site is used by children; that is the owner's decision, not a deploy-time
+  addition.
+- **Do not install a control panel** (cPanel/Plesk/CloudPanel). It will fight
+  this nginx config.
+- **Do not commit secrets.** None are needed today. When accounts land,
+  keys go in an env file readable only by `qasas`, never in the repo.
 - **Do not force-push or rewrite `master`.**
+- **Do not start the accounts work** ([ACCOUNTS_PLAN.md](ACCOUNTS_PLAN.md))
+  until the static site is live and §6 passes.
 
 ---
 
 ## 9. Open items for the owner
 
-1. **Canonical host** — apex recommended (§4). Confirm, because it is what
-   gets printed next to the book's QR code and should not change afterwards.
-2. **Backups.** A VPS is not backed up by default. The site rebuilds from
-   git, so the code is safe, but take Hostinger's snapshot option if the
-   box will ever hold anything that is not in the repo — which it will, the
-   moment accounts exist.
-3. **Where the single book QR points.** `ACCESS_MODEL.md` in the book repo
-   specifies one QR per book rather than per page. That URL should be
-   settled before anything goes to print.
-4. **Email for the domain** — not covered here. If `hello@qasaskids.com` is
-   wanted, it needs MX records, which are independent of this deploy.
+1. **Backups.** Hostinger's paid daily backup was declined at purchase, on
+   the reasoning that the box holds nothing that is not in git. **That stops
+   being true the moment accounts ship** — student progress will exist only
+   here. Raise it before that phase goes live. A nightly `pg_dump` offsite is
+   both cheaper and more reliable than a filesystem snapshot of a running
+   database.
+2. **Where the book's single QR points.** `ACCESS_MODEL.md` in the book repo
+   specifies one QR per book, not per page. Settle the URL before print.
+3. **Email for the domain.** Not covered here. `hello@qasaskids.com` would
+   need MX records, independent of this deploy.
+4. **Renewal.** VPS renews at **£11.99/mo** from August 2027 (paid £86.26 for
+   the first 12 months).
