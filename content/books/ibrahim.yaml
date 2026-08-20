@@ -14,7 +14,12 @@ non_story_pages: [1, 2, 53, 54]
 # Pages readable in the on-site book preview, from page 1. A PREVIEW, not
 # the book: the site is a companion and the full text stays in print.
 # Images live in public/book/<slug>/NN.webp.
-preview_pages: 13
+#
+# Rendered from "Qasas an-Nabiyyin - The Story of Ibrahim (AS).pdf" (the
+# print master, 54 pages) at 1000px wide. Regenerate from that PDF rather
+# than editing the webp files, so the preview cannot drift from what is
+# actually printed.
+preview_pages: 10
 
 # Sample pages shown on the marketing page. AT MOST TWO — the site is a
 # COMPANION to the book (audio, vocabulary, word families), not the book
