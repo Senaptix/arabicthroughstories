@@ -168,20 +168,20 @@ export default function Home() {
               letterSpacing: "-0.02em",
             }}
           >
-            Read the story.
+            The Arabic book your
             <br />
-            <span className="text-brand-blue">Keep the Arabic.</span>
+            child can <span className="text-brand-blue">actually finish</span>.
           </h1>
 
           <p
             className="text-ink/75 mt-6 max-w-[46ch]"
             style={{ fontSize: "clamp(16px, 2.5vw, 19px)", lineHeight: 1.65 }}
           >
-            An illustrated retelling of the story of Ibrahim{" "}
-            <span className="whitespace-nowrap">(AS)</span>, following
-            al-Nadwi&rsquo;s <i>Qasas an-Nabiyyin</i>. Every page carries fully
-            vowelled Arabic, the English underneath, and the new words gathered
-            where a child can find them.
+            The story of Ibrahim <span className="whitespace-nowrap">(AS)</span>
+            , retold from al-Nadwi&rsquo;s <i>Qasas an-Nabiyyin</i>. Every vowel
+            is marked, the English sits underneath, and every page is read
+            aloud — so a child who is still sounding words out can get through
+            all {storyPages} of them, and understand what they read.
           </p>
 
           <p
@@ -199,28 +199,46 @@ export default function Home() {
             <span>Arabic and English</span>
           </p>
 
+          {/* Buy is the primary action ONLY once there is a listing to send
+              people to. While book.buy_url is empty the preview takes the
+              primary slot, so this page can ship before the book is listed
+              without ever rendering a button that goes nowhere. */}
           <div className="mt-9 flex flex-wrap items-center gap-3">
-            <a
-              href="#inside"
-              className="bg-brand-blue text-paper inline-flex min-h-[48px] items-center rounded-2xl px-6 font-medium transition-transform duration-150 ease-out hover:-translate-y-0.5"
-              style={{ fontSize: "16px" }}
-            >
-              Look inside
-            </a>
-            <Link
-              href={`/books/${book.slug}`}
-              className="border-ink/15 text-ink hover:border-ink/35 inline-flex min-h-[48px] items-center rounded-2xl border px-6 font-medium transition-colors duration-150 ease-out"
-              style={{ fontSize: "16px" }}
-            >
-              Open the book
-            </Link>
-            <Link
-              href={`/books/${book.slug}#every-page`}
-              className="border-ink/15 text-ink hover:border-ink/35 inline-flex min-h-[48px] items-center rounded-2xl border px-6 font-medium transition-colors duration-150 ease-out"
-              style={{ fontSize: "16px" }}
-            >
-              Page by page
-            </Link>
+            {book.buy_url ? (
+              <>
+                <a
+                  href={book.buy_url}
+                  className="bg-brand-blue text-paper inline-flex min-h-[48px] items-center rounded-2xl px-6 font-medium transition-transform duration-150 ease-out hover:-translate-y-0.5"
+                  style={{ fontSize: "16px" }}
+                >
+                  Get the book
+                </a>
+                <a
+                  href="#inside"
+                  className="border-ink/15 text-ink hover:border-ink/35 inline-flex min-h-[48px] items-center rounded-2xl border px-6 font-medium transition-colors duration-150 ease-out"
+                  style={{ fontSize: "16px" }}
+                >
+                  Look inside
+                </a>
+              </>
+            ) : (
+              <>
+                <a
+                  href="#inside"
+                  className="bg-brand-blue text-paper inline-flex min-h-[48px] items-center rounded-2xl px-6 font-medium transition-transform duration-150 ease-out hover:-translate-y-0.5"
+                  style={{ fontSize: "16px" }}
+                >
+                  Look inside
+                </a>
+                <Link
+                  href={`/books/${book.slug}`}
+                  className="border-ink/15 text-ink hover:border-ink/35 inline-flex min-h-[48px] items-center rounded-2xl border px-6 font-medium transition-colors duration-150 ease-out"
+                  style={{ fontSize: "16px" }}
+                >
+                  Hear a page
+                </Link>
+              </>
+            )}
           </div>
         </div>
 
@@ -763,6 +781,72 @@ export default function Home() {
       </section>
 
       {/* ---------------------------------------------------------------- *
+       * What a buyer actually gets. Sits immediately before the series so
+       * the sequence reads: here is the book -> here is where it leads.
+       * ---------------------------------------------------------------- */}
+      <section className="mx-auto w-full max-w-[1100px] px-6 py-16 sm:px-8 lg:py-24">
+        <div className="reveal">
+          <Eyebrow>What you get</Eyebrow>
+          <h2
+            className="text-ink mt-4 max-w-[22ch] font-semibold text-balance"
+            style={{
+              fontSize: "clamp(28px, 5vw, 42px)",
+              lineHeight: 1.15,
+              letterSpacing: "-0.015em",
+            }}
+          >
+            A printed book, and everything that makes it readable.
+          </h2>
+        </div>
+
+        <div className="reveal mt-10 grid gap-4 sm:grid-cols-2">
+          <div className="border-ink/10 bg-paper rounded-2xl border px-6 py-6">
+            <p
+              className="text-brand-blue font-semibold"
+              style={{ fontSize: "13px", letterSpacing: "0.1em" }}
+            >
+              THE BOOK
+            </p>
+            <ul
+              className="text-ink/75 mt-4 space-y-2"
+              style={{ fontSize: "16px", lineHeight: 1.6 }}
+            >
+              <li>{book.page_count} pages, illustrated throughout</li>
+              <li>Fully vowelled Arabic on every story page</li>
+              <li>English underneath, never in place of the Arabic</li>
+              <li>New words glossed on the page they appear</li>
+              <li>Word-family appendix at the back</li>
+            </ul>
+          </div>
+
+          <div className="border-brand-blue/25 bg-sand/25 rounded-2xl border px-6 py-6">
+            <p
+              className="text-brand-blue font-semibold"
+              style={{ fontSize: "13px", letterSpacing: "0.1em" }}
+            >
+              THE COMPANION
+            </p>
+            <ul
+              className="text-ink/75 mt-4 space-y-2"
+              style={{ fontSize: "16px", lineHeight: 1.6 }}
+            >
+              <li>Every story page read aloud by a native reader</li>
+              <li>The line lights up as it is read</li>
+              <li>All {vocab.length} words, searchable</li>
+              <li>{families.length} word families to explore</li>
+              <li>Practice on all {practicePageCount} story pages</li>
+            </ul>
+            <p
+              className="text-ink/50 mt-4"
+              style={{ fontSize: "14px", lineHeight: 1.55 }}
+            >
+              On this site, on any device. Nothing to install.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ---------------------------------------------------------------- *
        * The series — this is book one, and the vowels come off gradually
        * ---------------------------------------------------------------- */}
       <section className="bg-sand/35 border-ink/5 border-y">
@@ -894,13 +978,36 @@ export default function Home() {
               That is the whole idea of this book.
             </p>
 
-            <Link
-              href={`/books/${book.slug}`}
-              className="bg-paper text-night mt-10 inline-flex min-h-[48px] items-center rounded-2xl px-7 font-medium transition-transform duration-150 ease-out hover:-translate-y-0.5"
-              style={{ fontSize: "16px" }}
-            >
-              Open the book
-            </Link>
+            {/* Closing CTA. Same rule as the hero: no buy button until there
+                is a listing behind it. */}
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+              {book.buy_url ? (
+                <>
+                  <a
+                    href={book.buy_url}
+                    className="bg-paper text-night inline-flex min-h-[48px] items-center rounded-2xl px-7 font-medium transition-transform duration-150 ease-out hover:-translate-y-0.5"
+                    style={{ fontSize: "16px" }}
+                  >
+                    Get the book
+                  </a>
+                  <Link
+                    href={`/books/${book.slug}`}
+                    className="border-paper/25 text-paper hover:border-paper/50 inline-flex min-h-[48px] items-center rounded-2xl border px-7 font-medium transition-colors duration-150 ease-out"
+                    style={{ fontSize: "16px" }}
+                  >
+                    Hear a page first
+                  </Link>
+                </>
+              ) : (
+                <Link
+                  href={`/books/${book.slug}`}
+                  className="bg-paper text-night inline-flex min-h-[48px] items-center rounded-2xl px-7 font-medium transition-transform duration-150 ease-out hover:-translate-y-0.5"
+                  style={{ fontSize: "16px" }}
+                >
+                  Open the book
+                </Link>
+              )}
+            </div>
           </div>
         </div>
       </section>

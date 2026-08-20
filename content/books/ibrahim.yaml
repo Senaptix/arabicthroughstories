@@ -5,6 +5,11 @@ series: qisas-an-nabiyyin
 series_order: 1
 page_count: 54
 age_range: "7-12"
+
+# The Amazon listing. LEAVE EMPTY until it is live — the landing page hides
+# the buy button entirely while this is blank rather than showing one that
+# goes nowhere. Pasting the URL here is the only change needed to go live.
+buy_url: ""
 vowelling: full
 audio_status: none
 # Cover, contents, and the two word-family appendix pages carry no story

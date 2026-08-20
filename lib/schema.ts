@@ -89,6 +89,18 @@ export const BookSchema = z.object({
   series_order: z.number().int().positive().nullable(),
   page_count: z.number().int().positive(),
   age_range: z.string().min(1),
+  /**
+   * Where "Buy the book" points — the Amazon listing.
+   *
+   * EMPTY until the listing is live, and the landing page checks it: with no
+   * URL the buy CTA is not rendered at all and the preview becomes the
+   * primary action. That way the sales page can ship before the listing
+   * exists without ever showing a button that goes nowhere. Filling this in
+   * is the whole of "go live".
+   */
+  buy_url: z
+    .union([z.string().url(), z.literal("")])
+    .default(""),
   /** Graded-vowelling level — see SERIES_PLAN.md in the book repo. */
   vowelling: z.enum(["full", "mostly", "partial", "minimal", "natural"]),
   audio_status: z.enum(["none", "draft", "final"]),
