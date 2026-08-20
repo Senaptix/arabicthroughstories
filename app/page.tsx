@@ -43,25 +43,25 @@ const THREAD_ROOT = "س ج د";
  * A SAMPLE — three pages, not a page browser. This is a landing page; the
  * rest of the book stays in print.
  *
- * ONLY generated/passed-pages-03-24-review-v2 (book repo) may appear here —
- * the reviewed set covering pages 3-24. Ibrahim is not drawn at all: not
- * featured, not blank-faced, not shown from behind either. Not every scene
- * uses the same device — some are shot as what he sees, others are simply
- * staged so he isn't in frame (he stayed home, he was thrown in the fire
- * and isn't shown landing in it) — whichever reads best for that page, not
- * a rule applied mechanically to all of them.
+ * SOURCE, since 2026-08-20: the illustrations embedded in "Qasas an-Nabiyyin
+ * - The Story of Ibrahim (AS).pdf" (book repo), the print master. They are
+ * extracted from it losslessly at 688x968, the size ART_STANDARD_V2.md
+ * specifies. Take art from the PDF and nowhere else — the candidate folders
+ * (generated/, for-upload/, FlowImages/) hold prototypes that were NOT the
+ * ones printed, and the site drifted onto exactly those once already.
  *
- * Check each page individually before adding it; don't trust the source
- * folder's own QA.md sight unseen. (An earlier note here wrongly flagged
- * this folder's page 10 as a rear-view depiction of Ibrahim — that was a
- * mix-up with a same-numbered file from a different, composed-book-page
- * batch. This folder's page 10 is a POV shot of people walking away from
- * him and is fine; corrected 2026-08-09.)
+ * Ibrahim is not drawn at all: not featured, not blank-faced, not shown from
+ * behind either. Not every scene uses the same device — some are shot as
+ * what he sees (pages 19 and 21 are the sky he is looking at), others are
+ * simply staged so he isn't in frame — whichever reads best for that page,
+ * not a rule applied mechanically to all of them.
+ *
+ * Check each page by eye before adding it, whatever the source claims.
  */
 const SAMPLE_ART = [
-  { page: 4, file: "page-04.png", caption: "The house of idols" },
-  { page: 19, file: "page-19.png", caption: "A star in the night sky" },
-  { page: 21, file: "page-21.png", caption: "The sun, rising" },
+  { page: 4, file: "page-04.webp", caption: "The house of idols" },
+  { page: 19, file: "page-19.webp", caption: "A star in the night sky" },
+  { page: 21, file: "page-21.webp", caption: "The sun, rising" },
 ];
 
 /** How the series weans the reader off tashkeel, book by book (SERIES_PLAN.md). */
@@ -250,16 +250,16 @@ export default function Home() {
         >
           <div className="relative aspect-[4/3.4]">
             <FloatingPage
-              file="page-14.png"
+              file="page-14.webp"
               className="absolute top-[6%] left-0 w-[52%] -rotate-6"
               priority
             />
             <FloatingPage
-              file="page-18.png"
+              file="page-18.webp"
               className="absolute top-0 right-[2%] w-[46%] rotate-3"
             />
             <FloatingPage
-              file="page-03.png"
+              file="page-03.webp"
               className="absolute bottom-0 left-[24%] w-[54%] rotate-1"
               priority
             />
