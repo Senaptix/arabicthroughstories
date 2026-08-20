@@ -64,15 +64,6 @@ const SAMPLE_ART = [
   { page: 21, file: "page-21.webp", caption: "The sun, rising" },
 ];
 
-/** How the series weans the reader off tashkeel, book by book (SERIES_PLAN.md). */
-const SERIES = [
-  { n: 1, label: "Fully vowelled", note: "This book" },
-  { n: 2, label: "Mostly vowelled" },
-  { n: 3, label: "Partially vowelled" },
-  { n: 4, label: "Primarily unvowelled" },
-  { n: 5, label: "Natural Arabic" },
-];
-
 /** Look a word's gloss up in the checked vocabulary index. Throws rather than
  *  rendering a word with no meaning beside it. */
 function gloss(vocab: VocabEntry[], ar: string): VocabEntry {
@@ -843,84 +834,6 @@ export default function Home() {
               On this site, on any device. Nothing to install.
             </p>
           </div>
-        </div>
-      </section>
-
-      {/* ---------------------------------------------------------------- *
-       * The series — this is book one, and the vowels come off gradually
-       * ---------------------------------------------------------------- */}
-      <section className="bg-sand/35 border-ink/5 border-y">
-        <div className="mx-auto w-full max-w-[1100px] px-6 py-16 sm:px-8 lg:py-24">
-          <div className="reveal">
-            <Eyebrow>Book one of the series</Eyebrow>
-            <h2
-              className="text-ink mt-4 max-w-[24ch] font-semibold text-balance"
-              style={{
-                fontSize: "clamp(28px, 5vw, 42px)",
-                lineHeight: 1.15,
-                letterSpacing: "-0.015em",
-              }}
-            >
-              The vowels come off one book at a time.
-            </h2>
-            <p
-              className="text-ink/70 mt-4 max-w-[56ch]"
-              style={{ fontSize: "clamp(16px, 2.5vw, 18px)", lineHeight: 1.65 }}
-            >
-              One prophet per book, and the tashkeel thins out as the series
-              goes on — so a reader is weaned off the marks the way Arabic is
-              actually learned, instead of meeting unvowelled text as a cliff.
-              This book is the first, and it is fully vowelled throughout.
-            </p>
-          </div>
-
-          <ol className="reveal mt-10 grid gap-3 sm:grid-cols-5">
-            {SERIES.map((s) => {
-              const current = s.n === book.series_order;
-              return (
-                <li
-                  key={s.n}
-                  className={`rounded-2xl border px-4 py-4 ${
-                    current
-                      ? "border-brand-blue/30 bg-paper"
-                      : "border-ink/10 bg-paper/40"
-                  }`}
-                >
-                  <p
-                    className={
-                      current ? "text-brand-blue font-semibold" : "text-ink/40"
-                    }
-                    style={{ fontSize: "13px", letterSpacing: "0.1em" }}
-                  >
-                    BOOK {s.n}
-                  </p>
-                  <p
-                    className={
-                      current ? "text-ink mt-1 font-medium" : "text-ink/60 mt-1"
-                    }
-                    style={{ fontSize: "15px", lineHeight: 1.45 }}
-                  >
-                    {s.label}
-                  </p>
-                  {s.note && (
-                    <p
-                      className="text-ink/45 mt-1"
-                      style={{ fontSize: "13px", lineHeight: 1.4 }}
-                    >
-                      {s.note}
-                    </p>
-                  )}
-                </li>
-              );
-            })}
-          </ol>
-
-          <p
-            className="text-ink/50 mt-6"
-            style={{ fontSize: "14px", lineHeight: 1.6 }}
-          >
-            Later books are in preparation. Nothing in this one depends on them.
-          </p>
         </div>
       </section>
 

@@ -169,9 +169,11 @@ and the payoff moment (meeting مَكْسُور in Book 3 having learned كَس�
 Book 1) only works if the index spans books. Entries will need a book number
 as well as a page.
 
-It also feeds the graded-vowelling plan in [SERIES_PLAN.md](SERIES_PLAN.md):
-"familiar word" for the purpose of dropping vowels can reasonably mean
-_familiar family_, not just familiar word.
+(It also fed the graded-vowelling plan — "familiar word", for the purpose of
+dropping vowels, could reasonably have meant _familiar family_. That plan was
+**scrapped on 2026-08-20** and every book now stays fully vowelled, so this
+particular argument no longer applies. The cross-book index above stands on
+its own regardless.)
 
 **Book 2 gets this better than Book 1 can.** Its pages are not laid out yet, so
 a small word-family box can sit on the page where the second member of a family
