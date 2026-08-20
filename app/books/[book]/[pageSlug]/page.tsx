@@ -8,6 +8,8 @@ import ReadAlong from "@/components/ReadAlong";
 import VocabCards from "@/components/VocabCards";
 import RootFamily from "@/components/RootFamily";
 import QuranicText from "@/components/QuranicText";
+import GateNotice from "@/components/GateNotice";
+import { canViewPage } from "@/lib/access";
 import {
   getAllBooks,
   getBook,
@@ -91,6 +93,10 @@ export default async function PageCard({
   const { book, words, families, text, hasAudio } = content;
   if (page > book.page_count) notFound();
 
+  // The ONE access check. While lib/access.ts has GATE_ENABLED off this is
+  // always true and the page renders exactly as it always has.
+  const canView = await canViewPage(slug, page);
+
   const isStoryPage = !book.non_story_pages.includes(page);
   // Per page, not per book: a clip exists for this page or it does not.
   // Read from disk, so dropping p7.mp3 in lights page 7 up on next build.
@@ -129,7 +135,9 @@ export default async function PageCard({
           separate screens (WEBSITE_DESIGN.md). No card around this zone —
           ReadAlong is already visually rich (play button, highlighted
           lines); the eyebrow is enough to title it. */}
-        {readAlong ? (
+        {!canView ? (
+          <GateNotice page={page} bookSlug={book.slug} />
+        ) : readAlong ? (
           <section className="mb-10">
             <Eyebrow>Read along</Eyebrow>
             <div className="mt-4">
@@ -248,7 +256,7 @@ export default async function PageCard({
 
           {/* Practice is its own screen: the text and words above would
               otherwise be the answer key sitting next to the question. */}
-          {hasPractice && (
+          {canView && hasPractice && (
             <Link
               href={`/books/${book.slug}/p${page}/practice`}
               className="bg-brand-blue text-paper mt-4 inline-flex min-h-[48px] w-full items-center justify-center rounded-xl px-5 font-medium"
