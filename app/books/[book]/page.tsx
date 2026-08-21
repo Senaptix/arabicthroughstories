@@ -1,8 +1,8 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import BookReader, { type ReaderPage } from "@/components/BookReader";
 import HomeBar from "@/components/HomeBar";
+import PageIndex from "@/components/PageIndex";
 import RootFamily from "@/components/RootFamily";
 import {
   getAllBooks,
@@ -165,26 +165,11 @@ export default async function BookOverview({
               : `${recorded.size} so far, and the rest are being recorded`}
             .
           </p>
-          <ul className="flex flex-wrap gap-2">
-            {storyPages.map((n) => {
-              const heard = recorded.has(n);
-              return (
-                <li key={n}>
-                  <Link
-                    href={`/books/${book.slug}/p${n}`}
-                    aria-label={heard ? `Page ${n}, with audio` : `Page ${n}`}
-                    className={
-                      heard
-                        ? "inline-flex h-[48px] min-w-[48px] items-center justify-center rounded-[12px] bg-[var(--brand-blue)] px-3 text-[15px] font-medium text-[var(--paper)] transition-transform duration-150 ease-out hover:-translate-y-0.5"
-                        : "inline-flex h-[48px] min-w-[48px] items-center justify-center rounded-[12px] bg-[var(--surface)]/70 px-3 text-[15px] text-[var(--brand-blue)] transition-colors duration-150 ease-out hover:bg-[var(--surface)]"
-                    }
-                  >
-                    {n}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+          <PageIndex
+            bookSlug={book.slug}
+            pages={storyPages}
+            recorded={[...recorded]}
+          />
         </section>
       </main>
     </>

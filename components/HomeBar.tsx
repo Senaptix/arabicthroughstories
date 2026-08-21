@@ -23,14 +23,22 @@ export default function HomeBar({ bookSlug }: { bookSlug?: string }) {
     <div className="border-ink/10 bg-paper/90 sticky top-0 z-10 border-b backdrop-blur">
       <nav className="mx-auto flex min-h-[58px] w-full max-w-[640px] items-center justify-between gap-4 px-6 sm:px-8">
         <BrandLockup />
-        {bookSlug && (
+        <div className="flex items-center gap-4">
+          {bookSlug && (
+            <Link
+              href={`/books/${bookSlug}#every-page`}
+              className="text-brand-blue hidden min-h-[48px] items-center text-[14px] underline-offset-4 hover:underline sm:inline-flex"
+            >
+              Page by page
+            </Link>
+          )}
           <Link
-            href={`/books/${bookSlug}#every-page`}
+            href="/account"
             className="text-brand-blue inline-flex min-h-[48px] items-center text-[14px] underline-offset-4 hover:underline"
           >
-            Page by page
+            Parent area
           </Link>
-        )}
+        </div>
       </nav>
     </div>
   );

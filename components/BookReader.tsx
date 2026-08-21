@@ -42,14 +42,34 @@ export default function BookReader({
   const last = pages.length - 1;
   const page = pages[i];
 
+  const saveProgress = useCallback(
+    (kind: "visit" | "complete", pageNumber: number) => {
+      fetch(`/api/progress/${kind}`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ bookSlug: slug, page: pageNumber }),
+        keepalive: true,
+      }).catch(() => undefined);
+    },
+    [slug],
+  );
+
   // Functional update, not `i + 1`: a child tapping quickly fires several
   // clicks inside one render, and reading `i` from the closure would make
   // them all compute the same page and silently drop turns.
   const step = useCallback(
-    (delta: number) =>
-      setI((cur) => Math.min(Math.max(cur + delta, 0), last)),
-    [last],
+    (delta: number) => {
+      if (delta > 0) saveProgress("complete", page.n);
+      setI((cur) => {
+        return Math.min(Math.max(cur + delta, 0), last);
+      });
+    },
+    [last, page.n, saveProgress],
   );
+
+  useEffect(() => {
+    saveProgress("visit", page.n);
+  }, [page.n, saveProgress]);
 
   // Arrow keys move through the book. Bound to the window rather than the
   // figure so it works without the reader having focus.

@@ -104,6 +104,8 @@ export default async function PracticePage({
             <Practice
               exercises={exercises}
               words={words.map((w) => ({ ar: w.ar, en: w.en }))}
+              bookSlug={book.slug}
+              page={page}
             />
           </div>
         </section>

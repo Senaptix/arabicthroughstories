@@ -9,6 +9,7 @@ import VocabCards from "@/components/VocabCards";
 import RootFamily from "@/components/RootFamily";
 import QuranicText from "@/components/QuranicText";
 import GateNotice from "@/components/GateNotice";
+import PageProgress from "@/components/PageProgress";
 import { canViewPage } from "@/lib/access";
 import {
   getAllBooks,
@@ -128,6 +129,8 @@ export default async function PageCard({
             {book.title_en}
           </Link>
         </div>
+
+        <PageProgress bookSlug={book.slug} page={page} />
 
         {/* With audio, the text and the player are one thing: the line being
           read highlights as it plays. The audio is a pronunciation model for

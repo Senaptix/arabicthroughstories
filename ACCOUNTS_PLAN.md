@@ -1,4 +1,109 @@
-# Student accounts, progress, and a cumulative vocabulary list
+# Parent accounts and child progress — current Supabase implementation
+
+**Revised 2026-08-21. This section is authoritative.** The owner deliberately
+chose Supabase after creating and configuring the production project. The old
+self-hosted Better Auth/Postgres proposal is retained below for decision
+history only and must not be implemented alongside Supabase.
+
+## Current decision
+
+- Supabase Auth with parent email/password accounts and confirmed email.
+- Custom SMTP uses the existing Hostinger mailbox `accounts@qasaskids.com`.
+- Children are profiles under the adult account. They have a nickname and a
+  fixed icon only: no email, DOB, photograph, password or free-text notes.
+- An httpOnly `qk_child` cookie identifies the active child and is validated
+  against the signed-in parent before every progress read or write.
+- Supabase Row Level Security is the final isolation boundary. The browser
+  never receives the service-role key.
+- Exact page records drive progress and My Words. Do not infer completion from
+  a highest page because the companion lets a reader jump between pages.
+- The existing purchase/ownership gate is a separate later phase. Do not turn
+  on `GATE_ENABLED` or treat an account as proof of purchase.
+- Published book routes remain static. Client islands fetch/save progress
+  after hydration; only account, auth callback and progress API routes are
+  dynamic.
+
+## Free-plan availability decision
+
+Supabase's current official policy says a low-activity Free project may be
+paused after seven days. A few real database requests per day are typically
+enough to avoid pausing, but this is not a guarantee. A paused project is
+resumed manually from the dashboard; do not promise an automatic ~30-second
+wake. Pro currently starts at $25/month and is not auto-paused.
+
+- Build and acceptance testing may use Free.
+- Before announcing accounts as a reliable production feature, the owner must
+  consciously choose either the Free-plan pause risk or Pro's no-pause
+  guarantee. Code must not change billing.
+- Do not add synthetic keep-alive traffic to evade pausing.
+
+Official references:
+
+- https://supabase.com/docs/guides/platform/free-project-pausing
+- https://supabase.com/pricing
+
+## Implemented architecture
+
+The migration is `supabase/migrations/202608210001_accounts_progress.sql`.
+It creates:
+
+- `child_profiles` — parent-owned profiles, maximum five;
+- `book_progress` — last page actually visited for Continue Reading;
+- `page_progress` — exact visits, read completion, practice completion and
+  the best aggregate score. Individual answers are never stored.
+
+RLS policies scope all three tables through `auth.uid()`. `anon` has no table
+privileges. The project was created with automatic table exposure disabled,
+so the migration explicitly grants the required operations to
+`authenticated` while RLS continues to filter every row.
+
+Routes and hooks:
+
+- `/account/sign-up`, `/account/sign-in`, forgot/reset password;
+- `/auth/callback` exchanges Supabase PKCE codes;
+- `/account` manages profiles and Continue Reading;
+- `/account/my-words` derives vocabulary from exact completed pages and the
+  verified content corpus; vocabulary is not duplicated in the database;
+- `/api/progress/{visit,complete,practice,status}` validates the trusted
+  Supabase claims and active profile;
+- static reading/practice/index components call those APIs only after
+  hydration, so signed-out reading stays available.
+
+Environment variables (values never committed):
+
+```text
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
+NEXT_PUBLIC_SITE_URL=https://qasaskids.com
+```
+
+## Required acceptance checks
+
+1. Apply the migration in the intended Supabase project.
+2. Register a real parent address, receive confirmation through Hostinger
+   SMTP, and sign in.
+3. Request and complete a password reset; invalid/expired links fail safely.
+4. Create five profiles; a sixth is rejected by both app and database.
+5. With two parent accounts, confirm neither can read or mutate the other's
+   profiles or progress, including after editing `qk_child` manually.
+6. Visit a page, reload and see Continue Reading return to that exact page.
+7. Mark non-consecutive pages read; My Words contains only vocabulary from
+   those exact pages.
+8. Finish practice twice with different scores; keep the best aggregate and
+   no per-question answers.
+9. Signed-out book pages, audio, vocabulary and practice continue to work.
+10. Run the content guard, lint, TypeScript and production build. All existing
+    published content routes must remain static; new account/API routes may be
+    dynamic.
+11. Deploy production environment variables without exposing a service-role
+    key, then repeat the auth and progress checks on `qasaskids.com`.
+
+---
+
+# Superseded proposal — self-hosted Better Auth/Postgres
+
+Everything below this line is historical context and is not an instruction
+for the current build.
 
 **Revised 2026-08-19** — rewritten for a self-hosted VPS. The earlier draft
 assumed Supabase; §0.1 records why that changed and what it means.
