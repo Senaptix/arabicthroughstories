@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import HomeBar from "@/components/HomeBar";
 import PageIndex from "@/components/PageIndex";
-import RootFamily from "@/components/RootFamily";
+import Link from "next/link";
 import {
   getAllBooks,
   getBook,
@@ -13,8 +13,13 @@ import {
 } from "@/lib/parse";
 
 /**
- * Book overview — effectively the printed word-family appendix, but
- * complete (every family, not the twelve chosen for paper) and clickable.
+ * Book overview — the way into the book: every page, in order.
+ *
+ * The word families used to live here too, and were the first thing on the
+ * page. They now have their own screen at /books/<slug>/words, linked from
+ * the bottom of this one. They are a reference you consult deliberately;
+ * having all 32 of them above the page index meant scrolling past the whole
+ * appendix to reach the page you actually came for.
  */
 
 /* The page-number grid below deliberately carries NO sample artwork. Three
@@ -68,9 +73,9 @@ export default async function BookOverview({
 
   return (
     <>
-      {/* Sticky, because this page is long — every word family, then every
-          page. A link only at the top strands anyone reading the book with no
-          way home short of scrolling back up. */}
+      {/* Sticky, because this page is long — 50 page numbers. A link only at
+          the top strands anyone reading the book with no way home short of
+          scrolling back up. */}
       <HomeBar bookSlug={book.slug} />
 
       <main className="mx-auto w-full max-w-[640px] px-6 py-10 sm:px-8">
@@ -95,31 +100,12 @@ export default async function BookOverview({
           </p>
         </header>
 
-        <section className="mb-12">
-          <h2 className="mb-2 text-[18px] font-medium">Related words</h2>
-          <p className="mb-6 text-[15px] text-[var(--ink)]/70">
-            Arabic words grow from three letters. Words built on the same three
-            letters have related meanings. Open a root to see its words, and tap
-            any word to go to the page it appears on.
-          </p>
+        {/* The page index comes FIRST. Someone opening this book wants the
+            page they are on; the word families are a reference you go to
+            deliberately, and all 32 of them sat between the reader and the
+            index. They now have their own screen, linked below.
 
-          <h2
-            lang="ar"
-            dir="rtl"
-            className="mb-4 font-[family-name:var(--font-arabic)]"
-            style={{ fontSize: "clamp(24px, 5vw, 30px)", lineHeight: 1.8 }}
-          >
-            الْجُذُورُ
-          </h2>
-
-          <RootFamily
-            families={families}
-            bookSlug={book.slug}
-            currentPage={0}
-          />
-        </section>
-
-        {/* scroll-mt: the sticky HomeBar would otherwise cover this heading
+            scroll-mt: the sticky HomeBar would otherwise cover this heading
             when reached via the "Page by page" link's #every-page jump. */}
         <section id="every-page" className="scroll-mt-20">
           <h2 className="mb-2 text-[18px] font-medium">Every page</h2>
@@ -136,6 +122,22 @@ export default async function BookOverview({
             pages={storyPages}
             recorded={[...recorded]}
           />
+        </section>
+
+        {/* The word families, as a way in rather than a wall of them. */}
+        <section className="mt-12 border-t border-[var(--ink)]/10 pt-8">
+          <h2 className="mb-2 text-[18px] font-medium">Related words</h2>
+          <p className="mb-4 max-w-[52ch] text-[15px] text-[var(--ink)]/70">
+            Arabic words grow from three letters, and words built on the same
+            three letters have related meanings. {families.length} families run
+            through this book.
+          </p>
+          <Link
+            href={`/books/${book.slug}/words`}
+            className="inline-flex min-h-[48px] items-center text-[15px] text-[var(--brand-blue)] underline-offset-4 hover:underline"
+          >
+            Explore the word families →
+          </Link>
         </section>
       </main>
     </>
