@@ -1,11 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import BrandLockup from "@/components/BrandLockup";
+import BookReader, { type ReaderPage } from "@/components/BookReader";
 import Eyebrow from "@/components/Eyebrow";
 import Practice from "@/components/Practice";
 import ReadAlong from "@/components/ReadAlong";
 import {
   getBook,
+  getReadAlong,
   parseExercises,
   parseRootFamilies,
   parseVocabulary,
@@ -105,6 +107,25 @@ export default function Home() {
 
   const sampleWords = vocab.filter((v) => v.page === SAMPLE_PAGE);
   const storyPages = book.page_count - book.non_story_pages.length;
+
+  // This is the same checked preview array that previously lived on the
+  // companion home. Keeping the image, vocabulary and read-along sources
+  // together ensures the page being shown and its support material cannot
+  // drift apart.
+  const readerPages: ReaderPage[] = Array.from(
+    { length: book.preview_pages },
+    (_, idx) => {
+      const n = idx + 1;
+      return {
+        n,
+        src: `/book/${book.slug}/${String(n).padStart(2, "0")}.webp`,
+        words: vocab
+          .filter((w) => w.page === n)
+          .map((w) => ({ ar: w.ar, en: w.en })),
+        readAlong: getReadAlong(book.slug, n),
+      };
+    },
+  );
 
   const exercisesByPage = parseExercises(SLUG);
   const practiceDemo = exercisesByPage.get(PRACTICE_DEMO_PAGE);
@@ -234,22 +255,13 @@ export default function Home() {
                 </a>
               </>
             ) : (
-              <>
-                <a
-                  href="#inside"
-                  className="bg-brand-blue text-paper inline-flex min-h-[48px] items-center rounded-2xl px-6 font-medium transition-transform duration-150 ease-out hover:-translate-y-0.5"
-                  style={{ fontSize: "16px" }}
-                >
-                  Look inside
-                </a>
-                <Link
-                  href={`/books/${book.slug}`}
-                  className="border-ink/15 text-ink hover:border-ink/35 inline-flex min-h-[48px] items-center rounded-2xl border px-6 font-medium transition-colors duration-150 ease-out"
-                  style={{ fontSize: "16px" }}
-                >
-                  Hear a page
-                </Link>
-              </>
+              <a
+                href="#inside"
+                className="bg-brand-blue text-paper inline-flex min-h-[48px] items-center rounded-2xl px-6 font-medium transition-transform duration-150 ease-out hover:-translate-y-0.5"
+                style={{ fontSize: "16px" }}
+              >
+                Look inside
+              </a>
             )}
           </div>
         </div>
@@ -278,6 +290,60 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ---------------------------------------------------------------- *
+       * The actual look-inside sample — the complete sales proof
+       * ---------------------------------------------------------------- */}
+      {readerPages.length > 0 && (
+        <section
+          id="inside"
+          className="bg-sand/25 border-ink/5 scroll-mt-8 border-y"
+        >
+          <div className="mx-auto w-full max-w-[720px] px-6 py-16 sm:px-8 lg:py-20">
+            <div className="reveal mb-10">
+              <Eyebrow>Look inside</Eyebrow>
+              <h2
+                className="text-ink mt-4 max-w-[18ch] font-semibold text-balance"
+                style={{
+                  fontSize: "clamp(28px, 5vw, 42px)",
+                  lineHeight: 1.15,
+                  letterSpacing: "-0.015em",
+                }}
+              >
+                Read the first {book.preview_pages} pages.
+              </h2>
+              <p
+                className="text-ink/70 mt-4 max-w-[52ch]"
+                style={{
+                  fontSize: "clamp(16px, 2.5vw, 18px)",
+                  lineHeight: 1.65,
+                }}
+              >
+                Click the page to turn it. Open <b>Book vocab</b> for the new
+                words on the page you are reading.
+              </p>
+            </div>
+
+            <BookReader
+              pages={readerPages}
+              totalPages={book.page_count}
+              slug={book.slug}
+            />
+
+            {book.buy_url && (
+              <div className="mt-10 flex justify-center">
+                <a
+                  href={book.buy_url}
+                  className="bg-brand-blue text-paper inline-flex min-h-[48px] items-center rounded-2xl px-7 font-medium transition-transform duration-150 ease-out hover:-translate-y-0.5"
+                  style={{ fontSize: "16px" }}
+                >
+                  Get the book
+                </a>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* ---------------------------------------------------------------- *
        * Read-along — the narration, the animation, and the line being read
@@ -404,7 +470,7 @@ export default function Home() {
        * Anatomy of a page — the real thing, parsed from the manuscript
        * ---------------------------------------------------------------- */}
       <section
-        id="inside"
+        id="every-page-holds"
         className="mx-auto w-full max-w-[1100px] scroll-mt-8 px-6 py-8 sm:px-8"
       >
         <div className="reveal">
@@ -912,35 +978,16 @@ export default function Home() {
               That is the whole idea of this book.
             </p>
 
-            {/* Closing CTA. Same rule as the hero: no buy button until there
-                is a listing behind it. */}
+            {/* The sample stays on the sales page, so the final action sends
+                a visitor back to the proof rather than into the owner area. */}
             <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-              {book.buy_url ? (
-                <>
-                  <a
-                    href={book.buy_url}
-                    className="bg-paper text-night inline-flex min-h-[48px] items-center rounded-2xl px-7 font-medium transition-transform duration-150 ease-out hover:-translate-y-0.5"
-                    style={{ fontSize: "16px" }}
-                  >
-                    Get the book
-                  </a>
-                  <Link
-                    href={`/books/${book.slug}`}
-                    className="border-paper/25 text-paper hover:border-paper/50 inline-flex min-h-[48px] items-center rounded-2xl border px-7 font-medium transition-colors duration-150 ease-out"
-                    style={{ fontSize: "16px" }}
-                  >
-                    Hear a page first
-                  </Link>
-                </>
-              ) : (
-                <Link
-                  href={`/books/${book.slug}`}
-                  className="bg-paper text-night inline-flex min-h-[48px] items-center rounded-2xl px-7 font-medium transition-transform duration-150 ease-out hover:-translate-y-0.5"
-                  style={{ fontSize: "16px" }}
-                >
-                  Open the book
-                </Link>
-              )}
+              <a
+                href="#inside"
+                className="bg-paper text-night inline-flex min-h-[48px] items-center rounded-2xl px-7 font-medium transition-transform duration-150 ease-out hover:-translate-y-0.5"
+                style={{ fontSize: "16px" }}
+              >
+                Look inside
+              </a>
             </div>
           </div>
         </div>
