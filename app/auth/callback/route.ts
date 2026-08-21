@@ -1,8 +1,16 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
-function safeNext(value: string | null) {
-  return value?.startsWith("/") && !value.startsWith("//") ? value : "/account";
+function safeNext(value: string | null, origin: string) {
+  if (!value) return "/account";
+
+  try {
+    const destination = new URL(value, origin);
+    if (destination.origin !== origin) return "/account";
+    return `${destination.pathname}${destination.search}${destination.hash}`;
+  } catch {
+    return "/account";
+  }
 }
 
 export async function GET(request: NextRequest) {
@@ -11,7 +19,11 @@ export async function GET(request: NextRequest) {
   if (code) {
     const supabase = await createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
-    if (!error) return NextResponse.redirect(new URL(safeNext(url.searchParams.get("next")), url.origin));
+    if (!error) {
+      return NextResponse.redirect(
+        new URL(safeNext(url.searchParams.get("next"), url.origin), url.origin),
+      );
+    }
   }
   return NextResponse.redirect(new URL("/account/sign-in?error=link", url.origin));
 }
