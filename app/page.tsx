@@ -692,12 +692,14 @@ export default function Home() {
                         style={{ fontSize: "15px", lineHeight: 1.7 }}
                       >
                         {w.en}
-                        <Link
-                          href={`/books/${book.slug}/p${m.page}`}
-                          className="text-brand-blue underline-offset-4 hover:underline"
-                        >
-                          page {m.page}
-                        </Link>
+                        {/* Not a link. Most of these words appear past the
+                            10-page preview, so linking them sent a visitor
+                            from the most persuasive thing on the page
+                            straight into a paywall. The page number is the
+                            point — that the same three letters come back 48
+                            pages later — and plain text makes it just as
+                            well. */}
+                        <span className="text-ink/45">page {m.page}</span>
                       </span>
                     </li>
                   );
@@ -752,13 +754,18 @@ export default function Home() {
                 works today.
               </p>
             )}
-            <Link
-              href={`/books/${book.slug}/p${SAMPLE_PAGE}`}
+            {/* This linked to /p{SAMPLE_PAGE} — past the 10-page preview, so
+                a sales page was promising "see it as a child would" and
+                delivering a paywall. The page is reproduced in full directly
+                above; the link only broke its own promise. Points at the
+                preview instead, which actually delivers. */}
+            <a
+              href="#inside"
               className="text-brand-blue mt-6 inline-flex min-h-[48px] items-center font-medium underline-offset-4 hover:underline"
               style={{ fontSize: "16px" }}
             >
-              See page {SAMPLE_PAGE} as a child would →
-            </Link>
+              Read the first ten pages →
+            </a>
           </div>
 
           <ul className="flex flex-col gap-4">
@@ -839,13 +846,12 @@ export default function Home() {
                 {practicePages[0]}–{practicePages[practicePages.length - 1]}),
                 with more on the way.
               </p>
-              <Link
-                href={`/books/${book.slug}/p${PRACTICE_DEMO_PAGE}/practice`}
-                className="text-brand-blue mt-6 inline-flex min-h-[48px] items-center font-medium underline-offset-4 hover:underline"
-                style={{ fontSize: "16px" }}
-              >
-                Practice page {PRACTICE_DEMO_PAGE} on its own screen →
-              </Link>
+              {/* No link out to /p4/practice. The real exercises are running
+                  a few centimetres to the right — the link was a second way
+                  to the same thing, and it opened the companion's shell,
+                  where a visitor could wander the page index instead of
+                  reading the rest of the pitch. A landing page should not
+                  hand people a side door out of itself. */}
             </div>
 
             <div>
