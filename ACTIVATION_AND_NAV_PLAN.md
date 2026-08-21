@@ -68,7 +68,7 @@ ships, the gate stops casual browsing and nothing else.
 buys book on Amazon
    -> signs up at qasaskids.com
    -> /activate: enters the Amazon order number
-   -> emails the receipt to receipts@qasaskids.com
+   -> emails the receipt to accounts@qasaskids.com
    -> Asma matches order number to receipt
    -> approves in Supabase
    -> 12 months, on the account
@@ -181,19 +181,31 @@ posting to an email service. If that is a step too far before the 25th,
 Asma can watch the table directly — volume will be tiny at launch, and a
 webhook can be added without touching the app.
 
-**Receiving address.** `receipts@qasaskids.com` on Hostinger's free email.
-The MX records are **already in place** (`mx1`/`mx2.hostinger.com`,
-verified 2026-08-21), so this is creating a mailbox, not a DNS change.
+**Receiving address: `accounts@qasaskids.com`** — live on Hostinger's Free
+Business Email plan (100 mailboxes, renews 2027-03-24).
 
-> ⚠️ **Do not let any email setup wizard "fix" or "reset" the DNS.** The A
-> records for `qasaskids.com` and `www` point at the VPS on
-> `191.215.35.21`. MX and A are different record types and coexist fine —
-> but a wizard offering to correct your DNS for email can overwrite the A
-> records and take the site down. Add or edit MX only; leave A alone.
+Verified 2026-08-21 after setup, because email wizards can overwrite DNS:
 
-Asma needs direct access to that mailbox, not a forward into someone
-else's inbox — she is matching order numbers against receipts, and it
-should be obvious which have been dealt with.
+```
+qasaskids.com      A   191.215.35.21     ✓ unchanged
+www.qasaskids.com  A   191.215.35.21     ✓ unchanged
+                   MX  mx1/mx2.hostinger.com
+                   TXT v=spf1 include:_spf.mail.hostinger.com ~all
+https://qasaskids.com -> 200
+```
+
+Mail and site records coexist correctly. **Re-run that check after any
+future DNS change** — the A records are what keep the site reachable, and
+an email wizard offering to "fix" your DNS is the likeliest thing to
+break them.
+
+Asma needs direct access to this mailbox, not a forward into someone
+else's inbox — she is matching order numbers against receipts, and it has
+to be obvious which have been dealt with.
+
+If activation mail starts drowning in general enquiries, add a dedicated
+`receipts@` later; 99 mailbox slots are free. Not worth splitting at
+launch volume.
 
 **Sending is a separate problem.** Supabase currently sends confirmation
 and reset email from its own domain. Moving those to `@qasaskids.com`
