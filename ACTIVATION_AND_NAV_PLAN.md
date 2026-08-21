@@ -62,17 +62,67 @@ The gate is on, but `hasMembership()` returns true for **any signed-in
 account**. Anyone can register free and read all 52 pages. Until Part B
 ships, the gate stops casual browsing and nothing else.
 
-### The flow
+### The flow — DECIDED 2026-08-21
+
+Access is granted **immediately on signup**, not held until a human has
+checked. The order number is collected at signup, and the receipt follows
+by email.
 
 ```
 buys book on Amazon
-   -> signs up at qasaskids.com
-   -> /activate: enters the Amazon order number
+   -> signs up at qasaskids.com, ENTERING THE ORDER NUMBER on the form
+   -> access starts at once  (provisional, 30 days)
    -> emails the receipt to receipts@qasaskids.com
    -> Asma matches order number to receipt
    -> approves in Supabase
-   -> 12 months, on the account
+   -> extended to 12 months
 ```
+
+**Why immediate access:** a parent who has already paid should not be
+locked out of the thing their book promised while waiting on a human. The
+friction would cost more genuine buyers than it would stop freeloaders.
+
+### The provisional window does the disabling
+
+The owner's instinct was to disable non-compliant accounts by hand. That
+works, but it depends on somebody **noticing an absence** — spotting that
+a receipt never arrived, for an account created weeks ago. People are
+reliably bad at that, and it silently stops happening the first busy week.
+
+So the entitlement created at signup **already has an expiry**:
+
+| | `expires_at` |
+|---|---|
+| On signup | `now() + 30 days` — provisional |
+| On Asma approving | `now() + 12 months` |
+| Receipt never sent | *lapses on its own* |
+
+This inverts the work. Asma only ever takes a **positive** action —
+approving something in front of her. Nobody has to remember to chase, and
+nobody has to remember to switch anyone off. A freeloader simply stops
+having access on day 31 while no one does anything at all.
+
+Manual disable stays available for abuse, but it is no longer the
+mechanism the model depends on.
+
+**30 days is one number**, in the trigger below. Long enough that a book
+bought as a gift and opened weeks later is not penalised; short enough
+that an unverified account does not persist for a year.
+
+### What the order number does and does not do
+
+Collected at signup, it is **unverified text** — nobody can check it
+against Amazon in real time, because KDP gives no per-order lookup
+(ACCESS_MODEL.md). Someone can type anything and get their 30 days.
+
+It still earns its place:
+
+- It is what Asma **matches the emailed receipt against**.
+- The partial unique index below means the same order cannot be approved
+  for two different accounts — so a real order number shared around
+  unlocks exactly one 12-month account, and the rest lapse at 30 days.
+- Asking for it at signup sets the expectation that this is verified,
+  which does more work than any check would.
 
 ### Why no file upload
 
@@ -129,7 +179,27 @@ not worth building before the 25th. But approving must not mean "flip a
 status **and** hand-write an entitlement row with the right dates". That
 is two steps, and the second one gets forgotten or mistyped.
 
-So a trigger does it:
+Two triggers. The first grants the provisional window the moment an
+activation is claimed at signup:
+
+```sql
+-- signup -> 30 days, immediately
+create or replace function public.grant_provisional()
+returns trigger language plpgsql security definer as $$
+begin
+  insert into public.entitlements (parent_id, source, starts_at, expires_at)
+  values (new.parent_id, 'provisional', now(), now() + interval '30 days')
+  on conflict (parent_id) do update
+    set expires_at = greatest(entitlements.expires_at, excluded.expires_at);
+  return new;
+end $$;
+
+create trigger activations_provisional
+  after insert on public.activations
+  for each row execute function public.grant_provisional();
+```
+
+The second upgrades it to a full year when Asma approves:
 
 ```sql
 create or replace function public.grant_on_approval()
@@ -139,7 +209,8 @@ begin
     insert into public.entitlements (parent_id, source, starts_at, expires_at)
     values (new.parent_id, 'book_activation', now(), now() + interval '12 months')
     on conflict (parent_id) do update
-      set expires_at = greatest(entitlements.expires_at, excluded.expires_at);
+      set source     = 'book_activation',
+          expires_at = greatest(entitlements.expires_at, excluded.expires_at);
     new.reviewed_at := now();
   end if;
   return new;
@@ -150,8 +221,16 @@ create trigger activations_grant
   for each row execute function public.grant_on_approval();
 ```
 
-Asma changes one cell. The database does the rest, and cannot do half of
-it. `greatest(...)` means re-approving extends rather than shortens.
+Asma changes one cell and the database does the rest — it cannot do half
+of it, which is the point of putting it here rather than in a checklist.
+
+`greatest(...)` in both means an approval always **extends** and never
+shortens, so approving on day 29 does not accidentally cut someone from
+30 days to a shorter window, and re-approving is harmless.
+
+**To revoke**, delete the `entitlements` row or set `expires_at` to the
+past. `hasMembership()` reads that one field, so it takes effect on the
+next request.
 
 ### RLS
 
@@ -247,13 +326,22 @@ Steps 1–4 are what the 25th needs.
 
 ## Decisions still open
 
-1. **Grace period.** Someone who has bought the book but not yet been
-   approved — do they wait, or get provisional access? Recommend waiting,
-   with a clear "usually within a day" message. Provisional access with no
-   check is the same as no gate.
-2. **Activation window.** ACCOUNTS_PLAN suggests 12 months from activation
-   provided it is activated within 90 days of purchase. Not encoded above;
-   add it to the trigger if wanted.
+1. ~~Grace period~~ — **decided 2026-08-21**: immediate provisional access
+   on signup, order number captured on the signup form, 30-day window,
+   extended to 12 months on approval.
+2. **The signup form now needs an order-number field**, and a line saying
+   where to send the receipt. That is a real change to `AuthForm` and the
+   `signUp` action, which currently take email and password only. Simplest
+   route: pass it as `options.data.order_number` on `supabase.auth.signUp`
+   so it lands in the user's metadata, then create the `activations` row
+   from there.
 3. **What a Kindle buyer submits.** Kindle orders have order numbers too,
    but the earlier reasoning was that Kindle buyers may not need the gate
-   at all.
+   at all — they already have the text.
+4. **What happens at day 31.** The account keeps working, the companion
+   locks, and the page they land on should say what to do rather than just
+   refusing. `GateNotice` currently assumes "you have not activated"; it
+   needs a second case for "your access has lapsed".
+5. **Nobody is told their window is closing.** No email goes out at day
+   25. Worth adding once volume justifies it — until then a parent's first
+   sign that anything was wrong is the companion locking.
