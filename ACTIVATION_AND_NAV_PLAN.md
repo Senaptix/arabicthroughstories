@@ -345,3 +345,166 @@ Steps 1–4 are what the 25th needs.
 5. **Nobody is told their window is closing.** No email goes out at day
    25. Worth adding once volume justifies it — until then a parent's first
    sign that anything was wrong is the companion locking.
+
+---
+
+# Part C — buyers who did not buy on Amazon
+
+Added 2026-08-21. The owner is buying author copies to sell in person at
+Islamic events. Those buyers have no Amazon order number, so the Part B
+flow cannot serve them.
+
+## Single-use activation codes
+
+This is the system ACCESS_MODEL.md called "the ideal" and ruled out —
+because KDP prints identical interiors, so a per-copy code was impossible.
+
+**Author copies remove that constraint.** The owner controls fulfilment,
+so each copy can carry a unique code on a card slipped inside.
+
+### The code path is BETTER than the Amazon path, deliberately
+
+| | Amazon buyer | Event buyer |
+|---|---|---|
+| Enters | order number | activation code |
+| Access | 30 days provisional | **12 months, immediately** |
+| Receipt needed | yes | **no** |
+| Human review | yes, Asma | **none** |
+
+That asymmetry is correct, not a loophole. **A code in someone's hand IS
+the proof of purchase** — the owner handed it over when they took the
+money. There is nothing left to verify. The Amazon flow only needs a
+receipt because KDP gives no way to check an order number.
+
+It also quietly rewards buying direct, where the margin is better.
+
+### One field, two paths
+
+Do **not** add a second box to the signup form. The existing order-number
+field accepts either, and the shape tells them apart:
+
+```
+starts "QK-"  ->  activation code  ->  redeem, 12 months, done
+otherwise     ->  Amazon order no. ->  activation row, 30 days, await receipt
+```
+
+A second field asks every buyer to work out which one they are.
+
+### Code format
+
+Alphabet `23456789ABCDEFGHJKMNPQRSTVWXYZ` — no `0/O`, `1/I/L`, or `U`.
+Those are the pairs people misread off a printed card, and every one of
+them becomes a support email.
+
+```
+QK-7X9K-4PL2
+```
+
+30^8 ≈ 656 billion combinations. Against a few hundred issued codes,
+guessing is hopeless — but rate-limit the redeem endpoint anyway, because
+the cost of not doing so is unbounded and the cost of doing it is a few
+lines.
+
+Match case-insensitively and ignore dashes, so however someone types it
+off the card, it works.
+
+### Table
+
+```sql
+create table public.activation_codes (
+  code        text primary key,
+  batch       text not null,              -- 'birmingham-2026-09'
+  created_at  timestamptz not null default now(),
+  redeemed_by uuid references auth.users(id) on delete set null,
+  redeemed_at timestamptz
+);
+create index activation_codes_batch on public.activation_codes (batch);
+```
+
+`redeemed_by is null` means available. No status column — the field that
+records who used it is the same field that marks it used, so the two can
+never disagree.
+
+`batch` is worth the column: it tells you which event a code came from,
+so you can see what sold where and kill a batch if a sheet goes missing.
+
+### Redemption must be atomic
+
+Two people entering the same code at once must not both get a year. The
+conditional `UPDATE` is what guarantees that — not a read-then-write:
+
+```sql
+create or replace function public.redeem_activation_code(p_code text)
+returns text language plpgsql security definer as $$
+declare
+  v_parent uuid := auth.uid();
+  v_norm   text := upper(replace(p_code, '-', ''));
+  v_found  text;
+begin
+  if v_parent is null then return 'not_signed_in'; end if;
+
+  update public.activation_codes
+     set redeemed_by = v_parent, redeemed_at = now()
+   where upper(replace(code, '-', '')) = v_norm
+     and redeemed_by is null
+  returning code into v_found;
+
+  if v_found is null then
+    if exists (select 1 from public.activation_codes
+                where upper(replace(code, '-', '')) = v_norm)
+      then return 'already_used';
+      else return 'not_found';
+    end if;
+  end if;
+
+  insert into public.entitlements (parent_id, source, starts_at, expires_at)
+  values (v_parent, 'direct_sale', now(), now() + interval '12 months')
+  on conflict (parent_id) do update
+    set source     = 'direct_sale',
+        expires_at = greatest(entitlements.expires_at, excluded.expires_at);
+
+  return 'ok';
+end $$;
+```
+
+`already_used` and `not_found` are distinguished on purpose. It slightly
+confirms a code exists, which barely matters at this scale — and a
+customer holding a card that says "already used" needs to be told that,
+not left guessing.
+
+### RLS: the table is not client-readable at all
+
+```sql
+alter table public.activation_codes enable row level security;
+revoke all on public.activation_codes from anon, authenticated;
+```
+
+No policy. Nobody selects from it; the `security definer` function is the
+only way in. That makes enumerating unused codes impossible rather than
+merely difficult.
+
+### Generating a batch
+
+A script — `scripts/make-codes.ts` — takes a count and a batch name and
+emits both the SQL to insert them and a CSV to print from. Generate with
+`crypto.randomBytes`, not `Math.random`: predictable codes are guessable
+codes.
+
+Print one per card, with the URL and a line of instruction. The card goes
+inside the book at the event.
+
+### What the buyer does
+
+1. Buys the book at the stall, gets a card.
+2. `qasaskids.com` → Book companion → create account.
+3. Types the code where the order number goes.
+4. Twelve months, immediately. No receipt, no wait.
+
+## Open
+
+1. **Lost card.** No recovery path — no email is attached to a code before
+   redemption. Keep the printed batch list; it is the only record.
+2. **What the card says.** Needs writing, and it is the only instruction
+   an event buyer gets.
+3. **Refunds.** Nothing revokes a redeemed code. Delete the entitlement
+   row by hand if it ever matters.
