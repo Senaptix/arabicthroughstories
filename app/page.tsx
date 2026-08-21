@@ -131,7 +131,12 @@ export default function Home() {
           near the top of the fold. muted + playsInline are what let it
           autoplay at all on mobile; aria-hidden because it carries no
           information the page does not already state in text. */}
-      <div className="bg-sand/40 border-ink/5 w-full border-b">
+      {/* Held to its own 16:9 box rather than stretched across the viewport.
+          A full-bleed band had to crop with object-cover, which on a wide
+          desktop threw away most of the frame and blew the logo up past the
+          edges. Capped width keeps the whole thing visible at every size and
+          keeps the headline near the top of the fold. */}
+      <div className="mx-auto w-full max-w-[500px] px-6 pt-6 pb-2 sm:px-8">
         <video
           src="/video/qasas-kids-intro.mp4"
           poster="/video/qasas-kids-intro-poster.webp"
@@ -141,17 +146,19 @@ export default function Home() {
           preload="metadata"
           aria-hidden="true"
           tabIndex={-1}
-          className="h-[clamp(160px,26vw,280px)] w-full object-cover motion-reduce:hidden"
+          className="border-ink/10 w-full rounded-2xl border motion-reduce:hidden"
         />
         {/* Anyone who has asked their system for less motion gets the still
-            lockup instead — same image as the poster, so the band looks
-            identical, it simply never moves. */}
+            lockup instead — same image as the poster, so it looks identical,
+            it simply never moves. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/video/qasas-kids-intro-poster.webp"
           alt=""
           aria-hidden="true"
-          className="hidden h-[clamp(160px,26vw,280px)] w-full object-cover motion-reduce:block"
+          width={960}
+          height={540}
+          className="border-ink/10 hidden w-full rounded-2xl border motion-reduce:block"
         />
       </div>
 
