@@ -131,37 +131,6 @@ export default function Home() {
           near the top of the fold. muted + playsInline are what let it
           autoplay at all on mobile; aria-hidden because it carries no
           information the page does not already state in text. */}
-      {/* Held to its own 16:9 box rather than stretched across the viewport.
-          A full-bleed band had to crop with object-cover, which on a wide
-          desktop threw away most of the frame and blew the logo up past the
-          edges. Capped width keeps the whole thing visible at every size and
-          keeps the headline near the top of the fold. */}
-      <div className="mx-auto w-full max-w-[500px] px-6 pt-6 pb-2 sm:px-8">
-        <video
-          src="/video/qasas-kids-intro.mp4"
-          poster="/video/qasas-kids-intro-poster.webp"
-          autoPlay
-          muted
-          playsInline
-          preload="metadata"
-          aria-hidden="true"
-          tabIndex={-1}
-          className="border-ink/10 w-full rounded-2xl border motion-reduce:hidden"
-        />
-        {/* Anyone who has asked their system for less motion gets the still
-            lockup instead — same image as the poster, so it looks identical,
-            it simply never moves. */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/video/qasas-kids-intro-poster.webp"
-          alt=""
-          aria-hidden="true"
-          width={960}
-          height={540}
-          className="border-ink/10 hidden w-full rounded-2xl border motion-reduce:block"
-        />
-      </div>
-
       <header className="brand-home border-ink/10 mx-auto flex w-full max-w-[1100px] flex-wrap items-center justify-between gap-x-8 gap-y-3 border-b px-6 py-5 sm:px-8">
         <BrandLockup size="hero" priority />
         <p className="flex flex-wrap items-baseline gap-x-3 gap-y-1 sm:justify-end">
