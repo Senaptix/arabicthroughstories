@@ -3,6 +3,10 @@
 import { headers, cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import {
+  isAuthWeakPasswordError,
+  type AuthError,
+} from "@supabase/supabase-js";
 import { z } from "zod";
 import {
   ACTIVE_CHILD_COOKIE,
@@ -36,6 +40,35 @@ const profileNameSchema = z
   .min(1, "Enter a name or nickname.")
   .max(30, "Use 30 characters or fewer.")
   .refine((value) => !/[\u0000-\u001f\u007f]/.test(value), "That name contains unsupported characters.");
+
+const GENERIC_SIGN_UP_ERROR = "We could not create the account. Please try again.";
+
+function signUpErrorMessage(error: AuthError) {
+  switch (error.code) {
+    case "email_exists":
+    case "user_already_exists":
+      return "An account already uses that email address. Sign in instead, or reset the password if needed.";
+    case "over_email_send_rate_limit":
+      return "Too many confirmation emails have just been sent. Please wait a few minutes and try again.";
+    case "email_address_invalid":
+      return "That email address was not accepted. Check it carefully and try again.";
+    case "weak_password":
+      if (isAuthWeakPasswordError(error)) {
+        if (error.reasons.includes("pwned")) {
+          return "Choose a different password. That one has appeared in a known data breach.";
+        }
+        if (error.reasons.includes("characters")) {
+          return "Your password needs at least one lowercase letter, one uppercase letter, one number and one symbol.";
+        }
+        if (error.reasons.includes("length")) {
+          return "Choose a longer password and try again.";
+        }
+      }
+      return "Choose a longer password with at least one lowercase letter, one uppercase letter, one number and one symbol.";
+    default:
+      return GENERIC_SIGN_UP_ERROR;
+  }
+}
 
 function safeNext(value: FormDataEntryValue | null, fallback = "/account") {
   return typeof value === "string" && value.startsWith("/") && !value.startsWith("//")
@@ -128,10 +161,20 @@ export async function signUp(_state: ActionState, formData: FormData): Promise<A
     },
   });
   if (error) {
+    // Do not log the email, password, order number or Supabase's raw message.
+    // The stable code and HTTP status are enough to diagnose production auth.
+    console.error("Supabase sign-up failed", {
+      code: error.code ?? "unknown",
+      status: error.status ?? null,
+    });
+    const actionableMessage = signUpErrorMessage(error);
+    if (actionableMessage !== GENERIC_SIGN_UP_ERROR) {
+      return { message: actionableMessage };
+    }
     if (looksLikeActivationCode(parsed.data.orderNumber)) {
       return { message: "That activation code could not be redeemed. It may already have been used." };
     }
-    return { message: "We could not create the account. Please try again." };
+    return { message: GENERIC_SIGN_UP_ERROR };
   }
   redirect("/account/sign-in?check-email=1");
 }
