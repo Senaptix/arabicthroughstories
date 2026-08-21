@@ -53,10 +53,13 @@ sample_pages:
 # ffmpeg silencedetect — never estimated. Re-measure if audio is
 # re-recorded.
 read_alongs:
+  # No video here. The old p3-azar-stall animation was removed 2026-08-21:
+  # it was drawn in a flat cartoon style unlike the book's, and gave Azar a
+  # full face — eyes, nose, open mouth — which the printed page 3
+  # deliberately does not. The brand intro at the top of the landing page
+  # carries the same scene in the correct style instead.
   - page: 3
     audio: "/audio/ibrahim/p3.mp3"
-    video: "/video/p3-azar-stall.mp4"
-    poster: "/video/p3-azar-stall-poster.jpg"
     lines:
       - at: 0
         ar: "قَبْلَ أَيَّامٍ كَثِيرَةٍ. كَثِيرَةٍ جِدًّا."

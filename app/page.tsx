@@ -122,6 +122,39 @@ export default function Home() {
       {/* ---------------------------------------------------------------- *
        * Hero
        * ---------------------------------------------------------------- */}
+      {/* Brand opening. Runs once and rests on its closing frame — the page 3
+          market scene — rather than looping, so it reads as an intro instead
+          of a distraction sitting above the headline.
+
+          Cropped with object-cover to keep the band short: the logo and the
+          scene are both centred, so the crop costs nothing and the H1 stays
+          near the top of the fold. muted + playsInline are what let it
+          autoplay at all on mobile; aria-hidden because it carries no
+          information the page does not already state in text. */}
+      <div className="bg-sand/40 border-ink/5 w-full border-b">
+        <video
+          src="/video/qasas-kids-intro.mp4"
+          poster="/video/qasas-kids-intro-poster.webp"
+          autoPlay
+          muted
+          playsInline
+          preload="metadata"
+          aria-hidden="true"
+          tabIndex={-1}
+          className="h-[clamp(160px,26vw,280px)] w-full object-cover motion-reduce:hidden"
+        />
+        {/* Anyone who has asked their system for less motion gets the still
+            lockup instead — same image as the poster, so the band looks
+            identical, it simply never moves. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/video/qasas-kids-intro-poster.webp"
+          alt=""
+          aria-hidden="true"
+          className="hidden h-[clamp(160px,26vw,280px)] w-full object-cover motion-reduce:block"
+        />
+      </div>
+
       <header className="brand-home border-ink/10 mx-auto flex w-full max-w-[1100px] flex-wrap items-center justify-between gap-x-8 gap-y-3 border-b px-6 py-5 sm:px-8">
         <BrandLockup size="hero" priority />
         <p className="flex flex-wrap items-baseline gap-x-3 gap-y-1 sm:justify-end">
