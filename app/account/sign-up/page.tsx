@@ -11,7 +11,7 @@ export default async function SignUpPage() {
     <AccountShell
       eyebrow="Parent account"
       title="Save their reading journey"
-      intro="One adult account can hold up to five child profiles. Have your Amazon order number ready; we never ask for a child’s personal details."
+      intro="One adult account can hold up to five child profiles. Have your Amazon order number or QK event code ready; we never ask for a child’s personal details."
     >
       <AuthForm mode="sign-up" />
     </AccountShell>

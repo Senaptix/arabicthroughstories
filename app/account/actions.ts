@@ -11,6 +11,11 @@ import {
 } from "@/lib/account";
 import { AVATAR_KEYS } from "@/lib/profile";
 import { createClient } from "@/lib/supabase/server";
+import {
+  activationIssuerSecret,
+  looksLikeActivationCode,
+  redemptionRateKey,
+} from "@/lib/activation-codes";
 
 export type ActionState = { message?: string; success?: string };
 
@@ -19,7 +24,7 @@ const passwordSchema = z.string().min(10).max(128);
 const orderNumberSchema = z
   .string()
   .trim()
-  .min(1, "Enter your Amazon order number.")
+  .min(1, "Enter your Amazon order number or activation code.")
   .max(100, "Use 100 characters or fewer for the order number.")
   .refine(
     (value) => !/[\u0000-\u001f\u007f]/.test(value),
@@ -77,6 +82,42 @@ export async function signUp(_state: ActionState, formData: FormData): Promise<A
   }
 
   const supabase = await createClient();
+  if (looksLikeActivationCode(parsed.data.orderNumber)) {
+    let issuerSecret: string;
+    try {
+      issuerSecret = activationIssuerSecret();
+    } catch {
+      return { message: "Activation codes are temporarily unavailable. Please try again later." };
+    }
+
+    const requestHeaders = await headers();
+    const forwardedFor = requestHeaders.get("x-forwarded-for");
+    const clientAddress = requestHeaders.get("x-real-ip")
+      ?? forwardedFor?.split(",").at(-1)?.trim()
+      ?? null;
+    const { data, error } = await supabase.rpc("check_activation_code_for_signup", {
+      p_code: parsed.data.orderNumber,
+      p_rate_key: redemptionRateKey(
+        parsed.data.email,
+        clientAddress,
+      ),
+      p_issuer_secret: issuerSecret,
+    });
+
+    if (error || data === "not_authorised") {
+      return { message: "Activation codes are temporarily unavailable. Please try again later." };
+    }
+    if (data === "rate_limited") {
+      return { message: "Too many activation-code attempts. Please wait 15 minutes and try again." };
+    }
+    if (data === "already_used") {
+      return { message: "That activation code has already been used. Email accounts@qasaskids.com if this is unexpected." };
+    }
+    if (data !== "ok") {
+      return { message: "That activation code was not recognised. Check it and try again." };
+    }
+  }
+
   const redirectTo = `${await siteOrigin()}/auth/callback?next=${encodeURIComponent("/account")}`;
   const { error } = await supabase.auth.signUp({
     email: parsed.data.email,
@@ -86,7 +127,12 @@ export async function signUp(_state: ActionState, formData: FormData): Promise<A
       data: { order_number: parsed.data.orderNumber },
     },
   });
-  if (error) return { message: "We could not create the account. Please try again." };
+  if (error) {
+    if (looksLikeActivationCode(parsed.data.orderNumber)) {
+      return { message: "That activation code could not be redeemed. It may already have been used." };
+    }
+    return { message: "We could not create the account. Please try again." };
+  }
   redirect("/account/sign-in?check-email=1");
 }
 

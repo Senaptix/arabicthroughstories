@@ -8,5 +8,10 @@ export async function proxy(request: NextRequest) {
 // The published book routes stay outside the session proxy, preserving their
 // static rendering. Only account and progress requests need cookie refreshes.
 export const config = {
-  matcher: ["/account/:path*", "/auth/:path*", "/api/progress/:path*"],
+  matcher: [
+    "/account/:path*",
+    "/admin/:path*",
+    "/auth/:path*",
+    "/api/progress/:path*",
+  ],
 };
