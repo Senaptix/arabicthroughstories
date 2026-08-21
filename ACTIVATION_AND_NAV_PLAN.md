@@ -68,7 +68,7 @@ ships, the gate stops casual browsing and nothing else.
 buys book on Amazon
    -> signs up at qasaskids.com
    -> /activate: enters the Amazon order number
-   -> emails the receipt to accounts@qasaskids.com
+   -> emails the receipt to receipts@qasaskids.com
    -> Asma matches order number to receipt
    -> approves in Supabase
    -> 12 months, on the account
@@ -82,7 +82,7 @@ keeping deliberately, not just accepting:
 - **No Supabase Storage**, so nothing extra to migrate to the VPS later.
 - **No receipt images in our database.** Amazon receipts carry name,
   address and other purchases. Holding them is a liability with no
-  ongoing purpose; leaving them in an inbox Asma already controls is both
+  ongoing purpose; leaving them in the receipts@ inbox Asma controls is both
   simpler and less exposure.
 - Less to build before the 25th.
 
@@ -181,8 +181,21 @@ posting to an email service. If that is a step too far before the 25th,
 Asma can watch the table directly — volume will be tiny at launch, and a
 webhook can be added without touching the app.
 
-**Receiving address: `accounts@qasaskids.com`** — live on Hostinger's Free
-Business Email plan (100 mailboxes, renews 2027-03-24).
+**Two mailboxes, both live** on Hostinger's Free Business Email plan
+(100 available, renews 2027-03-24):
+
+| Mailbox | Carries | Who reads it |
+|---|---|---|
+| **receipts@qasaskids.com** | Amazon receipts for activation, and nothing else | Asma |
+| **accounts@qasaskids.com** | General account enquiries, sign-in trouble | Whoever handles support |
+
+Keeping receipts separate is worth the second mailbox: Asma's inbox
+becomes a work queue where everything in it needs the same action, and an
+unread message means an unactivated parent waiting. Mixed in with general
+enquiries that signal disappears.
+
+The address printed on `/activate` must be **receipts@**, and it should be
+the only place it appears, so nothing else drifts into that queue.
 
 Verified 2026-08-21 after setup, because email wizards can overwrite DNS:
 
