@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useActionState } from "react";
 import {
   sendPasswordReset,
+  resendConfirmation,
   signIn,
   signUp,
   updatePassword,
@@ -16,10 +17,18 @@ export default function AuthForm({
   mode,
   next,
 }: {
-  mode: "sign-in" | "sign-up" | "forgot" | "reset";
+  mode: "sign-in" | "sign-up" | "forgot" | "reset" | "resend";
   next?: string;
 }) {
-  const action = mode === "sign-in" ? signIn : mode === "sign-up" ? signUp : mode === "forgot" ? sendPasswordReset : updatePassword;
+  const action = mode === "sign-in"
+    ? signIn
+    : mode === "sign-up"
+      ? signUp
+      : mode === "forgot"
+        ? sendPasswordReset
+        : mode === "resend"
+          ? resendConfirmation
+          : updatePassword;
   const [state, formAction, pending] = useActionState(action, initialState);
   const needsEmail = mode !== "reset";
   const needsPassword = mode === "sign-in" || mode === "sign-up" || mode === "reset";
@@ -51,12 +60,12 @@ export default function AuthForm({
       {state.message && <p role="alert" className="rounded-xl bg-terracotta/10 px-4 py-3 text-[14px] leading-6">{state.message}</p>}
       {state.success && <p role="status" className="rounded-xl bg-sage/15 px-4 py-3 text-[14px] leading-6">{state.success}</p>}
       <button type="submit" disabled={pending} className="min-h-[50px] w-full rounded-xl bg-brand-blue px-5 font-medium text-paper disabled:opacity-60">
-        {pending ? "Please wait…" : mode === "sign-in" ? "Sign in" : mode === "sign-up" ? "Create parent account" : mode === "forgot" ? "Send reset link" : "Save new password"}
+        {pending ? "Please wait…" : mode === "sign-in" ? "Sign in" : mode === "sign-up" ? "Create parent account" : mode === "forgot" ? "Send reset link" : mode === "resend" ? "Resend confirmation" : "Save new password"}
       </button>
       <div className="flex flex-wrap justify-between gap-3 text-[14px] text-brand-blue">
         {mode === "sign-in" && <><Link href="/account/forgot-password">Forgot password?</Link><Link href="/account/sign-up">Create an account</Link></>}
         {mode === "sign-up" && <Link href="/account/sign-in">Already have an account?</Link>}
-        {(mode === "forgot" || mode === "reset") && <Link href="/account/sign-in">Back to sign in</Link>}
+        {(mode === "forgot" || mode === "reset" || mode === "resend") && <Link href="/account/sign-in">Back to sign in</Link>}
       </div>
     </form>
   );

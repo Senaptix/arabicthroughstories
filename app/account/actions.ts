@@ -81,6 +81,46 @@ export async function sendPasswordReset(
   return { success: "If that address has an account, a reset link is on its way." };
 }
 
+export async function resendConfirmation(
+  _state: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const parsed = emailSchema.safeParse(formData.get("email"));
+  if (!parsed.success) return { message: "Enter a valid email address." };
+
+  const supabase = await createClient();
+  await supabase.auth.resend({
+    type: "signup",
+    email: parsed.data,
+    options: { emailRedirectTo: `${await siteOrigin()}/account/confirm-email` },
+  });
+  // Keep the response identical for registered and unknown addresses.
+  return { success: "If that address is awaiting confirmation, a fresh email is on its way." };
+}
+
+export async function confirmEmailToken(formData: FormData) {
+  const parsed = z
+    .object({
+      tokenHash: z.string().min(20).max(2048),
+      type: z.enum(["email", "recovery"]),
+      next: z.string().optional(),
+    })
+    .safeParse({
+      tokenHash: formData.get("tokenHash"),
+      type: formData.get("type"),
+      next: formData.get("next"),
+    });
+  if (!parsed.success) redirect("/account/sign-in?error=link");
+
+  const supabase = await createClient();
+  const { error } = await supabase.auth.verifyOtp({
+    token_hash: parsed.data.tokenHash,
+    type: parsed.data.type,
+  });
+  if (error) redirect("/account/sign-in?error=link");
+  redirect(safeNext(parsed.data.next ?? null));
+}
+
 export async function updatePassword(
   _state: ActionState,
   formData: FormData,

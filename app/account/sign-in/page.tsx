@@ -20,7 +20,12 @@ export default async function SignInPage({
     >
       {query["check-email"] === "1" && (
         <p className="mb-5 rounded-xl bg-sage/15 px-4 py-3 text-[14px] leading-6">
-          Check your inbox and confirm your email, then sign in here.
+          Check your inbox and confirm your email, then sign in here. If it
+          does not arrive or has expired, use the{" "}
+          <a href="/account/resend-confirmation" className="font-medium text-brand-blue underline">
+            resend form
+          </a>
+          .
         </p>
       )}
       {query.error === "link" && (
