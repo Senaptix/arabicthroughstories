@@ -3,57 +3,32 @@ import type { Metadata } from "next";
 import Eyebrow from "@/components/Eyebrow";
 import HomeBar from "@/components/HomeBar";
 
-/**
- * qasaskids.com/activate — where a book owner turns their copy into access.
- *
- * SCAFFOLD. This route exists so the URL is real, printable and linkable
- * before the login is built; it currently EXPLAINS the flow rather than
- * running it. There is deliberately no form here yet: a form that accepts an
- * order number and does nothing with it is worse than no form, because the
- * parent believes they have activated and finds out otherwise later.
- *
- * The flow it will run (ACCOUNTS_PLAN.md, and the owner's entitlement plan):
- *
- *   create parent account
- *     -> enter Amazon order number + upload receipt
- *     -> automated checks, manual review when uncertain
- *     -> 12-month entitlement on the ACCOUNT (not the device, not the child)
- *     -> web + Android + iOS all read that one entitlement
- *
- * Two things to carry into the build:
- *   - The order number is the anti-reuse key. Once redeemed it cannot be
- *     redeemed again; that is what stops one receipt unlocking fifty accounts.
- *   - Delete the receipt image once verified. Keep only the hashed order
- *     reference, the dates and the status. Holding parents' Amazon receipts
- *     is a liability with no ongoing purpose.
- */
-
 export const metadata: Metadata = {
   title: "Activate your book",
   description:
-    "Turn your copy of the book into access to the full Qasas Kids companion.",
+    "Start access to the Qasas Kids companion and send your Amazon receipt for approval.",
 };
 
 const STEPS = [
   {
     n: 1,
-    title: "Create a parent account",
-    body: "One account for the family. Children get profiles under it — no child ever needs an email address of their own.",
+    title: "Create the parent account",
+    body: "Enter the Amazon order number on the signup form. Your 30-day provisional access starts immediately.",
   },
   {
     n: 2,
-    title: "Enter your order number",
-    body: "From your Amazon order confirmation, along with a screenshot or PDF of the order.",
+    title: "Email the Amazon receipt",
+    body: "Forward the receipt or send a clear screenshot or PDF. Make sure the same order number is visible.",
   },
   {
     n: 3,
-    title: "We check it",
-    body: "Usually straight away. If anything is unclear a person looks at it, and you hear back by email.",
+    title: "Asma matches one number",
+    body: "She checks the receipt against the activation claim and changes its status to approved in Supabase.",
   },
   {
     n: 4,
-    title: "Everything opens",
-    body: "Twelve months of the full companion — every page's audio, vocabulary, word families and practice, on any device you sign in from.",
+    title: "Access extends to 12 months",
+    body: "Approval extends the family’s companion access automatically. If the receipt is not approved, provisional access ends after 30 days.",
   },
 ];
 
@@ -63,7 +38,7 @@ export default function Activate() {
       <HomeBar bookSlug="ibrahim" />
 
       <main className="mx-auto w-full max-w-[720px] px-6 py-12 sm:px-8">
-        <Eyebrow>Activate</Eyebrow>
+        <Eyebrow>Book activation</Eyebrow>
 
         <h1
           className="text-ink mt-4 font-semibold text-balance"
@@ -73,46 +48,55 @@ export default function Activate() {
             letterSpacing: "-0.015em",
           }}
         >
-          Turn your book into a year of Qasas&nbsp;Kids.
+          Start reading now. Send the receipt next.
         </h1>
 
         <p
           className="text-ink/75 mt-5 max-w-[52ch]"
           style={{ fontSize: "clamp(16px, 2.5vw, 18px)", lineHeight: 1.65 }}
         >
-          Every copy of the book includes twelve months of the full companion.
-          You activate once, and it works everywhere you sign in.
+          Your Amazon order number starts 30 days of companion access when you
+          create the parent account. The receipt lets Asma approve the purchase
+          and extend that access to a full 12 months.
         </p>
 
-        <div className="border-brand-blue/25 bg-sand/30 mt-8 rounded-2xl border px-6 py-6">
-          <p
-            className="text-ink font-semibold"
-            style={{ fontSize: "17px", lineHeight: 1.4 }}
+        <section className="border-brand-blue/25 bg-sand/30 mt-8 rounded-2xl border px-6 py-6">
+          <h2 className="text-ink text-[18px] font-semibold">
+            Send the receipt to
+          </h2>
+          <a
+            href="mailto:receipts@qasaskids.com"
+            className="text-brand-blue mt-2 inline-block text-[18px] font-medium underline decoration-brand-blue/30 underline-offset-4"
           >
-            Activation opens with the book
+            receipts@qasaskids.com
+          </a>
+          <p className="text-ink/70 mt-3 max-w-[52ch] text-[15px] leading-6">
+            Forward Amazon&rsquo;s order email, or attach a clear screenshot or
+            PDF. Keep the order number visible so it can be matched to the
+            number entered at signup. Please do not include any child&rsquo;s
+            details.
           </p>
-          <p
-            className="text-ink/70 mt-2 max-w-[52ch]"
-            style={{ fontSize: "16px", lineHeight: 1.6 }}
-          >
-            The book is not on sale quite yet. Until it is, the whole companion
-            is open — you can read, listen and practise right now without an
-            account.
-          </p>
-          <Link
-            href="/books/ibrahim"
-            className="bg-brand-blue text-paper mt-5 inline-flex min-h-[48px] items-center rounded-xl px-5 font-medium"
-            style={{ fontSize: "16px" }}
-          >
-            Open the book
-          </Link>
-        </div>
+          <div className="mt-5 flex flex-wrap gap-3">
+            <Link
+              href="/account/sign-up"
+              className="bg-brand-blue text-paper inline-flex min-h-[48px] items-center rounded-xl px-5 font-medium"
+            >
+              Create parent account
+            </Link>
+            <a
+              href="mailto:receipts@qasaskids.com"
+              className="border-ink/15 text-ink hover:border-ink/35 inline-flex min-h-[48px] items-center rounded-xl border px-5 font-medium transition-colors"
+            >
+              Email the receipt
+            </a>
+          </div>
+        </section>
 
         <h2
           className="text-ink mt-12 font-semibold"
           style={{ fontSize: "clamp(20px, 3.5vw, 24px)", lineHeight: 1.3 }}
         >
-          How it will work
+          What happens after purchase
         </h2>
 
         <ol className="mt-6 space-y-5">
@@ -148,10 +132,10 @@ export default function Activate() {
             className="text-ink/55"
             style={{ fontSize: "14px", lineHeight: 1.65 }}
           >
-            We keep as little as possible. Once your order is verified the
-            receipt image is deleted — we hold only that it was checked, and
-            when. Children&rsquo;s profiles store a name and reading progress,
-            nothing more.
+            Receipts can contain names, addresses and other purchases. They
+            stay in the dedicated receipts inbox rather than the Qasas Kids
+            database, and should be deleted once the activation has been
+            approved or rejected.
           </p>
         </div>
       </main>

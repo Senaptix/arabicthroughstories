@@ -1,5 +1,7 @@
+import { cache } from "react";
 import { getBook } from "@/lib/parse";
 import { getParentId } from "@/lib/account";
+import { createClient } from "@/lib/supabase/server";
 
 /**
  * THE ACCESS SEAM.
@@ -42,32 +44,42 @@ export function isFreePage(slug: string, page: number): boolean {
 /**
  * Does the current visitor hold an active membership?
  *
- * TODAY: a confirmed, signed-in parent account IS the membership. There is
- * no entitlement table yet — book activation, subscriptions and the app
- * stores are all still to come (ACCOUNTS_PLAN.md) — so signing in is what
- * separates a buyer from a passer-by.
- *
- * WHEN ACTIVATION LANDS, this becomes:
- *
- *   const parentId = await getParentId();
- *   if (!parentId) return false;
- *   return hasActiveEntitlement(parentId);   // <- the only line to add
- *
- * Keeping that check here, rather than at any call site, is the whole point
- * of this file: the answer to "is this person allowed in" is decided once.
+ * An account alone grants nothing. The parent must have an entitlement whose
+ * expiry is still in the future. Keeping that check here, rather than at any
+ * call site, is the whole point of this file: the answer to "is this person
+ * allowed in" is decided once.
  */
+export type MembershipState =
+  | "signed-out"
+  | "not-activated"
+  | "active"
+  | "lapsed";
+
+export const getMembershipState = cache(async (): Promise<MembershipState> => {
+  const parentId = await getParentId();
+  if (!parentId) return "signed-out";
+
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("entitlements")
+    .select("expires_at")
+    .eq("parent_id", parentId)
+    .maybeSingle();
+
+  if (error || !data) return "not-activated";
+  return Date.parse(data.expires_at) > Date.now() ? "active" : "lapsed";
+});
+
 export async function hasMembership(): Promise<boolean> {
-  return (await getParentId()) !== null;
+  return (await getMembershipState()) === "active";
 }
 
 /**
  * Master switch. While false NOTHING is gated and the site behaves exactly
  * as it does today.
  *
- * ON since 2026-08-21, now that `hasMembership()` reads a real session.
- * Before that it was off precisely because the stub returned false — with
- * the two out of step, flipping this would have locked out every visitor
- * including paying ones.
+ * ON since 2026-08-21. `hasMembership()` now reads the purchase entitlement,
+ * so a session without an activation remains outside the full companion.
  *
  * Turning it off again is a legitimate emergency lever: it reopens the whole
  * companion to everyone rather than taking the site down, which is the right

@@ -16,6 +16,15 @@ export type ActionState = { message?: string; success?: string };
 
 const emailSchema = z.string().trim().email().max(254);
 const passwordSchema = z.string().min(10).max(128);
+const orderNumberSchema = z
+  .string()
+  .trim()
+  .min(1, "Enter your Amazon order number.")
+  .max(100, "Use 100 characters or fewer for the order number.")
+  .refine(
+    (value) => !/[\u0000-\u001f\u007f]/.test(value),
+    "That order number contains unsupported characters.",
+  );
 const profileNameSchema = z
   .string()
   .trim()
@@ -49,17 +58,33 @@ export async function signIn(_state: ActionState, formData: FormData): Promise<A
 
 export async function signUp(_state: ActionState, formData: FormData): Promise<ActionState> {
   const parsed = z
-    .object({ email: emailSchema, password: passwordSchema })
-    .safeParse({ email: formData.get("email"), password: formData.get("password") });
+    .object({
+      email: emailSchema,
+      password: passwordSchema,
+      orderNumber: orderNumberSchema,
+    })
+    .safeParse({
+      email: formData.get("email"),
+      password: formData.get("password"),
+      orderNumber: formData.get("orderNumber"),
+    });
   if (!parsed.success) {
+    const orderIssue = parsed.error.issues.find(
+      (issue) => issue.path[0] === "orderNumber",
+    );
+    if (orderIssue) return { message: orderIssue.message };
     return { message: "Use a valid email and a password of at least 10 characters." };
   }
 
   const supabase = await createClient();
   const redirectTo = `${await siteOrigin()}/auth/callback?next=${encodeURIComponent("/account")}`;
   const { error } = await supabase.auth.signUp({
-    ...parsed.data,
-    options: { emailRedirectTo: redirectTo },
+    email: parsed.data.email,
+    password: parsed.data.password,
+    options: {
+      emailRedirectTo: redirectTo,
+      data: { order_number: parsed.data.orderNumber },
+    },
   });
   if (error) return { message: "We could not create the account. Please try again." };
   redirect("/account/sign-in?check-email=1");

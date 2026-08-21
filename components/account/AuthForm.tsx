@@ -42,6 +42,24 @@ export default function AuthForm({
           <input name="email" type="email" autoComplete="email" required className="min-h-[50px] w-full rounded-xl border border-ink/20 bg-surface px-4 text-[16px]" />
         </label>
       )}
+      {mode === "sign-up" && (
+        <label className="block">
+          <span className="mb-2 block text-[14px] font-medium">Amazon order number</span>
+          <input
+            name="orderNumber"
+            type="text"
+            autoComplete="off"
+            maxLength={100}
+            required
+            placeholder="123-1234567-1234567"
+            className="min-h-[50px] w-full rounded-xl border border-ink/20 bg-surface px-4 text-[16px]"
+          />
+          <span className="mt-2 block text-[13px] leading-5 text-ink/55">
+            This starts 30 days of access immediately. Follow the receipt step
+            on the <Link href="/activate" className="text-brand-blue underline-offset-4 hover:underline">activation page</Link> to extend it to 12 months.
+          </span>
+        </label>
+      )}
       {needsPassword && (
         <label className="block">
           <span className="mb-2 block text-[14px] font-medium">{mode === "reset" ? "New password" : "Password"}</span>

@@ -130,7 +130,7 @@ export default async function PageCard({
           </Link>
         </div>
 
-        <PageProgress bookSlug={book.slug} page={page} />
+        {canView && <PageProgress bookSlug={book.slug} page={page} />}
 
         {/* With audio, the text and the player are one thing: the line being
           read highlights as it plays. The audio is a pronunciation model for
@@ -207,7 +207,7 @@ export default async function PageCard({
           </>
         )}
 
-        {isStoryPage ? (
+        {canView && (isStoryPage ? (
           <>
             {/* Card boundary — the two blocks a reader most needs to
               distinguish from each other and from the text above. */}
@@ -249,7 +249,7 @@ export default async function PageCard({
               of the book.
             </p>
           </section>
-        )}
+        ))}
 
         {/* Page-to-page navigation. Divider first (a break from the sections
           above), then the label, then the links — a label sitting above its
