@@ -315,8 +315,9 @@ blue/green deployment for a children's book companion.
 
 ## 6. Verification — all of it
 
-1. `npm run build` shows **109 routes, all `○`/`●`**. Any route turning `ƒ`
-   is a regression: nothing in this deploy should change rendering.
+1. `npm run build` keeps every published `/books/...` route `○`/`●`.
+   The account phase added expected dynamic routes under `/account`,
+   `/auth/callback` and `/api/progress`; no book/content route may turn `ƒ`.
 2. `npm run lint` and `npx tsc --noEmit` clean.
 3. `npm audit` — nanoid advisory gone.
 4. `https://qasaskids.com` loads with a valid certificate.
@@ -390,8 +391,9 @@ change as the above — verify one, then the other.
 - **Do not commit secrets.** None are needed today. When accounts land,
   keys go in an env file readable only by `qasas`, never in the repo.
 - **Do not force-push or rewrite `master`.**
-- **Do not start the accounts work** ([ACCOUNTS_PLAN.md](ACCOUNTS_PLAN.md))
-  until the static site is live and §6 passes.
+- Account work is now live; [ACCOUNTS_PLAN.md](ACCOUNTS_PLAN.md) begins with
+  the authoritative Supabase implementation and keeps the old self-hosted
+  proposal as history only. Do not combine the two designs.
 
 ---
 
