@@ -181,8 +181,28 @@ posting to an email service. If that is a step too far before the 25th,
 Asma can watch the table directly — volume will be tiny at launch, and a
 webhook can be added without touching the app.
 
-**Dependency:** `receipts@qasaskids.com` needs MX records. The domain has
-none today; this is not covered by the VPS deploy.
+**Receiving address.** `receipts@qasaskids.com` on Hostinger's free email.
+The MX records are **already in place** (`mx1`/`mx2.hostinger.com`,
+verified 2026-08-21), so this is creating a mailbox, not a DNS change.
+
+> ⚠️ **Do not let any email setup wizard "fix" or "reset" the DNS.** The A
+> records for `qasaskids.com` and `www` point at the VPS on
+> `191.215.35.21`. MX and A are different record types and coexist fine —
+> but a wizard offering to correct your DNS for email can overwrite the A
+> records and take the site down. Add or edit MX only; leave A alone.
+
+Asma needs direct access to that mailbox, not a forward into someone
+else's inbox — she is matching order numbers against receipts, and it
+should be obvious which have been dealt with.
+
+**Sending is a separate problem.** Supabase currently sends confirmation
+and reset email from its own domain. Moving those to `@qasaskids.com`
+means SMTP credentials plus SPF and DKIM, and is unrelated to receiving
+receipts. Do not conflate the two.
+
+**Privacy.** Those receipts carry names, addresses and other purchases.
+Delete them once an activation is approved or rejected; keep only the
+order number and the outcome, which is all the `activations` table holds.
 
 ---
 
