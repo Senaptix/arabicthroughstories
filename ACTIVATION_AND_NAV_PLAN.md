@@ -354,15 +354,45 @@ Added 2026-08-21. The owner is buying author copies to sell in person at
 Islamic events. Those buyers have no Amazon order number, so the Part B
 flow cannot serve them.
 
-## Single-use activation codes
+**Decided: no printed cards or stickers.** At the stall the owner takes
+the buyer's email, and the system generates a single-use code and sends
+it to them.
 
-This is the system ACCESS_MODEL.md called "the ideal" and ruled out —
-because KDP prints identical interiors, so a per-copy code was impossible.
+## Why emailing beats printing, beyond convenience
 
-**Author copies remove that constraint.** The owner controls fulfilment,
-so each copy can carry a unique code on a card slipped inside.
+A printed card gives you a customer you can never contact again.
 
-### The code path is BETTER than the Amazon path, deliberately
+`ACCESS_MODEL.md` is emphatic that the mailing list is the real prize —
+*"registration is the only mechanism that captures an email from a KDP
+sale"*, and worth building *"even if it never earns a penny directly"*.
+An event sale is the one moment the buyer is standing in front of you.
+Taking their email there captures for free the thing Amazon will never
+give you.
+
+So this is not a workaround for not wanting to print. It is the better
+mechanism.
+
+## The flow
+
+```
+buys a copy at the stall
+   -> owner opens the admin page, types their email
+   -> code generated, emailed, AND shown on screen
+   -> buyer signs up at qasaskids.com and enters the code
+   -> 12 months, immediately
+```
+
+### The code must appear on screen too
+
+Not a nicety — the failure mode. Email addresses taken by ear at a busy
+stall get misheard and mistyped, and a code sent to `gmial.com` is gone
+with no way to tell. Showing it on screen means the owner can read it out
+on the spot, and the buyer leaves with it either way.
+
+The screen is the delivery mechanism that cannot fail. The email is the
+convenience, and the reason to ask for the address at all.
+
+## The code path is BETTER than the Amazon path, deliberately
 
 | | Amazon buyer | Event buyer |
 |---|---|---|
@@ -371,14 +401,14 @@ so each copy can carry a unique code on a card slipped inside.
 | Receipt needed | yes | **no** |
 | Human review | yes, Asma | **none** |
 
-That asymmetry is correct, not a loophole. **A code in someone's hand IS
-the proof of purchase** — the owner handed it over when they took the
-money. There is nothing left to verify. The Amazon flow only needs a
-receipt because KDP gives no way to check an order number.
+That asymmetry is correct, not a loophole. **The code IS the proof of
+purchase** — the owner generated it at the moment they took the money.
+There is nothing left to verify. The Amazon flow only needs a receipt
+because KDP gives no way to check an order number.
 
-It also quietly rewards buying direct, where the margin is better.
+It also rewards buying direct, where the margin is better.
 
-### One field, two paths
+## One field, two paths
 
 Do **not** add a second box to the signup form. The existing order-number
 field accepts either, and the shape tells them apart:
@@ -390,48 +420,60 @@ otherwise     ->  Amazon order no. ->  activation row, 30 days, await receipt
 
 A second field asks every buyer to work out which one they are.
 
-### Code format
+## Code format
 
-Alphabet `23456789ABCDEFGHJKMNPQRSTVWXYZ` — no `0/O`, `1/I/L`, or `U`.
-Those are the pairs people misread off a printed card, and every one of
-them becomes a support email.
+Alphabet `23456789ABCDEFGHJKMNPQRSTVWXYZ` — no `0/O`, `1/I/L` or `U`.
+Those are the pairs people misread, and every misread is a support email.
+It matters more here than on a card: someone may be copying this off a
+phone screen the owner is holding.
 
 ```
 QK-7X9K-4PL2
 ```
 
-30^8 ≈ 656 billion combinations. Against a few hundred issued codes,
-guessing is hopeless — but rate-limit the redeem endpoint anyway, because
-the cost of not doing so is unbounded and the cost of doing it is a few
-lines.
+Generate with `crypto.randomBytes`, never `Math.random`. Match
+case-insensitively and ignore dashes, so however it is typed, it works.
 
-Match case-insensitively and ignore dashes, so however someone types it
-off the card, it works.
-
-### Table
+## Table
 
 ```sql
 create table public.activation_codes (
-  code        text primary key,
-  batch       text not null,              -- 'birmingham-2026-09'
-  created_at  timestamptz not null default now(),
-  redeemed_by uuid references auth.users(id) on delete set null,
-  redeemed_at timestamptz
+  code         text primary key,
+  issued_to    text,                       -- email given at the stall
+  note         text,                       -- 'Birmingham, 6 Sep'
+  created_at   timestamptz not null default now(),
+  emailed_at   timestamptz,                -- null = send failed or skipped
+  redeemed_by  uuid references auth.users(id) on delete set null,
+  redeemed_at  timestamptz
 );
-create index activation_codes_batch on public.activation_codes (batch);
+create index activation_codes_issued_to on public.activation_codes (lower(issued_to));
 ```
 
-`redeemed_by is null` means available. No status column — the field that
-records who used it is the same field that marks it used, so the two can
+`redeemed_by is null` means available. No status column — the field
+recording who used it is the same field marking it used, so the two can
 never disagree.
 
-`batch` is worth the column: it tells you which event a code came from,
-so you can see what sold where and kill a batch if a sheet goes missing.
+`issued_to` is the mailing list, accumulating one sale at a time.
+`emailed_at` being null is the queue of people to chase.
 
-### Redemption must be atomic
+## Sending the email
+
+**Use the Hostinger mailbox already set up.** `accounts@qasaskids.com`
+comes with SMTP, the SPF record is already correct for Hostinger, and it
+costs nothing. No new provider, no new dependency, no DNS change — all of
+which matter with the listing four days out.
+
+Send from `accounts@`, not `receipts@`. The receipts inbox is Asma's work
+queue (Part B) and replies to a code email would pollute it.
+
+If the send fails, **do not fail the request** — the code is already
+generated and on screen, which is what the buyer actually needs. Record
+`emailed_at` as null and move on.
+
+## Redemption must be atomic
 
 Two people entering the same code at once must not both get a year. The
-conditional `UPDATE` is what guarantees that — not a read-then-write:
+conditional `UPDATE` guarantees that; a read-then-write does not:
 
 ```sql
 create or replace function public.redeem_activation_code(p_code text)
@@ -467,44 +509,45 @@ begin
 end $$;
 ```
 
-`already_used` and `not_found` are distinguished on purpose. It slightly
-confirms a code exists, which barely matters at this scale — and a
-customer holding a card that says "already used" needs to be told that,
-not left guessing.
+`already_used` and `not_found` are distinguished deliberately. It
+slightly confirms a code exists, which barely matters at this scale — and
+a buyer holding a code that says "already used" needs telling, not
+leaving to guess.
 
-### RLS: the table is not client-readable at all
+## Security
+
+**The table takes no RLS policy at all:**
 
 ```sql
 alter table public.activation_codes enable row level security;
 revoke all on public.activation_codes from anon, authenticated;
 ```
 
-No policy. Nobody selects from it; the `security definer` function is the
-only way in. That makes enumerating unused codes impossible rather than
-merely difficult.
+Nobody selects from it. The `security definer` function is the only way
+in, which makes enumerating unused codes impossible rather than merely
+hard.
 
-### Generating a batch
+**The admin page needs a real check.** An unprotected code generator is
+an unlimited free-access machine. Gate it on an allowlist of admin emails
+held in the server environment — not a client check, not a secret URL.
 
-A script — `scripts/make-codes.ts` — takes a count and a batch name and
-emits both the SQL to insert them and a CSV to print from. Generate with
-`crypto.randomBytes`, not `Math.random`: predictable codes are guessable
-codes.
+**Rate-limit redemption.** 30^8 makes guessing hopeless, but the cost of
+the limit is a few lines and the cost of omitting it is unbounded.
 
-Print one per card, with the URL and a line of instruction. The card goes
-inside the book at the event.
+## What the buyer is told at the stall
 
-### What the buyer does
+They need one sentence and a URL, spoken or in the email:
 
-1. Buys the book at the stall, gets a card.
-2. `qasaskids.com` → Book companion → create account.
-3. Types the code where the order number goes.
-4. Twelve months, immediately. No receipt, no wait.
+> Go to qasaskids.com, create a parent account, and enter this code where
+> it asks for your order number.
 
 ## Open
 
-1. **Lost card.** No recovery path — no email is attached to a code before
-   redemption. Keep the printed batch list; it is the only record.
-2. **What the card says.** Needs writing, and it is the only instruction
-   an event buyer gets.
+1. **Wrong email typed at the stall.** The code is on screen, so nothing
+   is lost — but the mailing-list entry is wrong and nobody will notice.
+   Worth showing the address back for confirmation before sending.
+2. **Codes generated but never redeemed.** `issued_to` plus
+   `redeemed_by is null` is exactly the list of people to nudge. No
+   mechanism yet; worth one email after the first event.
 3. **Refunds.** Nothing revokes a redeemed code. Delete the entitlement
    row by hand if it ever matters.
