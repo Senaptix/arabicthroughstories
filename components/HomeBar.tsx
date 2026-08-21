@@ -32,11 +32,17 @@ export default function HomeBar({ bookSlug }: { bookSlug?: string }) {
               Page by page
             </Link>
           )}
+          {/* "Book companion", not "Parent area": the label has to name what
+              is behind it. A parent who has just bought the book is looking
+              for the thing that came with the book, not for an account
+              settings screen. Styled as a button for the same reason — it is
+              the way in to everything the book paid for, so it should not
+              read as chrome. */}
           <Link
             href="/account"
-            className="text-brand-blue inline-flex min-h-[48px] items-center text-[14px] underline-offset-4 hover:underline"
+            className="bg-brand-blue text-paper inline-flex min-h-[44px] items-center rounded-xl px-4 text-[14px] font-medium"
           >
-            Parent area
+            Book companion
           </Link>
         </div>
       </nav>

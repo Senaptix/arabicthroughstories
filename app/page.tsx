@@ -156,6 +156,18 @@ export default function Home() {
             {book.title_en}
           </span>
         </p>
+
+        {/* The way in, for someone who already owns the book. The landing
+            page previously had no route to the companion at all — a buyer
+            scanning the code arrived here and had to guess. Named for what
+            it opens rather than "sign in", because the parent is looking for
+            the thing that came with their book. */}
+        <Link
+          href="/account"
+          className="bg-brand-blue text-paper inline-flex min-h-[44px] items-center rounded-xl px-4 text-[14px] font-medium"
+        >
+          Book companion
+        </Link>
       </header>
 
       <section className="mx-auto grid w-full max-w-[1100px] items-center gap-12 px-6 pt-10 pb-8 sm:px-8 lg:grid-cols-[1.05fr_1fr] lg:gap-16 lg:pt-16">

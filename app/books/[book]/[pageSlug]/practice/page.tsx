@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import GateNotice from "@/components/GateNotice";
+import { canViewPage } from "@/lib/access";
 import type { Metadata } from "next";
 import Eyebrow from "@/components/Eyebrow";
 import HomeBar from "@/components/HomeBar";
@@ -80,6 +82,22 @@ export default async function PracticePage({
     notFound();
   }
   const { book, words } = content;
+
+  // The practice screen needs the SAME check as the page card, not just a
+  // hidden link. Its exercises are built from that page's own sentences and
+  // vocabulary, so an unguarded /practice URL hands over the text the page
+  // card is withholding. Hiding the link only hides it from people who
+  // would not have typed the URL anyway.
+  if (!(await canViewPage(slug, page))) {
+    return (
+      <>
+        <HomeBar bookSlug={book.slug} />
+        <main className="mx-auto w-full max-w-[640px] px-6 py-8 sm:px-8">
+          <GateNotice page={page} bookSlug={book.slug} />
+        </main>
+      </>
+    );
+  }
 
   return (
     <>

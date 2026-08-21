@@ -1,4 +1,5 @@
 import { getBook } from "@/lib/parse";
+import { getParentId } from "@/lib/account";
 
 /**
  * THE ACCESS SEAM.
@@ -41,40 +42,39 @@ export function isFreePage(slug: string, page: number): boolean {
 /**
  * Does the current visitor hold an active membership?
  *
- * STUB — always false. Nothing is gated yet because `GATE_ENABLED` is off
- * (see below); this returning false is what makes the gate *testable* the
- * moment the flag flips, rather than silently letting everyone through
- * because the stub said yes.
+ * TODAY: a confirmed, signed-in parent account IS the membership. There is
+ * no entitlement table yet — book activation, subscriptions and the app
+ * stores are all still to come (ACCOUNTS_PLAN.md) — so signing in is what
+ * separates a buyer from a passer-by.
  *
- * TO WIRE THIS UP, replace the body with a session lookup:
+ * WHEN ACTIVATION LANDS, this becomes:
  *
- *   const session = await auth.api.getSession({ headers: await headers() });
- *   if (!session) return false;
- *   return hasActiveEntitlement(session.user.id);
+ *   const parentId = await getParentId();
+ *   if (!parentId) return false;
+ *   return hasActiveEntitlement(parentId);   // <- the only line to add
  *
- * It is async already so that change needs no signature edit at any call
- * site. See ACCOUNTS_PLAN.md for the entitlement model — one parent account
- * owns the entitlement, child profiles hang off it, and the source (book
- * activation / web subscription / app store) does not matter here.
+ * Keeping that check here, rather than at any call site, is the whole point
+ * of this file: the answer to "is this person allowed in" is decided once.
  */
 export async function hasMembership(): Promise<boolean> {
-  return false;
+  return (await getParentId()) !== null;
 }
 
 /**
  * Master switch. While false NOTHING is gated and the site behaves exactly
  * as it does today.
  *
- * This exists so the gate can be built, reviewed and deployed in a state
- * where it cannot break a live site, then turned on in one commit. Flip it
- * only once `hasMembership()` is real — turning it on against the stub locks
- * every visitor, including paying ones, out of everything past the preview.
+ * ON since 2026-08-21, now that `hasMembership()` reads a real session.
+ * Before that it was off precisely because the stub returned false — with
+ * the two out of step, flipping this would have locked out every visitor
+ * including paying ones.
  *
- * Target: on before the book is listed (25 Aug 2026). Until then the whole
- * companion is public, which is the state the landing page copy assumes is
- * temporary.
+ * Turning it off again is a legitimate emergency lever: it reopens the whole
+ * companion to everyone rather than taking the site down, which is the right
+ * failure direction for a children's book. It is not a way to skip fixing
+ * whatever went wrong.
  */
-export const GATE_ENABLED = false;
+export const GATE_ENABLED = true;
 
 /**
  * The one question callers should ask.
