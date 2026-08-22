@@ -177,21 +177,46 @@ Heritage plus the fix, which is the whole proposition.
 
 | Time | Voiceover | On screen |
 |---|---|---|
-| 0–5s | "This book has been used to teach children Arabic for decades." | The green Majlis edition of *Qasas an-Nabiyyin*, held up to camera. |
-| 5–11s | "Madrasas use it. Teachers swear by it. And most children still can't get through it on their own." | Hold on the cover. Then a page of dense unvowelled Arabic. |
-| 11–17s | "So we didn't change the stories. We changed everything that made them hard." | Cut to your book. Same story, open on a page. |
-| 17–25s | "Every vowel marked. The English underneath. Every new word explained right there. And every page read aloud." | Slow pan down a page: Arabic, gloss box, English panel. |
-| 25–30s | "Qasas Kids. The Arabic book your child can actually finish." | Logo. |
+| 0–5s | "This is how the story of Ibrahim has been taught for generations." | The plain Arabic *Qasas an-Nabiyyin*, open flat. A full page of unbroken text. |
+| 5–12s | "It is the right book. It is just not a book a seven-year-old can open on their own." | Slow push into the text. Let it sit there and feel dense. |
+| 12–17s | "Same story. Same words." | Cut to your book, open at the same passage. |
+| 17–25s | "Every vowel marked. The English underneath. Every new word explained right there. And every page read aloud." | Slow pan down the page: Arabic, gloss box, English panel. |
+| 25–30s | "Qasas Kids. The Arabic book your child can actually finish." | Logo, then qasaskids.com. |
 
-**The copy does not need to be worn.** An earlier draft called for a battered
-old one; that was wrong. What carries the heritage claim is *recognition*,
-not age — the green Majlis cover is the one anyone who sat in a madrasa
-knows on sight, and a clean copy of it says "this book" just as well. A
-suspiciously distressed prop would say less.
+**Shot with a plain text-only Arabic copy — not an old or worn one.** Two
+earlier drafts were wrong about this. The first asked for a battered volume;
+the second for the green Majlis cover, which turned out not to be to hand.
+Neither was necessary, and the version built from what actually exists is
+better than both.
 
-**The strongest version of this shot is two books, not one:** the green
-original and your edition side by side, held in the same hands. Same stories,
-made readable — stated in one frame, with nothing to age or fake.
+Here is why. Age was never the point, and neither was the cover. **The
+picture's job is to show why a child stalls**, and a plain Arabic page — no
+vowels, no pictures, no colour, no gloss, just a wall of text — shows that
+in about a second and a half, to a parent who cannot read a word of it. An
+old cover would have said "this book is respected". A dense page says "your
+child would not get past this", which is the thing that sells the fix.
+
+The heritage claim moves entirely into the voiceover, where it costs
+nothing and cannot be faked.
+
+**Photograph the same passage in both books.** The fly-and-mouse lines are
+**Lesson 2, ابن آزر / "Azar's Son"** in the original, and **page 7** in
+ours. Open both there and the reel proves itself: identical words, one
+impassable to a child and one not. It also ties this reel to Reel 1, which
+is built on those exact lines.
+
+**Stills are enough — no video camera needed.** Slow push moves across good
+photographs are standard for this and read as deliberate. Four frames:
+
+1. The Arabic book open at Lesson 2, shot straight down, filling the frame
+2. Closer, on the fly-and-mouse passage itself
+3. Your book open at page 7 — the same passage
+4. **Both books open side by side.** This is the shot; the other three
+   support it
+
+Plain surface, daylight, no flash, no hands in frame. Shoot at the highest
+resolution the phone offers — a slow push crops in, so anything soft on the
+original is worse on screen.
 
 **Why it works:** it does not ask the parent to believe in a new method. It
 says a thing they may already trust has been made usable — which is a much
