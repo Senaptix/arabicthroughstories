@@ -1,4 +1,4 @@
-import { getEntitlement } from "@/lib/access";
+import { getEntitlement, hasPendingActivation } from "@/lib/access";
 
 /**
  * Tells a parent on provisional access that a receipt is still needed.
@@ -18,8 +18,15 @@ import { getEntitlement } from "@/lib/access";
  */
 
 export default async function ReceiptNotice() {
-  const entitlement = await getEntitlement();
-  if (!entitlement || entitlement.source !== "provisional") return null;
+  // Keyed on a PENDING CLAIM, not the entitlement source. The provisional
+  // trigger leaves `source` alone when a row already exists, so an existing
+  // member who claims another book stays `book_activation` while still owing
+  // a receipt — and would never have been told.
+  const [entitlement, pending] = await Promise.all([
+    getEntitlement(),
+    hasPendingActivation(),
+  ]);
+  if (!pending || !entitlement) return null;
 
   // Both derived in getEntitlement(), which reads the clock once per request.
   const { expired, daysLeft: days } = entitlement;

@@ -18,6 +18,9 @@ export default async function GateNotice({
 }) {
   const membershipState = await getMembershipState();
   const hasLapsed = membershipState === "lapsed";
+  // Someone already signed in does not need telling to create an account —
+  // they need the box that takes an order number, which now exists.
+  const signedIn = membershipState !== "signed-out";
 
   return (
     <section className="border-brand-blue/20 bg-sand/30 mb-10 rounded-2xl border px-6 py-7">
@@ -36,16 +39,22 @@ export default async function GateNotice({
       >
         {hasLapsed
           ? <>Your companion access has expired. If your Amazon receipt has not been approved yet, send it using the activation-page instructions. If it was already approved, email <a href="mailto:accounts@qasaskids.com" className="text-brand-blue underline-offset-4 hover:underline">accounts@qasaskids.com</a> so we can check the account.</>
-          : "The audio, the vowelled Arabic and the practice for this page come with the book. Enter the Amazon order number when you create the parent account and access starts immediately."}
+          : signedIn
+            ? "The audio, the vowelled Arabic and the practice for this page come with the book. Add your Amazon order number or activation code to your account and access starts immediately."
+            : "The audio, the vowelled Arabic and the practice for this page come with the book. Enter the Amazon order number when you create the parent account and access starts immediately."}
       </p>
 
       <div className="mt-6 flex flex-wrap items-center gap-3">
         <Link
-          href="/activate"
+          href={signedIn ? "/account#add-a-book" : "/activate"}
           className="bg-brand-blue text-paper inline-flex min-h-[48px] items-center rounded-xl px-5 font-medium"
           style={{ fontSize: "16px" }}
         >
-          {hasLapsed ? "Send your receipt" : "Activate your book"}
+          {hasLapsed
+            ? "Restore your access"
+            : signedIn
+              ? "Add your book"
+              : "Activate your book"}
         </Link>
         <Link
           href={`/books/${bookSlug}`}

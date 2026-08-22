@@ -351,6 +351,97 @@ export async function renameProfile(
   return { success: `Renamed to ${parsed.data.displayName}.` };
 }
 
+/**
+ * Claim a book from inside the account — the path that did not exist.
+ *
+ * Until now the order-number box appeared once, on the signup form, and
+ * nowhere else. That dead-ended everyone whose claim came later: a parent
+ * whose receipt was rejected, one whose provisional window lapsed, an event
+ * buyer who already had an account, someone who signed up before the field
+ * existed — and, most importantly, every existing member buying the NEXT book
+ * in the series. The database always allowed it (the insert policy on
+ * activations, and redeem_activation_code granted to authenticated); only the
+ * form was missing.
+ *
+ * Same one-field rule as signup: a QK- code redeems outright, anything else
+ * is treated as an Amazon order number and goes to Asma's queue.
+ */
+export async function claimBook(
+  _state: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const parentId = await getParentId();
+  if (!parentId) redirect("/account/sign-in?next=/account");
+
+  const parsed = orderNumberSchema.safeParse(formData.get("orderNumber"));
+  if (!parsed.success) {
+    return { message: parsed.error.issues[0]?.message ?? "Check the number." };
+  }
+  const claim = parsed.data;
+  const supabase = await createClient();
+
+  // --- activation code: redeems immediately, no review ---------------------
+  if (looksLikeActivationCode(claim)) {
+    const { data, error } = await supabase.rpc("redeem_activation_code", {
+      p_code: claim,
+    });
+    if (error) {
+      return { message: "We could not check that code. Please try again." };
+    }
+    switch (data) {
+      case "ok":
+        revalidatePath("/account");
+        return { success: "Done — your access now runs for 12 months." };
+      case "already_used":
+        return {
+          message:
+            "That activation code has already been used. Email accounts@qasaskids.com if this is unexpected.",
+        };
+      case "rate_limited":
+        return {
+          message: "Too many attempts. Please wait 15 minutes and try again.",
+        };
+      default:
+        return {
+          message: "That activation code was not recognised. Check it and try again.",
+        };
+    }
+  }
+
+  // --- Amazon order number: joins the review queue --------------------------
+  // A parent correcting a typo will legitimately submit twice, so repeats are
+  // allowed — but an identical claim already waiting is told so rather than
+  // silently adding a duplicate to Asma's queue.
+  const { data: existing } = await supabase
+    .from("activations")
+    .select("id")
+    .eq("parent_id", parentId)
+    .eq("order_number", claim)
+    .eq("status", "pending")
+    .maybeSingle();
+
+  if (existing) {
+    return {
+      success:
+        "We already have that order number and are checking it. Email your receipt to receipts@qasaskids.com if you have not yet.",
+    };
+  }
+
+  const { error } = await supabase
+    .from("activations")
+    .insert({ parent_id: parentId, order_number: claim });
+
+  if (error) {
+    return { message: "We could not record that order number. Please try again." };
+  }
+
+  revalidatePath("/account");
+  return {
+    success:
+      "Order number received. Email your receipt to receipts@qasaskids.com and we will extend your access to 12 months.",
+  };
+}
+
 export async function switchProfile(formData: FormData) {
   const parentId = await getParentId();
   if (!parentId) redirect("/account/sign-in");

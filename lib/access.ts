@@ -1,6 +1,6 @@
 import { cache } from "react";
 import { getBook } from "@/lib/parse";
-import { getParentId } from "@/lib/account";
+import { getParentId, requireProgressContext } from "@/lib/account";
 import { createClient } from "@/lib/supabase/server";
 
 /**
@@ -108,6 +108,30 @@ export const getEntitlement = cache(async (): Promise<Entitlement | null> => {
   };
 });
 
+/**
+ * Does this parent have an order number waiting on a receipt?
+ *
+ * The receipt prompt keys off THIS, not the entitlement's source. The
+ * provisional trigger only updates `expires_at` on conflict, so an existing
+ * member who claims another book keeps source `book_activation` while very
+ * much owing us a receipt. A pending row is the actual question.
+ */
+export const hasPendingActivation = cache(async (): Promise<boolean> => {
+  const parentId = await getParentId();
+  if (!parentId) return false;
+
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("activations")
+    .select("id")
+    .eq("parent_id", parentId)
+    .eq("status", "pending")
+    .limit(1)
+    .maybeSingle();
+
+  return !error && Boolean(data);
+});
+
 export const getMembershipState = cache(async (): Promise<MembershipState> => {
   if (!(await getParentId())) return "signed-out";
   const entitlement = await getEntitlement();
@@ -148,4 +172,23 @@ export async function canViewPage(
   if (!GATE_ENABLED) return true;
   if (isFreePage(slug, page)) return true;
   return hasMembership();
+}
+
+/**
+ * Progress context, plus the access check the progress routes were missing.
+ *
+ * They gated on "signed in with a profile" and never asked the seam, so a
+ * lapsed or never-activated account could record progress against pages it
+ * cannot open. Nothing leaked — but writes landed where the gate says the
+ * reader is not.
+ *
+ * Deliberately per-page rather than per-membership: a family reading the free
+ * preview should still have that progress saved, entitlement or not. That is
+ * exactly the question canViewPage already answers.
+ */
+export async function requireProgressAccess(slug: string, page: number) {
+  const context = await requireProgressContext();
+  if ("error" in context) return context;
+  if (!(await canViewPage(slug, page))) return { error: "no_access" as const };
+  return context;
 }

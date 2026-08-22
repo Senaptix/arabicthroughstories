@@ -5,6 +5,7 @@ import AvatarBadge from "@/components/account/AvatarBadge";
 import ProfileCreator from "@/components/account/ProfileCreator";
 import ProfileRenamer from "@/components/account/ProfileRenamer";
 import ReceiptNotice from "@/components/account/ReceiptNotice";
+import BookClaimer from "@/components/account/BookClaimer";
 import { signOut, switchProfile } from "./actions";
 import { getActiveProfile, getParentId, getProfiles } from "@/lib/account";
 import { getAllBooks } from "@/lib/parse";
@@ -60,6 +61,15 @@ export default async function AccountPage({
         {/* Above the profiles, because it is the one thing on this page with
             a deadline. Renders nothing once the purchase is approved. */}
         <ReceiptNotice />
+
+        {/* How a family adds the next book in the series, and the only route
+            back for anyone whose claim was rejected or has lapsed. */}
+        <section
+          id="add-a-book"
+          className="border-ink/10 mt-12 scroll-mt-20 border-t pt-10"
+        >
+          <BookClaimer heading="Add another book" />
+        </section>
 
         <section className="mt-10" aria-labelledby="profiles-heading">
           <div className="flex items-end justify-between gap-4">

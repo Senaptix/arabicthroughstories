@@ -1,14 +1,20 @@
 import { NextResponse } from "next/server";
-import { requireProgressContext } from "@/lib/account";
+import { requireProgressAccess } from "@/lib/access";
 import { isPublishedPage, pageProgressSchema } from "@/lib/progress";
 import { createClient } from "@/lib/supabase/server";
 
 export async function POST(request: Request) {
-  const context = await requireProgressContext();
-  if ("error" in context) return NextResponse.json(context, { status: context.error === "signed_out" ? 401 : 409 });
   const parsed = pageProgressSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success || !isPublishedPage(parsed.data.bookSlug, parsed.data.page)) {
     return NextResponse.json({ error: "invalid_page" }, { status: 400 });
+  }
+
+  // Access is checked AFTER parsing, because it is per page: free
+  // preview progress saves without an entitlement, gated pages do not.
+  const context = await requireProgressAccess(parsed.data.bookSlug, parsed.data.page);
+  if ("error" in context) {
+    const status = context.error === "signed_out" ? 401 : context.error === "no_access" ? 403 : 409;
+    return NextResponse.json(context, { status });
   }
 
   const supabase = await createClient();
