@@ -155,7 +155,7 @@ export default function Home() {
           information the page does not already state in text. */}
       <header className="brand-home border-ink/10 mx-auto flex w-full max-w-[1100px] flex-wrap items-center justify-between gap-x-8 gap-y-3 border-b px-6 py-5 sm:px-8">
         <BrandLockup size="hero" priority />
-        <p className="flex flex-wrap items-baseline gap-x-3 gap-y-1 sm:justify-end">
+        <p className="order-last flex w-full flex-wrap items-baseline gap-x-3 gap-y-1 sm:order-none sm:w-auto sm:justify-end">
           <span
             lang="ar"
             dir="rtl"
@@ -179,7 +179,7 @@ export default function Home() {
           </span>
         </p>
 
-        <SiteNav hideInside />
+        <SiteNav />
       </header>
 
       <section className="mx-auto grid w-full max-w-[1100px] items-center gap-12 px-6 pt-10 pb-8 sm:px-8 lg:grid-cols-[1.05fr_1fr] lg:gap-16 lg:pt-16">
