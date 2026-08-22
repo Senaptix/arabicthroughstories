@@ -16,6 +16,7 @@ import {
 import { AVATAR_KEYS } from "@/lib/profile";
 import { createClient } from "@/lib/supabase/server";
 import { safeRedirectPath } from "@/lib/safe-redirect";
+import { siteOrigin } from "@/lib/site-origin";
 import {
   activationIssuerSecret,
   looksLikeActivationCode,
@@ -87,11 +88,6 @@ async function safeNext(
   return safeRedirectPath(value, await siteOrigin(), fallback);
 }
 
-async function siteOrigin() {
-  const configured = process.env.NEXT_PUBLIC_SITE_URL;
-  if (configured) return configured.replace(/\/$/, "");
-  return (await headers()).get("origin") ?? "https://qasaskids.com";
-}
 
 export async function signIn(_state: ActionState, formData: FormData): Promise<ActionState> {
   const parsed = z
