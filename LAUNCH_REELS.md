@@ -45,17 +45,80 @@ shooting — anything that trips the tongue is written wrong.
 
 ---
 
-## Reel 1 — "Fifty years of teaching, one problem" (30s)
+## Reel 1 — "The mouse" (20s) — BUILT
 
-**Lead with this.** Heritage plus the fix, which is the whole proposition.
+The lead, and the only one already cut: `qasas-mouse-reel.mp4`, 1080×1920,
+24fps, no audio track.
+
+This is the position argued by demonstration rather than assertion. It does
+not claim the book teaches through story — it just tells the story, and the
+viewer discovers at the end that it was Arabic all along.
+
+The on-screen text is **page 7 of the book, verbatim in translation**:
+
+> He would see the fly sit on the idols, and they would not push it away.
+> He would see the mouse eat the idols' food, and they would not stop it.
+> And Ibrahim would say to himself: why do people prostrate to the idols?
+
+| Time | On screen | Text |
+|---|---|---|
+| 0.6–4.2s | Mouse at the offering bowls, fly resting on the great idol | "A fly sat on the idols. / They did not push it away." |
+| 4.7–7.9s | Mouse eating, closer | "A mouse ate their food. / They did not stop it." |
+| 8.7–15.9s | Cut to the crowd prostrating in the idol house | "So Ibrahim asked himself / why do people bow to them?" |
+| 16–20.4s | Logo animation, then the closing line | "The stories of the Prophets / in Arabic your child can read" |
+
+**Why the last shot works:** the question lands over an image that answers
+it — a room full of people bowing to stones that could not chase off a fly.
+The reel never argues; it lets the question do the work, which is exactly
+what al-Nadwi's text does.
+
+### How it was built, for re-cutting
+
+- Source `Initial_Scene_-_2026-08-22_202608221918.mp4` is letterboxed: the
+  picture is **720×1012 at y=134**, which is the book's own page ratio
+  (688×968). Crop to that before scaling or you inherit black bars.
+- Art is framed as a book page — 960×1350 inset at (60, 330) on flat cream
+  **#DBCAB5**, sampled from the logo animation's background so the tail
+  matches. Text sits in the band above, Georgia Bold 56 in **#2E2114**.
+- The logo animation is landscape on a cream *gradient*. Padding it into a
+  portrait frame always seams, and blurring the fill did not fix it. It is
+  inset as a card with margin on all four sides instead, which reads as
+  deliberate. If a transparent-background logo ever exists, use that —
+  `public/brand/qasas-kids-mark.png` is RGBA but its alpha is opaque white.
+- Bottom ~240px is left empty on purpose — that is where the Instagram UI
+  sits.
+
+### Before posting
+
+- **The closing card carries no date and no call to action.** That is a
+  decision, not an oversight: say "Out 25 August", or carry the link, then
+  re-cut the tail.
+- The mouse in this clip has a visible eye; the book's own page 7 art was
+  deliberately selected without one. Fine for marketing, worth knowing.
+
+---
+
+## Reel 2 — "Fifty years of teaching, one problem" (30s)
+
+Heritage plus the fix, which is the whole proposition.
 
 | Time | Voiceover | On screen |
 |---|---|---|
-| 0–5s | "This book has been used to teach children Arabic for decades." | An old, worn copy of *Qasas an-Nabiyyin*. Real one if you have it. |
-| 5–11s | "Madrasas use it. Teachers swear by it. And most children still can't get through it on their own." | Hold on the old copy. Then a page of dense unvowelled Arabic. |
+| 0–5s | "This book has been used to teach children Arabic for decades." | The green Majlis edition of *Qasas an-Nabiyyin*, held up to camera. |
+| 5–11s | "Madrasas use it. Teachers swear by it. And most children still can't get through it on their own." | Hold on the cover. Then a page of dense unvowelled Arabic. |
 | 11–17s | "So we didn't change the stories. We changed everything that made them hard." | Cut to your book. Same story, open on a page. |
 | 17–25s | "Every vowel marked. The English underneath. Every new word explained right there. And every page read aloud." | Slow pan down a page: Arabic, gloss box, English panel. |
 | 25–30s | "Qasas Kids. The Arabic book your child can actually finish." | Logo. |
+
+**The copy does not need to be worn.** An earlier draft called for a battered
+old one; that was wrong. What carries the heritage claim is *recognition*,
+not age — the green Majlis cover is the one anyone who sat in a madrasa
+knows on sight, and a clean copy of it says "this book" just as well. A
+suspiciously distressed prop would say less.
+
+**The strongest version of this shot is two books, not one:** the green
+original and your edition side by side, held in the same hands. Same stories,
+made readable — stated in one frame, with nothing to age or fake.
 
 **Why it works:** it does not ask the parent to believe in a new method. It
 says a thing they may already trust has been made usable — which is a much
@@ -63,7 +126,7 @@ smaller thing to accept.
 
 ---
 
-## Reel 2 — "Nobody learns a language from a list" (25s)
+## Reel 3 — "Nobody learns a language from a list" (25s)
 
 The method, said plainly. No jargon.
 
@@ -80,7 +143,7 @@ not narrate the difference; show it and let the line land.
 
 ---
 
-## Reel 3 — "Press play" (15s)
+## Reel 4 — "Press play" (15s)
 
 Almost no voiceover. The product makes the sound.
 
@@ -98,7 +161,7 @@ competing with it is the one mistake this reel can make.
 
 ---
 
-## Reel 4 — "Two things at once" (25s)
+## Reel 5 — "Two things at once" (25s)
 
 For the parent weighing how much is in the week already.
 
@@ -115,7 +178,7 @@ idol house, the night sky, the market stall.
 
 ---
 
-## Reel 5 — "Why I made this" (30s, optional)
+## Reel 6 — "Why I made this" (30s, optional)
 
 Only worth doing if you are comfortable on camera. A half-hearted one is
 worse than none.
@@ -134,8 +197,9 @@ word-perfect here.
 
 ## Production notes
 
-**Format.** 1080×1920, H.264, 30fps, under 60s. Reels, TikTok and Shorts all
-take this; export once.
+**Format.** 1080×1920, H.264, under 60s. Reel 1 is 24fps, matching its
+source — do not convert it to 30, the duplicated frames judder on the slow
+push. Instagram, TikTok and YouTube all accept 24.
 
 **Captions are not optional.** Most of this plays on mute. Every word needs
 burned-in text — not platform auto-captions, which will mangle "Qasas",
@@ -144,14 +208,17 @@ burned-in text — not platform auto-captions, which will mangle "Qasas",
 **Arabic on a phone.** Fully vowelled Arabic goes illegible fast at reel
 size. Anything showing tashkeel must fill far more of the frame than looks
 right on a desktop preview. **Test one on an actual phone at arm's length
-before making the rest.**
+before making the rest.** Reel 1 dodges this by carrying its story in
+English and revealing the Arabic only at the end.
 
-**Openings.** Reels 1 and 2 both open on the problem rather than the product,
+**Openings.** Reels 2 and 3 both open on the problem rather than the product,
 deliberately. A parent scrolling recognises their own situation before they
-know they are being sold to.
+know they are being sold to. Reel 1 opens on neither — it opens on a mouse,
+which is the best hook available precisely because it is not selling
+anything.
 
-**No music.** Decided. If a bed is ever added it goes under 1, 4 and 5 only —
-never 3, where the narration is the point.
+**No music.** Decided. If a bed is ever added it goes under 2, 5 and 6 only —
+never 4, where the narration is the point.
 
 ---
 
@@ -159,7 +226,7 @@ never 3, where the narration is the point.
 
 Given the raw clips: reframing to 9:16, cutting and sequencing, crossfades,
 burned-in captions timed to the frame, audio mixing and levelling, and
-platform-spec export.
+platform-spec export. Reel 1 is the worked example.
 
 What ffmpeg cannot do is judge whether a cut lands. Send a rough back and I
 will adjust timings; the call on feel is yours.
