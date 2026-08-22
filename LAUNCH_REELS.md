@@ -4,126 +4,165 @@ For the 25 August listing. Written to be spoken by the author, not narrated
 by an AI voice: this is a Muslim parent recommending a book to other Muslim
 parents, and whose voice it is carries part of the argument.
 
-**Suno is music generation, not speech.** For a synthetic voice you would want
-ElevenLabs or similar — but see above. The Arabic in these should be the
-book's own narrator, which already exists as 50 recorded clips.
-
-Timings are for a spoken pace of roughly 2.5 words per second. Read them
-aloud before shooting; anything that trips the tongue is written wrong.
+**Suno generates music, not speech.** For a synthetic voice you would want
+ElevenLabs — but see above. The Arabic in these should be the book's own
+narrator, which already exists as 50 recorded clips.
 
 ---
 
-## Reel 1 — "The same three letters" (30s)
+## The position
 
-**The strongest one. Lead with this.** It is the moment the method proves
-itself, and it needs no claims — the viewer works it out a beat before you
-say it, which is why it lands.
+**A text that has taught Arabic for decades, rebuilt so a child can actually
+get through it.**
 
-| Time | Voiceover | On screen |
-|---|---|---|
-| 0–4s | "On page four of this book, a child meets this word." | Page 4 fills frame. Push in on **يَسْجُدُ**. Hold. |
-| 4–8s | "Yasjudu. He prostrates. They learn it, and they carry on reading." | The word isolated, large, tashkeel clearly visible. |
-| 8–14s | "Forty-eight pages later — a different story, a different page —" | Fast flick through pages. Motion blur is fine here. |
-| 14–20s | "— they meet this one." | Page 52. Push in on **الْمَسْجِدُ**. Hold longer than feels comfortable. |
-| 20–26s | "And nobody has to explain it. They just see it." | Both words side by side. The shared root س ج د lights up in each. |
-| 26–30s | "Qasas Kids. The Arabic book your child can actually finish." | Logo animation. |
+Three things carry the pitch, in this order:
 
-**Why it works:** it demonstrates rather than asserts. A parent who has tried
-Arabic apps knows the difference between memorising a word and *seeing* a
-pattern — this shows the second one happening.
+1. **Story, not drill.** Children acquire a language by understanding things
+   said in it — not by memorising lists or parsing grammar tables. A story a
+   child can follow, slightly above what they can already read, is how the
+   language goes in. Everything the book does exists to keep the Arabic
+   *understandable* while it stays real: full vowelling, English underneath,
+   new words glossed where they appear, audio for every page.
+2. **The heritage is the credibility.** Al-Nadwi's *Qasas an-Nabiyyin* has
+   been used to teach Arabic for generations. This is not a new method being
+   tried on someone's children — it is a proven text with the obstacles
+   removed.
+3. **Two things at once.** They are learning Arabic, and they are learning
+   the stories of the Prophets from the Qur'an. A parent is not choosing
+   between Arabic time and Islamic studies time.
 
-**Assets:** pages 4 and 52 from the print PDF. The root highlight is the one
-piece of motion graphics needed; everything else is a push-in on a still.
+**Do not say "comprehensible input" or name any language-learning app or
+platform in the marketing.** Say what it means in plain words: *children
+learn a language by understanding stories in it.* The parents who know the
+theory will recognise it; the rest will simply agree.
+
+**The root-family thread is a detail, not the headline.** It delights people
+who already own the book. It does not sell it. Keep it for a later reel or
+the website, where it rewards attention rather than carrying the argument.
+
+Timings assume roughly 2.5 words per second. Read every line aloud before
+shooting — anything that trips the tongue is written wrong.
 
 ---
 
-## Reel 2 — "Every vowel is there" (20s)
+## Reel 1 — "Fifty years of teaching, one problem" (30s)
 
-For parents who have been burned by books that were too hard.
+**Lead with this.** Heritage plus the fix, which is the whole proposition.
 
 | Time | Voiceover | On screen |
 |---|---|---|
-| 0–5s | "If your child has learned the letters but still can't read Arabic, this is usually why." | A line of **unvowelled** Arabic. Let it sit. Uncomfortable. |
-| 5–9s | "No vowels. Nothing to hold on to." | Same line, still bare. |
-| 9–14s | "Every page of this book looks like this instead." | The same line **fully vowelled**. Marks appear one by one. |
-| 14–18s | "Every word. Every page. All fifty." | Quick fan of pages, tashkeel visible throughout. |
-| 18–20s | "Qasas Kids." | Logo. |
+| 0–5s | "This book has been used to teach children Arabic for decades." | An old, worn copy of *Qasas an-Nabiyyin*. Real one if you have it. |
+| 5–11s | "Madrasas use it. Teachers swear by it. And most children still can't get through it on their own." | Hold on the old copy. Then a page of dense unvowelled Arabic. |
+| 11–17s | "So we didn't change the stories. We changed everything that made them hard." | Cut to your book. Same story, open on a page. |
+| 17–25s | "Every vowel marked. The English underneath. Every new word explained right there. And every page read aloud." | Slow pan down a page: Arabic, gloss box, English panel. |
+| 25–30s | "Qasas Kids. The Arabic book your child can actually finish." | Logo. |
 
-**The whole reel is one visual idea:** bare text, then marked text. Do not
-add anything else to it.
+**Why it works:** it does not ask the parent to believe in a new method. It
+says a thing they may already trust has been made usable — which is a much
+smaller thing to accept.
 
-**Careful:** the unvowelled line must be real Arabic from the book, not
-invented. Take a line from `ibrahim.pages.md` and strip the marks
-mechanically — do not hand-type it.
+---
+
+## Reel 2 — "Nobody learns a language from a list" (25s)
+
+The method, said plainly. No jargon.
+
+| Time | Voiceover | On screen |
+|---|---|---|
+| 0–5s | "Your child can probably recite the alphabet. Maybe a hundred words." | Flashcards, or a vocabulary list on a screen. Static. Dull on purpose. |
+| 5–10s | "But nobody ever learned a language from a list." | Hold. Let it be flat. |
+| 10–17s | "They learn it the way they learned English. By understanding stories, one page at a time." | Cut to the book. A child's hands turning a page. Warm light. |
+| 17–22s | "Real Arabic. A real story. And enough help on the page that they never get stuck." | Page in full: Arabic, glossed words, English. |
+| 22–25s | "Qasas Kids." | Logo. |
+
+**The contrast is the whole reel** — sterile list, then a child reading. Do
+not narrate the difference; show it and let the line land.
 
 ---
 
 ## Reel 3 — "Press play" (15s)
 
-Shows the companion. Almost no voiceover; the product makes the sound.
+Almost no voiceover. The product makes the sound.
 
 | Time | Voiceover | On screen |
 |---|---|---|
-| 0–3s | "Every page is read aloud." | Finger presses play on a phone. |
-| 3–11s | *(silence — the narration plays)* | Screen recording of the read-along, line highlighting as it goes. |
+| 0–3s | "Every page is read aloud, by a native reader." | Finger presses play on a phone. |
+| 3–11s | *(silence — the narration plays)* | Screen recording of the read-along, the line highlighting as it goes. |
 | 11–15s | "Included with the book. Nothing to install." | Logo. |
 
 **Do not talk over the Arabic.** The recitation is the product; a voiceover
 competing with it is the one mistake this reel can make.
 
-**Asset:** a real screen recording of `/books/ibrahim/p3` on a phone. Page 3
-or 4 — both have measured line cues, so the highlight is accurate.
+**Asset:** a real screen recording of `/books/ibrahim/p3` or `p4` on a phone
+— both have measured line cues, so the highlight is accurate.
 
 ---
 
-## Reel 4 — "Why I made this" (30s, optional)
+## Reel 4 — "Two things at once" (25s)
 
-Founder piece. Only worth doing if you are comfortable on camera — a
-half-hearted one is worse than none.
+For the parent weighing how much is in the week already.
 
 | Time | Voiceover | On screen |
 |---|---|---|
-| 0–6s | "I wanted my children to read the stories of the Prophets in Arabic. Not a translation." | You, talking. Plain background. |
-| 6–14s | "Everything I found was either too easy to be real Arabic, or real Arabic they couldn't get through." | Hold on you. |
-| 14–24s | "So we built the one I wanted. Fully vowelled, read aloud, with every new word on the page it appears." | Cut to book in hands, turning a page. |
-| 24–30s | "Qasas an-Nabiyyin, for children. Out now." | Logo. |
+| 0–6s | "Most weeks there isn't time for Arabic and Islamic studies both." | A busy kitchen table. Books, homework. |
+| 6–12s | "This is the same hour." | The book, open. |
+| 12–20s | "They're reading the story of Ibrahim, alayhi salam, in the Arabic it was written in. Learning the language, and learning the deen." | Pages turning — the idols, the fire, the stars. |
+| 20–25s | "Qasas Kids. Out now." | Logo. |
 
-**Unscripted is better than word-perfect here.** Learn the beats, not the
-sentences.
+**Careful with the artwork:** no Prophet is depicted anywhere in this book,
+and the reel must not imply otherwise. Use the scenes he is not in — the
+idol house, the night sky, the market stall.
+
+---
+
+## Reel 5 — "Why I made this" (30s, optional)
+
+Only worth doing if you are comfortable on camera. A half-hearted one is
+worse than none.
+
+| Time | Voiceover | On screen |
+|---|---|---|
+| 0–7s | "I wanted my children to read the stories of the Prophets in Arabic. Not in translation." | You, talking. Plain background. |
+| 7–15s | "Everything I found was either too easy to be real Arabic, or real Arabic they couldn't get through." | Hold on you. |
+| 15–25s | "So we took the book the madrasas have used for fifty years, and made it something a child could read on their own." | Cut to book in hands, turning a page. |
+| 25–30s | "Qasas an-Nabiyyin, for children. Out now." | Logo. |
+
+**Learn the beats, not the sentences.** Unscripted is better than
+word-perfect here.
 
 ---
 
 ## Production notes
 
-**Format.** 1080×1920, H.264, 30fps. Under 60s. Reels, TikTok and Shorts all
-accept this; export once.
+**Format.** 1080×1920, H.264, 30fps, under 60s. Reels, TikTok and Shorts all
+take this; export once.
 
-**Captions are not optional.** Most of this plays on mute. Every word of
-voiceover needs burned-in text — not the platform's auto-captions, which
-mangle "Yasjudu" and every other Arabic word in these scripts.
+**Captions are not optional.** Most of this plays on mute. Every word needs
+burned-in text — not platform auto-captions, which will mangle "Qasas",
+"an-Nabiyyin" and "alayhi salam".
 
-**Arabic on a phone.** Fully vowelled Arabic gets illegible fast at reel
-sizes. Anything with tashkeel needs to fill much more of the frame than
-feels right on a desktop preview. **Test one on an actual phone at arm's
-length before making the rest.**
+**Arabic on a phone.** Fully vowelled Arabic goes illegible fast at reel
+size. Anything showing tashkeel must fill far more of the frame than looks
+right on a desktop preview. **Test one on an actual phone at arm's length
+before making the rest.**
 
-**The first second decides it.** Reels 1 and 2 both open on a word rather
-than a face or a logo, deliberately — a viewer scrolling past sees Arabic
-and either stops or does not, and the ones who stop are the audience.
+**Openings.** Reels 1 and 2 both open on the problem rather than the product,
+deliberately. A parent scrolling recognises their own situation before they
+know they are being sold to.
 
-**No music.** Decided. If a bed is wanted later, it goes under Reels 1 and 4
-only — never under 3, where the narration is the point.
+**No music.** Decided. If a bed is ever added it goes under 1, 4 and 5 only —
+never 3, where the narration is the point.
 
 ---
 
 ## What I can assemble
 
-Given the raw clips, ffmpeg handles: reframing to 9:16, cutting and
-sequencing, crossfades, burned-in captions timed to the frame, audio mixing
-and levelling, and platform-spec export.
+Given the raw clips: reframing to 9:16, cutting and sequencing, crossfades,
+burned-in captions timed to the frame, audio mixing and levelling, and
+platform-spec export.
 
-What it cannot do is judge whether a cut lands. Send a rough version back and
-I will adjust timings, but the call on feel is yours.
+What ffmpeg cannot do is judge whether a cut lands. Send a rough back and I
+will adjust timings; the call on feel is yours.
 
-Page artwork and the 50 narration clips can be pulled straight from this repo
-at full quality — no need to re-export from Canva.
+Page artwork and the 50 narration clips come straight from this repo at full
+quality — no re-exporting from Canva.
