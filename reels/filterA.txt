@@ -1,0 +1,9 @@
+color=c=0xDBCAB5:s=1080x1920:r=24:d=16[bg];
+[0:v]crop=720:1012:0:134,scale=896:1260:flags=lanczos,setsar=1[art];
+[bg][art]overlay=92:400:shortest=1[v0];
+[1:v]format=rgba,fade=t=in:st=0.6:d=0.4:alpha=1,fade=t=out:st=3.8:d=0.4:alpha=1[b1];
+[2:v]format=rgba,fade=t=in:st=4.7:d=0.4:alpha=1,fade=t=out:st=7.5:d=0.4:alpha=1[b2];
+[3:v]format=rgba,fade=t=in:st=8.7:d=0.4:alpha=1,fade=t=out:st=15.4:d=0.5:alpha=1[b3];
+[v0][b1]overlay=0:0:enable='between(t,0.6,4.2)'[v1];
+[v1][b2]overlay=0:0:enable='between(t,4.7,7.9)'[v2];
+[v2][b3]overlay=0:0:enable='between(t,8.7,15.9)'[vout]

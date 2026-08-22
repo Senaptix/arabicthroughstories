@@ -54,7 +54,8 @@ This is the position argued by demonstration rather than assertion. It does
 not claim the book teaches through story — it just tells the story, and the
 viewer discovers at the end that it was Arabic all along.
 
-The on-screen text is **page 7 of the book, verbatim in translation**:
+The on-screen text is **page 7 of the book** — the Arabic verbatim from the
+corpus, with the English beneath it, laid out the way the printed page is:
 
 > He would see the fly sit on the idols, and they would not push it away.
 > He would see the mouse eat the idols' food, and they would not stop it.
@@ -62,10 +63,10 @@ The on-screen text is **page 7 of the book, verbatim in translation**:
 
 | Time | On screen | Text |
 |---|---|---|
-| 0.6–4.2s | Mouse at the offering bowls, fly resting on the great idol | "A fly sat on the idols. / They did not push it away." |
-| 4.7–7.9s | Mouse eating, closer | "A mouse ate their food. / They did not stop it." |
-| 8.7–15.9s | Cut to the crowd prostrating in the idol house | "So Ibrahim asked himself / why do people bow to them?" |
-| 16–20.4s | Logo animation, then the closing line | "The stories of the Prophets / in Arabic your child can read" |
+| 0.6–4.2s | Mouse at the offering bowls, fly resting on the great idol | Page 7 line 1 + "A fly sat on the idols. / They did not push it away." |
+| 4.7–7.9s | Mouse eating, closer | Page 7 line 2 + "A mouse ate their food. / They did not stop it." |
+| 8.7–15.9s | Cut to the crowd prostrating in the idol house | Page 7 line 3 + "So Ibrahim asked himself / why do people bow to them?" |
+| 16–20.4s | Logo animation, then the closing card | "The stories of the Prophets / in Arabic your child can read" / **qasaskids.com** |
 
 **Why the last shot works:** the question lands over an image that answers
 it — a room full of people bowing to stones that could not chase off a fly.
@@ -88,13 +89,41 @@ what al-Nadwi's text does.
 - Bottom ~240px is left empty on purpose — that is where the Instagram UI
   sits.
 
+### The Arabic — do not render it with ffmpeg
+
+**ffmpeg's `drawtext` cannot be trusted with this text, and the failure is
+silent.** Everything needed is in `reels/`.
+
+- The Arabic is read out of `content/data/ibrahim.pages.md` by script and
+  written to `reels/ar*.txt`. It is never retyped. Only the Latin full stop
+  and colon are dropped, because the web font subset has no glyph for them.
+- Every font on this machine failed in a different way. The site's
+  Scheherazade New subset renders as tofu under harfbuzz shaping; Dubai is
+  missing glyphs; **Segoe UI silently drops most of the tashkeel**; Arial
+  and Tahoma shape correctly but set the marks badly. A missing vowel is a
+  different word, so "it looked fine" is not a check that passes here.
+- What works: `reels/band.html` rendered by headless Chrome at 2× and
+  downscaled. The browser shapes the subset correctly, and the text is in
+  the same face the site uses.
+
+```
+chrome --headless=new --force-device-scale-factor=2 \
+  --window-size=1080,1410 --screenshot=band_raw.png http://localhost:PORT/band.html
+```
+
+Each 1080×470 section becomes one text band; crop the top 400px of each and
+overlay it with an alpha fade. `reels/filterA.txt` and `filterB.txt` are the
+filter graphs as shipped.
+
 ### Before posting
 
-- **The closing card carries no date and no call to action.** That is a
-  decision, not an oversight: say "Out 25 August", or carry the link, then
-  re-cut the tail.
+- The closing card carries **qasaskids.com** but no date. Add "Out 25
+  August" if you want urgency — that is a decision, not an oversight.
 - The mouse in this clip has a visible eye; the book's own page 7 art was
   deliberately selected without one. Fine for marketing, worth knowing.
+- **Check the Arabic on a phone before this goes out.** It is set at 60px in
+  a 1080-wide frame, which is large on a desktop preview and merely adequate
+  in the hand.
 
 ---
 
@@ -209,7 +238,7 @@ burned-in text — not platform auto-captions, which will mangle "Qasas",
 size. Anything showing tashkeel must fill far more of the frame than looks
 right on a desktop preview. **Test one on an actual phone at arm's length
 before making the rest.** Reel 1 dodges this by carrying its story in
-English and revealing the Arabic only at the end.
+English at first and letting the Arabic lead each beat.
 
 **Openings.** Reels 2 and 3 both open on the problem rather than the product,
 deliberately. A parent scrolling recognises their own situation before they
