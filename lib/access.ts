@@ -55,19 +55,64 @@ export type MembershipState =
   | "active"
   | "lapsed";
 
-export const getMembershipState = cache(async (): Promise<MembershipState> => {
+/**
+ * How the entitlement was earned. `provisional` is the 30-day window granted
+ * at signup and is the only one still waiting on a receipt.
+ */
+export type EntitlementSource =
+  | "provisional"
+  | "book_activation"
+  | "direct_sale";
+
+export type Entitlement = {
+  source: EntitlementSource;
+  /** Epoch ms. */
+  expiresAt: number;
+  /** Already lapsed. */
+  expired: boolean;
+  /** Whole days remaining, never negative. */
+  daysLeft: number;
+};
+
+/**
+ * The parent's entitlement row, or null.
+ *
+ * Cached per request, so the page card, the gate notice and the account
+ * banner can each ask without three round trips to the database.
+ */
+export const getEntitlement = cache(async (): Promise<Entitlement | null> => {
   const parentId = await getParentId();
-  if (!parentId) return "signed-out";
+  if (!parentId) return null;
 
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("entitlements")
-    .select("expires_at")
+    .select("source, expires_at")
     .eq("parent_id", parentId)
     .maybeSingle();
 
-  if (error || !data) return "not-activated";
-  return Date.parse(data.expires_at) > Date.now() ? "active" : "lapsed";
+  if (error || !data) return null;
+
+  // Read the clock HERE, not in a component. This function is cached per
+  // request, so every caller sees the same instant — and a React component
+  // that called Date.now() itself would be impure by the letter of the rule
+  // and unstable in spirit if it ever re-rendered.
+  const expiresAt = Date.parse(data.expires_at);
+  const now = Date.now();
+
+  return {
+    source: data.source as EntitlementSource,
+    expiresAt,
+    expired: expiresAt <= now,
+    daysLeft: Math.max(0, Math.ceil((expiresAt - now) / 86_400_000)),
+  };
+});
+
+export const getMembershipState = cache(async (): Promise<MembershipState> => {
+  if (!(await getParentId())) return "signed-out";
+  const entitlement = await getEntitlement();
+  if (!entitlement) return "not-activated";
+  return entitlement.expiresAt > Date.now() ? "active" : "lapsed";
 });
 
 export async function hasMembership(): Promise<boolean> {

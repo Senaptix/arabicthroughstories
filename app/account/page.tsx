@@ -4,6 +4,7 @@ import BrandLockup from "@/components/BrandLockup";
 import AvatarBadge from "@/components/account/AvatarBadge";
 import ProfileCreator from "@/components/account/ProfileCreator";
 import ProfileRenamer from "@/components/account/ProfileRenamer";
+import ReceiptNotice from "@/components/account/ReceiptNotice";
 import { signOut, switchProfile } from "./actions";
 import { getActiveProfile, getParentId, getProfiles } from "@/lib/account";
 import { getAllBooks } from "@/lib/parse";
@@ -55,6 +56,10 @@ export default async function AccountPage({
         {query["password-updated"] === "1" && (
           <p className="mt-7 rounded-xl bg-sage/15 px-4 py-3 text-[14px]">Your password has been updated.</p>
         )}
+
+        {/* Above the profiles, because it is the one thing on this page with
+            a deadline. Renders nothing once the purchase is approved. */}
+        <ReceiptNotice />
 
         <section className="mt-10" aria-labelledby="profiles-heading">
           <div className="flex items-end justify-between gap-4">
