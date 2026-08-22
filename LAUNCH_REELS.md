@@ -34,6 +34,15 @@ Three things carry the pitch, in this order:
    the stories of the Prophets from the Qur'an. A parent is not choosing
    between Arabic time and Islamic studies time.
 
+**Who this is for, stated once so every reel can assume it:** children being
+raised outside the Arabic-speaking world, who do not have the language at
+home. This matters because the obvious rival — al-Nadwi's own
+*Qasas an-Nabiyyin lil-Atfal* — is already a children's edition and already
+fully vowelled. **The gap it leaves is comprehension, not decoding.** A
+child can sound out every word on its pages and know none of them. That
+single sentence is the clearest statement of what this book is for, and
+Reel 2 is built on it.
+
 **Do not say "comprehensible input" or name any language-learning app or
 platform in the marketing.** Say what it means in plain words: *children
 learn a language by understanding stories in it.* The parents who know the
@@ -177,50 +186,67 @@ Heritage plus the fix, which is the whole proposition.
 
 | Time | Voiceover | On screen |
 |---|---|---|
-| 0–5s | "This is how the story of Ibrahim has been taught for generations." | The plain Arabic *Qasas an-Nabiyyin*, open flat. A full page of unbroken text. |
-| 5–12s | "It is the right book. It is just not a book a seven-year-old can open on their own." | Slow push into the text. Let it sit there and feel dense. |
-| 12–17s | "Same story. Same words." | Cut to your book, open at the same passage. |
-| 17–25s | "Every vowel marked. The English underneath. Every new word explained right there. And every page read aloud." | Slow pan down the page: Arabic, gloss box, English panel. |
-| 25–30s | "Qasas Kids. The Arabic book your child can actually finish." | Logo, then qasaskids.com. |
+| 0–6s | "This is the book. Shaykh Abul Hasan Ali an-Nadwi, written for children. It is beautiful, and every vowel is already there." | The Dar Ibn Kathir cover, then the book opening. |
+| 6–15s | "Your child can sound out every single word on this page — and still have no idea what just happened." | Slow push into a full page of vowelled Arabic text. Hold on it. |
+| 15–20s | "Because they don't speak Arabic yet. That is the gap." | Stay on the page a beat longer than is comfortable. |
+| 20–28s | "Same story. Same words. With the English underneath, every new word explained, a picture on every page, and a native reader on the audio." | Cut to your book at the same passage. Pan down: Arabic, gloss, English. |
+| 28–32s | "Qasas Kids." | Logo, then qasaskids.com. |
 
-**Shot with a plain text-only Arabic copy — not an old or worn one.** Two
-earlier drafts were wrong about this. The first asked for a battered volume;
-the second for the green Majlis cover, which turned out not to be to hand.
-Neither was necessary, and the version built from what actually exists is
-better than both.
+### The gap is comprehension, not decoding
 
-Here is why. Age was never the point, and neither was the cover. **The
-picture's job is to show why a child stalls**, and a plain Arabic page — no
-vowels, no pictures, no colour, no gloss, just a wall of text — shows that
-in about a second and a half, to a parent who cannot read a word of it. An
-old cover would have said "this book is respected". A dense page says "your
-child would not get past this", which is the thing that sells the fix.
+This is the third version of Reel 2 and the first correct one. The earlier
+drafts wanted a battered old volume, then the green Majlis cover, then a
+plain unvowelled page — all of them arguing that the original is *hard to
+read*. The actual copy settles it: قصص النبيين للأطفال, Dar Ibn Kathir, a
+bright modern hardback, already written for children, **already fully
+vowelled**.
 
-The heritage claim moves entirely into the voiceover, where it costs
-nothing and cannot be faked.
+So vowelling was never the gap, and any reel claiming it was would be
+contradicted by the book in shot.
 
-**Photograph the same passage in both books.** The fly-and-mouse lines are
-**Lesson 2, ابن آزر / "Azar's Son"** in the original, and **page 7** in
-ours. Open both there and the reel proves itself: identical words, one
-impassable to a child and one not. It also ties this reel to Reel 1, which
-is built on those exact lines.
+The real gap is sharper and easier to sell: **a child who does not yet speak
+Arabic can decode a page perfectly and understand none of it.** The original
+was written for children who already have the language; it teaches them to
+read their own. Ours is for children who do not — which is why it carries
+English underneath, glosses each new word where it appears, puts a picture
+on every page and reads itself aloud.
+
+That names the audience exactly: Muslim families raising children outside
+the Arabic-speaking world.
+
+**Do not disparage the original.** The reel praises it and then identifies a
+different reader. The heritage argument only works if the respect is real,
+and it is — this is the book, and ours exists to reach children it was not
+written for.
+
+### The shots
+
+The passage in the photo is **lesson 5, «مَنْ فَعَلَ هٰذَا؟»** on page 26 —
+the idols broken, the axe hung on the great one's neck. That is **pages
+13–15 of ours**, and the wording is near-identical, so both books can be
+opened at the same words. It also lines up with the Reel 2 Flow prompts in
+the book repo.
 
 **Stills are enough — no video camera needed.** Slow push moves across good
-photographs are standard for this and read as deliberate. Four frames:
+photographs read as deliberate. Five frames:
 
-1. The Arabic book open at Lesson 2, shot straight down, filling the frame
-2. Closer, on the fly-and-mouse passage itself
-3. Your book open at page 7 — the same passage
-4. **Both books open side by side.** This is the shot; the other three
-   support it
+1. The Dar Ibn Kathir cover, flat, straight on
+2. The book open at page 26, shot straight down, filling the frame
+3. Closer still, on the vowelled text alone — no page furniture
+4. Ours open at pages 13–15, the same passage
+5. **Both open side by side.** This is the shot; the rest support it
 
 Plain surface, daylight, no flash, no hands in frame. Shoot at the highest
-resolution the phone offers — a slow push crops in, so anything soft on the
+resolution the phone offers — a slow push crops in, so anything soft in the
 original is worse on screen.
 
+The photos already taken are close but shot at an angle and in mixed light.
+Reshoot 2 and 4 square-on with the page flat, or the push will read as a
+snapshot rather than a held frame.
+
 **Why it works:** it does not ask the parent to believe in a new method. It
-says a thing they may already trust has been made usable — which is a much
-smaller thing to accept.
+asks them to accept a smaller thing — that a book they already respect was
+written for a child who grew up speaking Arabic, and theirs did not.
 
 ---
 
