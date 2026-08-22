@@ -78,9 +78,10 @@ what al-Nadwi's text does.
 - Source `Initial_Scene_-_2026-08-22_202608221918.mp4` is letterboxed: the
   picture is **720×1012 at y=134**, which is the book's own page ratio
   (688×968). Crop to that before scaling or you inherit black bars.
-- Art is framed as a book page — 960×1350 inset at (60, 330) on flat cream
+- Art is framed as a book page — 896×1260 inset at (92, 400) on flat cream
   **#DBCAB5**, sampled from the logo animation's background so the tail
-  matches. Text sits in the band above, Georgia Bold 56 in **#2E2114**.
+  matches. The text band occupies the top 400px: Arabic in Scheherazade New
+  Bold 60 over English in Georgia Bold 40, mirroring the printed page.
 - The logo animation is landscape on a cream *gradient*. Padding it into a
   portrait frame always seams, and blurring the fill did not fix it. It is
   inset as a card with margin on all four sides instead, which reads as
@@ -237,8 +238,8 @@ burned-in text — not platform auto-captions, which will mangle "Qasas",
 **Arabic on a phone.** Fully vowelled Arabic goes illegible fast at reel
 size. Anything showing tashkeel must fill far more of the frame than looks
 right on a desktop preview. **Test one on an actual phone at arm's length
-before making the rest.** Reel 1 dodges this by carrying its story in
-English at first and letting the Arabic lead each beat.
+before making the rest.** Reel 1 does not dodge this — the Arabic leads
+every beat with the English under it — so it is the one to test first.
 
 **Openings.** Reels 2 and 3 both open on the problem rather than the product,
 deliberately. A parent scrolling recognises their own situation before they
