@@ -8,6 +8,17 @@ import "./globals.css";
  * requirement. Do not swap it for a prettier naskh without testing full
  * vocalisation first. See WEBSITE_DESIGN.md.
  *
+ * THE BOOK USES A DIFFERENT FACE, DELIBERATELY. From 2026-08-22 the printed
+ * edition sets its Arabic in Noto Naskh Arabic, chosen for legibility for
+ * young readers. The site stays on Scheherazade New because both were tried
+ * and it reads better on screen — the same typeface renders differently in a
+ * print layout tool and in a browser, and the browser is what these readers
+ * are looking at.
+ *
+ * So book and site do not match, and that is the tested outcome rather than
+ * drift. Do not "fix" the inconsistency without repeating the comparison on
+ * a real screen, at the sizes a child actually reads.
+ *
  * next/font downloads and self-hosts at build time, so there is no runtime
  * request to Google and the swap window is short.
  */
