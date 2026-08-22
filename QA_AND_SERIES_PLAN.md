@@ -296,9 +296,21 @@ undecided: keep `greatest()`.
 - **F5 — progress writes** route through `requireProgressAccess`, checked per
   page so free-preview progress still saves without an entitlement. `status`
   keeps the plain context: it returns progress rows, not content.
-- **F3 groundwork** — `postgresql-client` installed, `/srv/qasas/backup.sh`
-  written, cron at 03:17 UTC, 14-day retention, partial-file and
-  suspiciously-small-dump guards. **Blocked on one credential** (below).
+- **F3 + F4 — DONE, verified.** Nightly `pg_dump` at 03:17 UTC, 14-day
+  retention, guards against partial and suspiciously-small dumps. First
+  backup taken and **checked rather than assumed**: gzip integrity OK, 102KB
+  uncompressed, all six tables present, `auth.users` included (parent
+  accounts), 8 data blocks. 17KB compressed is a small dataset, not a
+  truncated dump.
+
+  Two problems surfaced on the way, each naming itself: the Supabase **Auth**
+  password is not the **database** password (different credential entirely),
+  and Ubuntu 24.04 ships `pg_dump` 16 while Supabase runs Postgres 17 —
+  `postgresql-client-17` installed from PGDG.
+
+  **F4 comes free with it:** a nightly connection to Postgres is database
+  activity, so the free-tier 7-day pause can no longer trigger regardless of
+  how quiet the site gets.
 
 ### F1 — audio access: DECIDED, accept for launch
 
