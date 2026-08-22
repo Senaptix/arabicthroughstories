@@ -8,6 +8,9 @@ parents, and whose voice it is carries part of the argument.
 ElevenLabs — but see above. The Arabic in these should be the book's own
 narrator, which already exists as 50 recorded clips.
 
+Reel 1 went further and needs no voiceover at all: it runs on the page 7
+narration alone. Where the recording can carry a reel, let it.
+
 ---
 
 ## The position
@@ -45,14 +48,25 @@ shooting — anything that trips the tongue is written wrong.
 
 ---
 
-## Reel 1 — "The mouse" (20s) — BUILT
+## Reel 1 — "The mouse" (21s) — BUILT
 
-The lead, and the only one already cut: `qasas-mouse-reel.mp4`, 1080×1920,
-24fps, no audio track.
+The lead, and the only one already cut: `reels/out/qasas-mouse-reel.mp4`,
+1080×1920, 24fps, carrying **the book's own page 7 narration**. There is no
+scripted voiceover and none is wanted — the narrator reads, the text
+follows, and nothing is said over it.
 
-This is the position argued by demonstration rather than assertion. It does
-not claim the book teaches through story — it just tells the story, and the
-viewer discovers at the end that it was Arabic all along.
+`qasas-mouse-reel-silent.mp4` is the same cut without audio, kept in case a
+voiceover version is ever needed. `reels/out/` is gitignored; rebuild from
+the sources beside it.
+
+This is the position argued by demonstration rather than assertion. It never
+claims the book teaches through story; it just tells the story.
+
+And it does something better than describing the method — it performs it. A
+parent who cannot read a word of Arabic hears Arabic, sees Arabic, and
+follows the story anyway, because the English is right there and the picture
+is doing half the work. That is the whole argument of the book, happening to
+the viewer in twenty seconds, with nobody explaining it.
 
 The on-screen text is **page 7 of the book** — the Arabic verbatim from the
 corpus, with the English beneath it, laid out the way the printed page is:
@@ -61,12 +75,17 @@ corpus, with the English beneath it, laid out the way the printed page is:
 > He would see the mouse eat the idols' food, and they would not stop it.
 > And Ibrahim would say to himself: why do people prostrate to the idols?
 
-| Time | On screen | Text |
+| Narration | On screen | Text band |
 |---|---|---|
-| 0.6–4.2s | Mouse at the offering bowls, fly resting on the great idol | Page 7 line 1 + "A fly sat on the idols. / They did not push it away." |
-| 4.7–7.9s | Mouse eating, closer | Page 7 line 2 + "A mouse ate their food. / They did not stop it." |
-| 8.7–15.9s | Cut to the crowd prostrating in the idol house | Page 7 line 3 + "So Ibrahim asked himself / why do people bow to them?" |
-| 16–20.4s | Logo animation, then the closing card | "The stories of the Prophets / in Arabic your child can read" / **qasaskids.com** |
+| 0–4.32s | Mouse at the offering bowls, fly resting on the great idol | Page 7 line 1 + "A fly sat on the idols. / They did not push it away." |
+| 4.73–9.59s | Mouse eating, closer | Page 7 line 2 + "A mouse ate their food. / They did not stop it." |
+| 9.98–16.01s | Cut to the crowd prostrating in the idol house | Page 7 line 3 + "So Ibrahim asked himself / why do people bow to them?" |
+| silent | Logo animation, then the closing card | "The stories of the Prophets / in Arabic your child can read" / **qasaskids.com** |
+
+**Page 7 has four lines; the reel uses three.** The fourth is the parallel
+"why do people *ask* the idols?", and the audio is trimmed before it at
+16.45s. Including it would need another six seconds of picture that does not
+exist.
 
 **Why the last shot works:** the question lands over an image that answers
 it — a room full of people bowing to stones that could not chase off a fly.
@@ -89,6 +108,30 @@ what al-Nadwi's text does.
   `public/brand/qasas-kids-mark.png` is RGBA but its alpha is opaque white.
 - Bottom ~240px is left empty on purpose — that is where the Instagram UI
   sits.
+
+### Cutting picture to narration, not the other way round
+
+The narration is fixed, so the picture was retimed to fit it. **The audio
+was never stretched** — altering recorded Arabic to fit a video would change
+how the words sound, which is the one thing this project cannot do.
+
+- Line boundaries came from `silencedetect` on `public/audio/ibrahim/p7.mp3`,
+  the same method used for the p3/p4 cues. Lines 3 and 4 confirm the reading:
+  they are near-identical sentences and their two halves measure 2.62/2.69s
+  and 2.35/2.59s, which is too close to be coincidence. **These cues have not
+  been confirmed by ear** — that standard applies to the read-along, not to a
+  reel, but treat them as measured rather than verified.
+- The source cuts from mouse to crowd at exactly 8.0s, while the mouse line
+  runs to 9.59s. The mouse half is therefore slowed by 1.196× with
+  `minterpolate=mi_mode=mci:mc_mode=aobmc:vsbmc=1`, which generates real
+  intermediate frames instead of duplicating them — checked for artifacts on
+  the whiskers and tail, none. Plain `setpts` would judder on a moving
+  subject.
+- That puts the scene change at 9.50s, inside the pause between lines. The
+  cut lands on silence, which is why it does not read as a cut.
+- Audio is trimmed to 16.45s, faded across the crossfade, and run through
+  `loudnorm=I=-14` — social platforms normalise to about −14 LUFS and the
+  source sits at −18.5.
 
 ### The Arabic — do not render it with ffmpeg
 
