@@ -280,79 +280,111 @@ undecided: keep `greatest()`.
 
 ## Progress log — 2026-08-22
 
-### Built
+### Built and verified
 
-- **F2 — add-a-book form.** `claimBook` action + `BookClaimer` on the account
-  page at `#add-a-book`. QK codes redeem via `redeem_activation_code`;
-  anything else inserts an activation through the existing RLS policy. An
-  identical pending claim is reported rather than duplicated.
-- **F6 — GateNotice** no longer tells a signed-in visitor to create the
-  account they already have; it links to the new form.
-- **Banner correctness (found while building F2).** ReceiptNotice keyed off
+- **F2 — add-a-book form.** `claimBook` + `BookClaimer` on the account page at
+  `#add-a-book`. QK codes redeem via `redeem_activation_code`; anything else
+  inserts an activation through the existing RLS policy. An identical pending
+  claim is reported rather than duplicated. **This is the mechanism by which
+  the series sells** — see Part 2.
+- **Banner correctness, found while building F2.** ReceiptNotice keyed off
   entitlement `source`, but `grant_provisional` only updates `expires_at` on
   conflict — so an existing member claiming another book stays
-  `book_activation` while owing a receipt, and would never have been asked.
-  Now keys off a pending activation row.
-- **F5 — progress writes** route through `requireProgressAccess`, checked per
-  page so free-preview progress still saves without an entitlement. `status`
-  keeps the plain context: it returns progress rows, not content.
-- **F3 + F4 — DONE, verified.** Nightly `pg_dump` at 03:17 UTC, 14-day
-  retention, guards against partial and suspiciously-small dumps. First
-  backup taken and **checked rather than assumed**: gzip integrity OK, 102KB
-  uncompressed, all six tables present, `auth.users` included (parent
-  accounts), 8 data blocks. 17KB compressed is a small dataset, not a
-  truncated dump.
+  `book_activation` while owing a receipt, and would never have been asked for
+  one. Now keys off a pending activation row, which is the real question.
+- **F6 — GateNotice** no longer tells a signed-in visitor to create the account
+  they already have.
+- **F5 — progress writes** go through `requireProgressAccess`, checked per page
+  so free-preview progress still saves without an entitlement. `status` keeps
+  the plain context: it returns progress rows, not content.
+- **F10 — `vowelling` removed.** Nothing read it, and its enum encoded the
+  scrapped graded-vowelling ladder.
+- **F10 — ACCESS_MODEL.md** given a supersession note in the book repo. It
+  still argued "no expiry on a purchased book" while a 12-month membership had
+  shipped, and it sits in CLAUDE.md's reading order.
 
-  Two problems surfaced on the way, each naming itself: the Supabase **Auth**
-  password is not the **database** password (different credential entirely),
-  and Ubuntu 24.04 ships `pg_dump` 16 while Supabase runs Postgres 17 —
-  `postgresql-client-17` installed from PGDG.
+### F3 + F4 — backups, done and checked
 
-  **F4 comes free with it:** a nightly connection to Postgres is database
-  activity, so the free-tier 7-day pause can no longer trigger regardless of
-  how quiet the site gets.
+Nightly `pg_dump` at 03:17 UTC, 14-day retention, guards against partial and
+suspiciously-small dumps. First backup **verified rather than assumed**: gzip
+integrity OK, 102KB uncompressed, all six tables, `auth.users` included, 8
+data blocks. 17KB compressed is a small dataset, not a truncated dump — which
+is precisely the distinction the script's own size guard cannot make.
+
+Two problems on the way, each naming itself in the error: the Supabase **Auth**
+password is not the **database** password, and Ubuntu 24.04 ships `pg_dump` 16
+while Supabase runs Postgres 17 (`postgresql-client-17` installed from PGDG).
+
+**F4 comes free.** A nightly connection to Postgres is database activity, so
+the free-tier 7-day pause cannot trigger however quiet the site gets — which
+mattered because anonymous page views never touch the database at all.
+
+### F8 — auto-deploy, and the in-place build it exposed
+
+A five-minute cron compares `HEAD` to `origin/master` and deploys on
+difference. **Polling, not a webhook:** a webhook needs a public endpoint, a
+shared secret and signature verification — three more things to secure, for
+latency nothing here cares about.
+
+Testing it found two bugs it would otherwise have shipped with:
+
+1. **`git` as root in a `qasas`-owned checkout** aborts on "dubious
+   ownership". On a cron writing to a log nobody reads, that is an auto-deploy
+   that silently never deploys — the worst kind, because it looks installed.
+   All git calls now run through `sudo -u qasas`.
+2. **The build was taking the live site down.** `next build` rewrites `.next/`
+   in place while the running server reads from `.next/standalone`, so the
+   process threw `MODULE_NOT_FOUND` and everything 500'd for the ~30 seconds a
+   build takes. Tolerable while a human deployed and watched; not unattended,
+   and not during launch traffic.
+
+Deploys are release-based now: build in the checkout, copy the finished output
+to `/srv/qasas/releases/<timestamp>-<sha>`, swap the `live` symlink, restart.
+systemd's `WorkingDirectory` is the symlink, so the previous release serves
+untouched until the swap. Five releases kept.
+
+**Measured by polling the live site once a second through a real deploy: 169
+requests OK, 1 failed (502).** One second, against roughly thirty. Removing
+the last second needs socket activation or two ports behind an nginx upstream
+— real complexity, not worth it here.
 
 ### F1 — audio access: DECIDED, accept for launch
 
-The 50 narration clips stay publicly downloadable at guessable URLs.
-
-The gate protects the **vowelled Arabic text**, which is what
-ACCESS_MODEL.md set out to keep in print, and what WEBSITE_DESIGN.md argues
-the audio is worthless without — *"audio alone is a different, worse
-product"*. Gating it would mean moving audio out of `public/` behind an
-authenticated route, losing nginx caching and hand-rolling HTTP Range
-support (without which seeking breaks mid-clip for a child), or nginx
+The 50 clips stay publicly downloadable. The gate protects the **vowelled
+Arabic text**, which is what ACCESS_MODEL.md set out to keep in print and what
+WEBSITE_DESIGN.md argues the audio is worth little without. Gating it means
+moving audio out of `public/`, losing nginx caching and hand-rolling HTTP
+Range support (without which seeking breaks mid-clip), or nginx
 `auth_request`. Days before a listing, that trade is wrong.
 
-**Revisit if** scraping is observed, or if audio ever becomes the primary
-product (an app, a podcast feed). Recorded here so it reads as a decision
-rather than an oversight.
+**Revisit if** scraping is observed, or if audio becomes a product in its own
+right (an app, a podcast feed). Recorded so it reads as a decision.
 
-### F10 — ACCESS_MODEL.md supersession
+### Restoring a backup
 
-That document still argues **"No expiry on a purchased book"** and calls
-re-charging "the kind of thing that lands in reviews". The implemented model
-is a **12-month membership** that lapses. This was a later, deliberate
-choice — the book buys a year of the companion, and renewal funds the series
-— but the two documents now disagree and the older one is in CLAUDE.md's
-reading order. It needs a supersession note in the book repo.
+```
+gzip -dc qasas-YYYYMMDD-HHMMSS.sql.gz | psql "$SUPABASE_DB_URL"
+```
 
-### Still blocked on the owner
+Dumped with `--no-owner --no-acl`, so Supabase-managed roles absent from the
+target will not fail the import.
 
-1. **`SUPABASE_DB_URL`** — pooler connection string from Supabase → Project
-   Settings → Database. Contains a password, so it cannot be pasted into a
-   transcript. Once set, backups AND the F4 keep-alive both start working:
+**Untested.** A backup nobody has restored is a hope, not a guarantee — worth
+one dry run into a scratch project when there is time.
 
-   ```
-   read -rsp 'Supabase DB URL: ' V; echo
-   printf '\nSUPABASE_DB_URL=%s\n' "$V" >> /srv/qasas/qasas.env
-   unset V
-   /srv/qasas/backup.sh          # expect: ok /srv/qasas/backups/... (NNNKB)
-   ```
+### Still on the owner
 
-   If the password contains `$`, `#` or a quote, single-quote the value —
-   same systemd/`EnvironmentFile` trap as `SMTP_PASSWORD`.
+1. **F7 — DKIM and a spam-placement test to Gmail.** Dashboard work.
+2. **F9 — the three untested paths.** Code redemption, the lapse, the full
+   Amazon approve loop.
+3. **Launch:** paste `buy_url` and push. Auto-deploy takes it from there.
+4. **Off-box backup copy.** Backups sit on the VPS they would help recover.
+   Fine against a bad table edit — the actual risk, since Asma works in the
+   table editor daily — useless against losing the box.
 
-2. **F7 — DKIM and a spam-placement test.** Dashboard work.
-3. **F9 — the three untested paths.** Redemption, the lapse, the approve loop.
-4. **Launch:** paste `buy_url`, push, deploy, click the live button.
+### Correction
+
+An earlier commit here claimed the backup section had been updated when the
+string replacement had silently failed to match, leaving the document saying
+backups were blocked while they were working. The log above is rewritten from
+the live state rather than patched.
