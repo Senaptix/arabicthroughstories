@@ -309,6 +309,52 @@ export async function createProfile(
   return { success: `${parsed.data.displayName}'s profile is ready.` };
 }
 
+/**
+ * Rename a child profile.
+ *
+ * Children outgrow the name they were signed up with, and a nickname typed
+ * by a parent in a hurry should not be permanent.
+ *
+ * Scoped twice over: the `.eq("parent_id", ...)` below, and the RLS policy on
+ * child_profiles. Either alone would do; both means a mistake in one is not a
+ * way into another family's profiles.
+ */
+export async function renameProfile(
+  _state: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const parentId = await getParentId();
+  if (!parentId) redirect("/account/sign-in");
+
+  const parsed = z
+    .object({ profileId: z.string().uuid(), displayName: profileNameSchema })
+    .safeParse({
+      profileId: formData.get("profileId"),
+      displayName: formData.get("displayName"),
+    });
+  if (!parsed.success) {
+    return { message: parsed.error.issues[0]?.message ?? "Check the name." };
+  }
+
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("child_profiles")
+    .update({ display_name: parsed.data.displayName })
+    .eq("id", parsed.data.profileId)
+    .eq("parent_id", parentId)
+    .select("id")
+    .maybeSingle();
+
+  // No row back means the profile is not this parent's, or does not exist.
+  // Same message either way — which of the two it is, is not theirs to learn.
+  if (error || !data) {
+    return { message: "We could not rename that profile. Please try again." };
+  }
+
+  revalidatePath("/account");
+  return { success: `Renamed to ${parsed.data.displayName}.` };
+}
+
 export async function switchProfile(formData: FormData) {
   const parentId = await getParentId();
   if (!parentId) redirect("/account/sign-in");

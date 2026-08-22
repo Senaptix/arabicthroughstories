@@ -130,7 +130,13 @@ export default async function PageCard({
           </Link>
         </div>
 
-        {canView && <PageProgress bookSlug={book.slug} page={page} />}
+        {/* Story pages only. The cover, contents and the two appendix pages
+            carry no text, audio or words, so "Mark page read" there asks a
+            child to record having read nothing — and it would count toward
+            their progress. */}
+        {canView && isStoryPage && (
+          <PageProgress bookSlug={book.slug} page={page} />
+        )}
 
         {/* With audio, the text and the player are one thing: the line being
           read highlights as it plays. The audio is a pronunciation model for

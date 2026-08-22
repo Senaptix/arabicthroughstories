@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import BrandLockup from "@/components/BrandLockup";
 import AvatarBadge from "@/components/account/AvatarBadge";
 import ProfileCreator from "@/components/account/ProfileCreator";
+import ProfileRenamer from "@/components/account/ProfileRenamer";
 import { signOut, switchProfile } from "./actions";
 import { getActiveProfile, getParentId, getProfiles } from "@/lib/account";
 import { getAllBooks } from "@/lib/parse";
@@ -91,6 +92,10 @@ export default async function AccountPage({
               <div>
                 <p className="text-[13px] uppercase tracking-[0.12em] text-brand-blue">Now reading as</p>
                 <h2 id="journey-heading" className="text-[24px] font-medium">{active.display_name}</h2>
+                <ProfileRenamer
+                  profileId={active.id}
+                  currentName={active.display_name}
+                />
               </div>
             </div>
 
