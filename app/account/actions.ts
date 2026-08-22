@@ -15,6 +15,7 @@ import {
 } from "@/lib/account";
 import { AVATAR_KEYS } from "@/lib/profile";
 import { createClient } from "@/lib/supabase/server";
+import { safeRedirectPath } from "@/lib/safe-redirect";
 import {
   activationIssuerSecret,
   looksLikeActivationCode,
@@ -70,10 +71,20 @@ function signUpErrorMessage(error: AuthError) {
   }
 }
 
-function safeNext(value: FormDataEntryValue | null, fallback = "/account") {
-  return typeof value === "string" && value.startsWith("/") && !value.startsWith("//")
-    ? value
-    : fallback;
+/**
+ * Resolve a caller-supplied `next` against our own origin.
+ *
+ * This was a `startsWith("/")` check, which `/\evil.com` walks straight
+ * through — see lib/safe-redirect.ts for why, and for why the guard now lives
+ * in one place. It is async only because the origin comes from siteOrigin();
+ * the check itself is shared with the auth callback, so the two can no longer
+ * drift apart.
+ */
+async function safeNext(
+  value: FormDataEntryValue | null,
+  fallback = "/account",
+) {
+  return safeRedirectPath(value, await siteOrigin(), fallback);
 }
 
 async function siteOrigin() {
@@ -91,7 +102,7 @@ export async function signIn(_state: ActionState, formData: FormData): Promise<A
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword(parsed.data);
   if (error) return { message: "The email address or password was not recognised." };
-  redirect(safeNext(formData.get("next")));
+  redirect(await safeNext(formData.get("next")));
 }
 
 export async function signUp(_state: ActionState, formData: FormData): Promise<ActionState> {
@@ -232,7 +243,7 @@ export async function confirmEmailToken(formData: FormData) {
     type: parsed.data.type,
   });
   if (error) redirect("/account/sign-in?error=link");
-  redirect(safeNext(parsed.data.next ?? null));
+  redirect(await safeNext(parsed.data.next ?? null));
 }
 
 export async function updatePassword(
