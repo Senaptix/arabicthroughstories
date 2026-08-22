@@ -10,7 +10,6 @@ age_range: "7 and up"
 # the buy button entirely while this is blank rather than showing one that
 # goes nowhere. Pasting the URL here is the only change needed to go live.
 buy_url: ""
-vowelling: full
 audio_status: none
 # Cover, contents, and the two word-family appendix pages carry no story
 # text and so have no per-page glossary or audio clip.

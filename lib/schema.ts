@@ -101,8 +101,6 @@ export const BookSchema = z.object({
   buy_url: z
     .union([z.string().url(), z.literal("")])
     .default(""),
-  /** Graded-vowelling level — see SERIES_PLAN.md in the book repo. */
-  vowelling: z.enum(["full", "mostly", "partial", "minimal", "natural"]),
   audio_status: z.enum(["none", "draft", "final"]),
   /** Pages that carry no story text (cover, contents, appendix). */
   non_story_pages: z.array(z.number().int().positive()).default([]),
