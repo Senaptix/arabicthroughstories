@@ -275,3 +275,72 @@ undecided: keep `greatest()`.
 ---
 
 *Compiled read-only. No fixes were applied while auditing.*
+
+---
+
+## Progress log — 2026-08-22
+
+### Built
+
+- **F2 — add-a-book form.** `claimBook` action + `BookClaimer` on the account
+  page at `#add-a-book`. QK codes redeem via `redeem_activation_code`;
+  anything else inserts an activation through the existing RLS policy. An
+  identical pending claim is reported rather than duplicated.
+- **F6 — GateNotice** no longer tells a signed-in visitor to create the
+  account they already have; it links to the new form.
+- **Banner correctness (found while building F2).** ReceiptNotice keyed off
+  entitlement `source`, but `grant_provisional` only updates `expires_at` on
+  conflict — so an existing member claiming another book stays
+  `book_activation` while owing a receipt, and would never have been asked.
+  Now keys off a pending activation row.
+- **F5 — progress writes** route through `requireProgressAccess`, checked per
+  page so free-preview progress still saves without an entitlement. `status`
+  keeps the plain context: it returns progress rows, not content.
+- **F3 groundwork** — `postgresql-client` installed, `/srv/qasas/backup.sh`
+  written, cron at 03:17 UTC, 14-day retention, partial-file and
+  suspiciously-small-dump guards. **Blocked on one credential** (below).
+
+### F1 — audio access: DECIDED, accept for launch
+
+The 50 narration clips stay publicly downloadable at guessable URLs.
+
+The gate protects the **vowelled Arabic text**, which is what
+ACCESS_MODEL.md set out to keep in print, and what WEBSITE_DESIGN.md argues
+the audio is worthless without — *"audio alone is a different, worse
+product"*. Gating it would mean moving audio out of `public/` behind an
+authenticated route, losing nginx caching and hand-rolling HTTP Range
+support (without which seeking breaks mid-clip for a child), or nginx
+`auth_request`. Days before a listing, that trade is wrong.
+
+**Revisit if** scraping is observed, or if audio ever becomes the primary
+product (an app, a podcast feed). Recorded here so it reads as a decision
+rather than an oversight.
+
+### F10 — ACCESS_MODEL.md supersession
+
+That document still argues **"No expiry on a purchased book"** and calls
+re-charging "the kind of thing that lands in reviews". The implemented model
+is a **12-month membership** that lapses. This was a later, deliberate
+choice — the book buys a year of the companion, and renewal funds the series
+— but the two documents now disagree and the older one is in CLAUDE.md's
+reading order. It needs a supersession note in the book repo.
+
+### Still blocked on the owner
+
+1. **`SUPABASE_DB_URL`** — pooler connection string from Supabase → Project
+   Settings → Database. Contains a password, so it cannot be pasted into a
+   transcript. Once set, backups AND the F4 keep-alive both start working:
+
+   ```
+   read -rsp 'Supabase DB URL: ' V; echo
+   printf '\nSUPABASE_DB_URL=%s\n' "$V" >> /srv/qasas/qasas.env
+   unset V
+   /srv/qasas/backup.sh          # expect: ok /srv/qasas/backups/... (NNNKB)
+   ```
+
+   If the password contains `$`, `#` or a quote, single-quote the value —
+   same systemd/`EnvironmentFile` trap as `SMTP_PASSWORD`.
+
+2. **F7 — DKIM and a spam-placement test.** Dashboard work.
+3. **F9 — the three untested paths.** Redemption, the lapse, the approve loop.
+4. **Launch:** paste `buy_url`, push, deploy, click the live button.
