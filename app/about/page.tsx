@@ -204,7 +204,7 @@ export default function AboutPage() {
               style={{ fontSize: "17px", lineHeight: 1.75 }}
             >
               This edition began with Shaykh Dr Mohammad Akram Nadwi, whose
-              student our author has been since 2007. He returns to{" "}
+              student our editor has been since 2007. He returns to{" "}
               <i>Qasas an-Nabiyyin</i> constantly — recommending it to students
               beginning Arabic, to teachers building a syllabus, and to parents
               asking where to start. After enough years of hearing a book
@@ -253,7 +253,7 @@ export default function AboutPage() {
           >
             A language, on this view, is not assembled from parts. It is
             absorbed from meaning the learner can actually follow. That single
-            idea is the reason this book looks the way it does.
+            idea is the reason this edition looks the way it does.
           </p>
 
           <p
