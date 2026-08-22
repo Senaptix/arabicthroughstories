@@ -1,6 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import BrandLockup from "@/components/BrandLockup";
 import ActivationCodeIssuer from "@/components/admin/ActivationCodeIssuer";
+import PendingActivations from "@/components/admin/PendingActivations";
 import { getAdminAccess } from "@/lib/admin";
 
 export const dynamic = "force-dynamic";
@@ -27,6 +28,19 @@ export default async function ActivationCodesAdminPage() {
       <div className="mt-10">
         <ActivationCodeIssuer />
       </div>
+
+      {/* The other half of the same job. This was being read in the Supabase
+          table editor while codes were issued here; one screen for both is
+          the point. */}
+      <section className="border-ink/10 mt-14 border-t pt-10">
+        <h2 className="text-[20px] font-semibold">Waiting on a receipt</h2>
+        <p className="text-ink/60 mt-1 text-[15px]">
+          Amazon activations not yet approved.
+        </p>
+        <div className="mt-5">
+          <PendingActivations />
+        </div>
+      </section>
     </main>
   );
 }
