@@ -59,9 +59,14 @@ export const metadata: Metadata = {
     icon: "/brand/qasas-kids-icon.png",
     apple: "/brand/qasas-kids-icon.png",
   },
+  // "./" is resolved against metadataBase PER ROUTE, so a shared page card
+  // names that page rather than the homepage. A literal "/" here would make
+  // every page on the site claim to be the root.
+  alternates: { canonical: "./" },
   openGraph: {
     type: "website",
     siteName: "Qasas Kids",
+    url: "./",
     title: "Qasas Kids — Arabic stories for children",
     description:
       "Audio, vocabulary and word roots for a bilingual Arabic/English reading series for children.",
