@@ -211,7 +211,7 @@ export default function Home() {
             style={{ fontSize: "clamp(16px, 2.5vw, 19px)", lineHeight: 1.65 }}
           >
             The story of Ibrahim <span className="whitespace-nowrap">(AS)</span>
-            , retold from al-Nadwi&rsquo;s <i>Qasas an-Nabiyyin</i>. Every vowel
+            , retold from Shaykh Abul Hasan&rsquo;s <i>Qasas an-Nabiyyin</i>. Every vowel
             is marked, the English sits underneath, and every page is read
             aloud — so a child who is still sounding words out can get through
             all {storyPages} of them, and understand what they read.
@@ -776,7 +776,7 @@ export default function Home() {
               ],
               [
                 "Nothing cut",
-                "The story follows al-Nadwi's original. Difficult episodes are told plainly rather than removed.",
+                "The story follows Shaykh Abul Hasan's original. Difficult episodes are told plainly rather than removed.",
               ],
               [
                 "Never drawn",
@@ -1003,8 +1003,21 @@ export default function Home() {
         <div className="border-ink/10 flex flex-col gap-5 border-t pt-8 sm:flex-row sm:items-center sm:justify-between">
           <BrandLockup size="footer" />
           <div className="sm:text-right">
+            {/* The long-form case for the book. Deliberately not in the
+                header — a first-time visitor should meet the book before
+                the reasoning behind it — but a parent who has scrolled this
+                far is exactly the one who wants it. */}
+            <p>
+              <Link
+                href="/about"
+                className="text-brand-blue underline-offset-4 hover:underline"
+                style={{ fontSize: "14px", lineHeight: 1.6 }}
+              >
+                Why we made this book
+              </Link>
+            </p>
             <p
-              className="text-ink/60"
+              className="text-ink/60 mt-2"
               style={{ fontSize: "14px", lineHeight: 1.6 }}
             >
               {book.title_en} — book {book.series_order} of the{" "}

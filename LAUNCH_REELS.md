@@ -26,7 +26,7 @@ Three things carry the pitch, in this order:
    language goes in. Everything the book does exists to keep the Arabic
    *understandable* while it stays real: full vowelling, English underneath,
    new words glossed where they appear, audio for every page.
-2. **The heritage is the credibility.** Al-Nadwi's *Qasas an-Nabiyyin* has
+2. **The heritage is the credibility.** Shaykh Abul Hasan's *Qasas an-Nabiyyin* has
    been used to teach Arabic for generations. This is not a new method being
    tried on someone's children — it is a proven text with the obstacles
    removed.
@@ -38,7 +38,7 @@ Three things carry the pitch, in this order:
 raised outside the Arabic-speaking world, who do not have the language at
 home and do not have a teacher to hand.
 
-Be accurate about the original, because this audience knows it. **Al-Nadwi
+Be accurate about the original, because this audience knows it. **Shaykh Abul Hasan
 wrote *Qasas an-Nabiyyin* for non-native learners** — it is a graded reader,
 the vocabulary and structures build deliberately, and it has been used to
 teach Arabic as a second language to children and adults for decades, in
@@ -110,7 +110,7 @@ exist.
 **Why the last shot works:** the question lands over an image that answers
 it — a room full of people bowing to stones that could not chase off a fly.
 The reel never argues; it lets the question do the work, which is exactly
-what al-Nadwi's text does.
+what Shaykh Abul Hasan's text does.
 
 ### How it was built, for re-cutting
 
@@ -211,10 +211,10 @@ Researched rather than assumed — see
 Three earlier drafts got this wrong three different ways: a battered old
 volume, then the green Majlis cover, then a plain unvowelled page — each
 arguing the original is somehow *hard*. Then a fourth error, mine: that
-al-Nadwi wrote for children who already spoke Arabic.
+Shaykh Abul Hasan wrote for children who already spoke Arabic.
 
 **That was false.** He wrote expressly for non-native learners, to help them
-*acquire* Arabic — Akram Nadwi's word is اكتساب — and it is used as an
+*acquire* Arabic — Shaykh Akram's word is اكتساب — and it is used as an
 Arabic primer in seminaries worldwide. Nor is vowelling the gap; the Dar Ibn
 Kathir edition is fully vowelled. Say either in a reel and the first ustadh
 who sees it will know.
@@ -228,7 +228,7 @@ So the book was built for a classroom with an ustadh in it, and every
 support a learner needs comes from a person who is not in the book. Ours
 puts him on the page.
 
-### Why the reel opens on al-Nadwi's own preface
+### Why the reel opens on Shaykh Abul Hasan's own preface
 
 Because it is the same story as this project, seventy years apart, and it is
 not about us.
@@ -241,7 +241,7 @@ publishers rather than the child. That is exactly why this edition exists.
 
 An earlier draft opened on the author's own history with the book —
 Damascus, 1996. True, and moving, but weaker here: it makes the argument
-about us. Al-Nadwi's preface makes it about the work, and it can be cited.
+about us. Shaykh Abul Hasan's preface makes it about the work, and it can be cited.
 Keep the personal version for Reel 6, where it belongs.
 
 ⚠️ **Check the quotation against a physical volume 1 before filming.** It is
@@ -249,7 +249,7 @@ a major scholar's words going into a marketing video. One word is uncertain
 in the source text — see the research note — so either verify the full list
 of animals or quote only "cats and dogs, lions and wolves", which is secure.
 
-### Al-Nadwi also stated the method, so we never have to
+### Shaykh Abul Hasan also stated the method, so we never have to
 
 His four self-imposed conditions include: **the barest minimum of
 vocabulary, engraved by abundant repetition**, and stories simplified so the
@@ -257,7 +257,7 @@ child never feels the weight of being taught.
 
 That is graded-reader design in the author's own words. Reel 3's argument —
 nobody learns a language from a list — can be made on his authority and on
-Akram Nadwi's advice to students to *avoid vocabulary and grammar books and
+Shaykh Akram's advice to students to *avoid vocabulary and grammar books and
 read stories instead*. **Neither requires naming a modern theory or a
 language app.**
 
@@ -359,7 +359,7 @@ worse than none.
 
 **This is where the personal history belongs** — not in Reel 2. A founder
 reel is *supposed* to be about the founder; a positioning reel is not. Reel
-2 now makes the same argument from al-Nadwi's own preface, which is sourced
+2 now makes the same argument from Shaykh Abul Hasan's own preface, which is sourced
 and about the work rather than about us. Here, the biography is the point.
 
 It also cannot be borrowed. Any publisher can say "nothing I found was right

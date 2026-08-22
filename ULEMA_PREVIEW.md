@@ -36,7 +36,7 @@ the word against everyone else.
 >
 > Respected scholars,
 >
-> I have adapted Shaykh Abul Hasan Ali an-Nadwi's *Qasas an-Nabiyyin* — the
+> I have adapted Shaykh Abul Hasan Ali al-Hasani's *Qasas an-Nabiyyin* — the
 > story of Ibrahim عليه السلام — into an illustrated bilingual reader for
 > children, *Who Broke the Idols*, with a companion website carrying the
 > narration, vocabulary and word families for every page.
