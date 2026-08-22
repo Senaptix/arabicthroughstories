@@ -36,11 +36,22 @@ Three things carry the pitch, in this order:
 
 **Who this is for, stated once so every reel can assume it:** children being
 raised outside the Arabic-speaking world, who do not have the language at
-home. This matters because the obvious rival — al-Nadwi's own
-*Qasas an-Nabiyyin lil-Atfal* — is already a children's edition and already
-fully vowelled. **The gap it leaves is comprehension, not decoding.** A
-child can sound out every word on its pages and know none of them. That
-single sentence is the clearest statement of what this book is for, and
+home and do not have a teacher to hand.
+
+Be accurate about the original, because this audience knows it. **Al-Nadwi
+wrote *Qasas an-Nabiyyin* for non-native learners** — it is a graded reader,
+the vocabulary and structures build deliberately, and it has been used to
+teach Arabic as a second language to children and adults for decades, in
+Syria, in India, in British madrasas and summer schools. Anyone we are
+selling to may well have studied from it themselves.
+
+So the gap is **not** that it was written for Arabic speakers, and it is not
+vowelling — the Dar Ibn Kathir children's edition is fully vowelled. The gap
+is that **it was written for a classroom.** It assumes an ustadh beside you
+translating each new word, which is exactly how it is taught and exactly
+what most families at home do not have.
+
+**We put the teacher on the page.** That is the product in six words, and
 Reel 2 is built on it.
 
 **Do not say "comprehensible input" or name any language-learning app or
@@ -186,38 +197,43 @@ Heritage plus the fix, which is the whole proposition.
 
 | Time | Voiceover | On screen |
 |---|---|---|
-| 0–6s | "This is the book. Shaykh Abul Hasan Ali an-Nadwi, written for children. It is beautiful, and every vowel is already there." | The Dar Ibn Kathir cover, then the book opening. |
-| 6–15s | "Your child can sound out every single word on this page — and still have no idea what just happened." | Slow push into a full page of vowelled Arabic text. Hold on it. |
-| 15–20s | "Because they don't speak Arabic yet. That is the gap." | Stay on the page a beat longer than is comfortable. |
-| 20–28s | "Same story. Same words. With the English underneath, every new word explained, a picture on every page, and a native reader on the audio." | Cut to your book at the same passage. Pan down: Arabic, gloss, English. |
-| 28–32s | "Qasas Kids." | Logo, then qasaskids.com. |
+| 0–8s | "This book has taught Arabic to non-Arabs for decades. I studied it myself, in Syria, in 1996." | The Dar Ibn Kathir cover, then the book opening. |
+| 8–16s | "It is a brilliant book. But it was written for a classroom — it assumes a teacher sitting beside you, explaining every new word." | Slow push into a full page of vowelled Arabic text. |
+| 16–21s | "Most of our children don't have that teacher." | Hold on the page a beat longer than is comfortable. |
+| 21–30s | "So we put the teacher on the page. The English underneath. Every new word explained where it appears. A picture on every page. And a native reader on the audio." | Cut to ours at the same passage. Pan down: Arabic, gloss, English. |
+| 30–34s | "Qasas Kids." | Logo, then qasaskids.com. |
 
-### The gap is comprehension, not decoding
+### The gap is the teacher, not the text
 
-This is the third version of Reel 2 and the first correct one. The earlier
-drafts wanted a battered old volume, then the green Majlis cover, then a
-plain unvowelled page — all of them arguing that the original is *hard to
-read*. The actual copy settles it: قصص النبيين للأطفال, Dar Ibn Kathir, a
-bright modern hardback, already written for children, **already fully
-vowelled**.
+Three earlier drafts got this wrong in three different ways, and each was
+corrected by a fact rather than a preference. They wanted a battered old
+volume; then the green Majlis cover; then a plain unvowelled page — and then
+claimed the original was written for children who already spoke Arabic.
 
-So vowelling was never the gap, and any reel claiming it was would be
-contradicted by the book in shot.
+**That last one was simply false.** Al-Nadwi wrote a *graded reader for
+non-native learners*: the vocabulary builds on purpose, and it has taught
+Arabic as a second language to children and adults for decades. The author
+of this book studied it in Damascus in 1996 and again in summer school
+recently, which is how the error surfaced. Say it wrongly in a reel and the
+first ustadh who sees it will know.
 
-The real gap is sharper and easier to sell: **a child who does not yet speak
-Arabic can decode a page perfectly and understand none of it.** The original
-was written for children who already have the language; it teaches them to
-read their own. Ours is for children who do not — which is why it carries
-English underneath, glosses each new word where it appears, puts a picture
-on every page and reads itself aloud.
+Nor is vowelling the gap — the Dar Ibn Kathir edition is fully vowelled.
 
-That names the audience exactly: Muslim families raising children outside
-the Arabic-speaking world.
+**The gap is that it was written for a classroom.** It assumes an ustadh
+beside you translating each new word, because that is how it has always been
+taught. Most families at home do not have that person. Ours puts him on the
+page: English underneath, every new word glossed where it appears, a picture
+on every page, a native reader on the audio.
 
-**Do not disparage the original.** The reel praises it and then identifies a
-different reader. The heritage argument only works if the respect is real,
-and it is — this is the book, and ours exists to reach children it was not
-written for.
+**This is the most respectful version as well as the truest.** It grants the
+original everything — it works, it has worked for decades, the author learned
+Arabic from it — and locates the difference in the reader's circumstances
+rather than in the book's quality.
+
+**The 1996 line is the single most valuable second in the set.** A man
+saying he learned from this book, and then showing what he made from it, is
+an argument no copywriting can manufacture. Confirm the details before
+shooting: city, year, and whether "summer school" should be named.
 
 ### The shots
 
@@ -309,13 +325,27 @@ worse than none.
 
 | Time | Voiceover | On screen |
 |---|---|---|
-| 0–7s | "I wanted my children to read the stories of the Prophets in Arabic. Not in translation." | You, talking. Plain background. |
-| 7–15s | "Everything I found was either too easy to be real Arabic, or real Arabic they couldn't get through." | Hold on you. |
-| 15–25s | "So we took the book the madrasas have used for fifty years, and made it something a child could read on their own." | Cut to book in hands, turning a page. |
-| 25–30s | "Qasas an-Nabiyyin, for children. Out now." | Logo. |
+| 0–8s | "I learned Arabic from this book. Damascus, 1996. I was a young man." | You, holding the Dar Ibn Kathir copy. Plain background. |
+| 8–16s | "I had a teacher then. Sitting next to me, explaining every word I didn't know." | Hold on you. |
+| 16–24s | "My children don't have that. Most of our children don't." | Hold. |
+| 24–32s | "So I spent two years putting that teacher onto the page." | Cut to your book in hands, turning a page. |
+| 32–36s | "Qasas Kids. Out now." | Logo, then qasaskids.com. |
+
+**This is now the strongest reel in the set, and it should probably be
+made.** The earlier draft was a generic founder piece — "I wanted my
+children to read Arabic, nothing I found was right" — which any publisher
+could say. This one cannot be borrowed: a specific book, a specific city, a
+specific year, and a direct line from the teacher he had to the teacher his
+children do not.
+
+**Check the facts before shooting**, since they are checkable: the city, the
+year, and whether it was this Dar Ibn Kathir edition or another printing.
+Getting the year wrong in a reel that leans on the year is worse than not
+mentioning it.
 
 **Learn the beats, not the sentences.** Unscripted is better than
-word-perfect here.
+word-perfect here — and the pause before "most of our children don't" is
+worth leaving in.
 
 ---
 
