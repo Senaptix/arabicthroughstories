@@ -418,11 +418,13 @@ export default function AboutPage() {
             className="text-ink/75 mt-5"
             style={{ fontSize: "17px", lineHeight: 1.75 }}
           >
-            Arabic teachers checked the vowelling word by word, listened to the
-            recordings line by line against the page, and advised on the
-            typefaces — which sounds like a small matter until you watch a child
-            try to read a fully vowelled line set in the wrong one. Ulema gave
-            their guidance on the illustrations.
+            Ustadh Akhlaaq Choudry of Al Salam Institute — one of the editor's
+            own Arabic teachers — checked the vowelling word by word, listened
+            to the recordings line by line against the page, and advised on the
+            typefaces, which sounds like a small matter until you watch a child
+            try to read a fully vowelled line set in the wrong one. Other
+            Arabic teachers read the text and corrected it, and ulema gave their
+            guidance on the illustrations.
           </p>
           <p
             className="text-ink/75 mt-5"
