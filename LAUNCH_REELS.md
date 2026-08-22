@@ -197,43 +197,69 @@ Heritage plus the fix, which is the whole proposition.
 
 | Time | Voiceover | On screen |
 |---|---|---|
-| 0–8s | "This book has taught Arabic to non-Arabs for decades. I studied it myself, in Syria, in 1996." | The Dar Ibn Kathir cover, then the book opening. |
-| 8–16s | "It is a brilliant book. But it was written for a classroom — it assumes a teacher sitting beside you, explaining every new word." | Slow push into a full page of vowelled Arabic text. |
-| 16–21s | "Most of our children don't have that teacher." | Hold on the page a beat longer than is comfortable. |
-| 21–30s | "So we put the teacher on the page. The English underneath. Every new word explained where it appears. A picture on every page. And a native reader on the audio." | Cut to ours at the same passage. Pan down: Arabic, gloss, English. |
-| 30–34s | "Qasas Kids." | Logo, then qasaskids.com. |
+| 0–8s | "Seventy years ago a scholar in India looked at what his young nephew was reading." | The Dar Ibn Kathir cover, still. |
+| 8–17s | "Cats and dogs. Lions and wolves. And he wrote: *the fault is ours — that is what we put in print.*" | The book opening. Then the page. |
+| 17–26s | "So he wrote him the stories of the Prophets, in Arabic simple enough for a child. Seminaries have taught Arabic from it ever since." | Slow push into the vowelled text. |
+| 26–35s | "But he wrote it for a classroom, where a teacher explains every new word. Most of our children don't have that teacher — so we put him on the page." | Cut to ours at the same passage. Pan down: Arabic, gloss, English. |
+| 35–39s | "Qasas Kids." | Logo, then qasaskids.com. |
 
 ### The gap is the teacher, not the text
 
-Three earlier drafts got this wrong in three different ways, and each was
-corrected by a fact rather than a preference. They wanted a battered old
-volume; then the green Majlis cover; then a plain unvowelled page — and then
-claimed the original was written for children who already spoke Arabic.
+Researched rather than assumed — see
+`RESEARCH_QASAS_USAGE.md` in the book repo for sources.
 
-**That last one was simply false.** Al-Nadwi wrote a *graded reader for
-non-native learners*: the vocabulary builds on purpose, and it has taught
-Arabic as a second language to children and adults for decades. The author
-of this book studied it in Damascus in 1996 and again in summer school
-recently, which is how the error surfaced. Say it wrongly in a reel and the
-first ustadh who sees it will know.
+Three earlier drafts got this wrong three different ways: a battered old
+volume, then the green Majlis cover, then a plain unvowelled page — each
+arguing the original is somehow *hard*. Then a fourth error, mine: that
+al-Nadwi wrote for children who already spoke Arabic.
 
-Nor is vowelling the gap — the Dar Ibn Kathir edition is fully vowelled.
+**That was false.** He wrote expressly for non-native learners, to help them
+*acquire* Arabic — Akram Nadwi's word is اكتساب — and it is used as an
+Arabic primer in seminaries worldwide. Nor is vowelling the gap; the Dar Ibn
+Kathir edition is fully vowelled. Say either in a reel and the first ustadh
+who sees it will know.
 
-**The gap is that it was written for a classroom.** It assumes an ustadh
-beside you translating each new word, because that is how it has always been
-taught. Most families at home do not have that person. Ours puts him on the
-page: English underneath, every new word glossed where it appears, a picture
-on every page, a native reader on the audio.
+**What the sources do show is how it is taught:** students memorise the
+vocabulary, read aloud, identify the i'rab, summarise each chapter from
+memory — and meet Arabic vocabulary *and its translation* for the first
+time, the translation being supplied in the room by the teacher.
 
-**This is the most respectful version as well as the truest.** It grants the
-original everything — it works, it has worked for decades, the author learned
-Arabic from it — and locates the difference in the reader's circumstances
-rather than in the book's quality.
+So the book was built for a classroom with an ustadh in it, and every
+support a learner needs comes from a person who is not in the book. Ours
+puts him on the page.
 
-**The 1996 line is the single most valuable second in the set.** A man
-saying he learned from this book, and then showing what he made from it, is
-an argument no copywriting can manufacture. Confirm the details before
-shooting: city, year, and whether "summer school" should be named.
+### Why the reel opens on al-Nadwi's own preface
+
+Because it is the same story as this project, seventy years apart, and it is
+not about us.
+
+He wrote volume 1 for his nephew Muhammad ibn Abd al-Ali, having looked at
+what the boy had to read and found only animal tales — and having concluded
+**"the fault is ours, for that is what you find in print."** A Muslim adult
+looks at what is available to a child, finds it thin, and blames the
+publishers rather than the child. That is exactly why this edition exists.
+
+An earlier draft opened on the author's own history with the book —
+Damascus, 1996. True, and moving, but weaker here: it makes the argument
+about us. Al-Nadwi's preface makes it about the work, and it can be cited.
+Keep the personal version for Reel 6, where it belongs.
+
+⚠️ **Check the quotation against a physical volume 1 before filming.** It is
+a major scholar's words going into a marketing video. One word is uncertain
+in the source text — see the research note — so either verify the full list
+of animals or quote only "cats and dogs, lions and wolves", which is secure.
+
+### Al-Nadwi also stated the method, so we never have to
+
+His four self-imposed conditions include: **the barest minimum of
+vocabulary, engraved by abundant repetition**, and stories simplified so the
+child never feels the weight of being taught.
+
+That is graded-reader design in the author's own words. Reel 3's argument —
+nobody learns a language from a list — can be made on his authority and on
+Akram Nadwi's advice to students to *avoid vocabulary and grammar books and
+read stories instead*. **Neither requires naming a modern theory or a
+language app.**
 
 ### The shots
 
@@ -331,12 +357,14 @@ worse than none.
 | 24–32s | "So I spent two years putting that teacher onto the page." | Cut to your book in hands, turning a page. |
 | 32–36s | "Qasas Kids. Out now." | Logo, then qasaskids.com. |
 
-**This is now the strongest reel in the set, and it should probably be
-made.** The earlier draft was a generic founder piece — "I wanted my
-children to read Arabic, nothing I found was right" — which any publisher
-could say. This one cannot be borrowed: a specific book, a specific city, a
-specific year, and a direct line from the teacher he had to the teacher his
-children do not.
+**This is where the personal history belongs** — not in Reel 2. A founder
+reel is *supposed* to be about the founder; a positioning reel is not. Reel
+2 now makes the same argument from al-Nadwi's own preface, which is sourced
+and about the work rather than about us. Here, the biography is the point.
+
+It also cannot be borrowed. Any publisher can say "nothing I found was right
+for my children". Only one person can trace the line from the teacher he had
+in Damascus to the teacher his children do not.
 
 **Check the facts before shooting**, since they are checkable: the city, the
 year, and whether it was this Dar Ibn Kathir edition or another printing.
