@@ -16,11 +16,17 @@ import { getBook } from "@/lib/parse";
  * and Shaykh Akram on how Arabic is actually learned. Every claim
  * about either is traceable to something they wrote.
  *
- * NO HAND-TYPED ARABIC. The house rule is that Arabic on this site is
- * parsed from the book's verified corpus and never keyed in — a wrong vowel
- * changes the word. Shaykh Abul Hasan's preface is not in that corpus, so it appears
- * here in English translation only. The one Arabic string on the page is
- * the book's own title, which comes from the parsed book record.
+ * NO HAND-TYPED ARABIC, with one narrow exception. The house rule is that
+ * Arabic here is parsed from the book's verified corpus and never keyed in,
+ * because a wrong vowel changes the word. Shaykh Abul Hasan's preface is not
+ * in that corpus, so it appears in English translation only.
+ *
+ * The exception is the two honorific formulae in the note below. They are
+ * written UNVOWELLED, which is how they are conventionally set, so the
+ * failure the rule guards against — a mis-set diacritic altering a word a
+ * child is learning — cannot occur. They are also prose about the book
+ * rather than text to be read from it. Do not treat this as licence to type
+ * vowelled Arabic anywhere on the site.
  *
  * Static server component: no client JS beyond the shared `.reveal`
  * scroll animation in globals.css.
@@ -360,8 +366,8 @@ The ustadh supplied everything the book left out
             >
               Not faceless, not from behind, not in silhouette, shadow or
               reflection, and not by any substitute figure. Nor do angels.
-              Where a scene is seen through Ibrahim's eyes you see the night
-              sky, the idol house, the fire, and no part of him.
+              Where a scene is seen through the eyes of Ibrahim (as) you see
+              the night sky, the idol house, the fire, and no part of him.
             </p>
             <p
               className="text-ink/75 mt-5"
@@ -379,6 +385,48 @@ The ustadh supplied everything the book left out
               young reader and cut no episode for being difficult. Where the
               story is grave, the picture carries the weight without dwelling
               on the act.
+            </p>
+            <h3
+              className="text-ink mt-10 font-semibold"
+              style={{ fontSize: "19px", lineHeight: 1.35 }}
+            >
+              Why the honorifics are not printed
+            </h3>
+            <p
+              className="text-ink/75 mt-4"
+              style={{ fontSize: "17px", lineHeight: 1.75 }}
+            >
+              You will not find{" "}
+              <span lang="ar" dir="rtl" style={{ fontFamily: "var(--font-arabic)" }}>
+                عليه السلام
+              </span>{" "}
+              printed after a Prophet's name in the book, and that is a
+              decision rather than an oversight.
+            </p>
+            <p
+              className="text-ink/75 mt-5"
+              style={{ fontSize: "17px", lineHeight: 1.75 }}
+            >
+              Shaykh Abul Hasan did not write them, and this edition follows
+              his Arabic exactly. The English sits line for line beneath it so
+              a child can match one to the other, and that matching is how the
+              book teaches. Put words on one side that are not on the other
+              and the correspondence a child relies on breaks.
+            </p>
+            <p
+              className="text-ink/75 mt-5"
+              style={{ fontSize: "17px", lineHeight: 1.75 }}
+            >
+              So it is said here instead, and meant throughout. Wherever a
+              Prophet is named in this book,{" "}
+              <span lang="ar" dir="rtl" style={{ fontFamily: "var(--font-arabic)" }}>
+                عليه السلام
+              </span>{" "}
+              is intended. Wherever Allah is named,{" "}
+              <span lang="ar" dir="rtl" style={{ fontFamily: "var(--font-arabic)" }}>
+                سبحانه وتعالى
+              </span>
+              . The same note is printed inside the book.
             </p>
           </div>
         </div>

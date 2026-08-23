@@ -201,7 +201,7 @@ export default function Home() {
             className="text-ink/75 mt-6 max-w-[46ch]"
             style={{ fontSize: "clamp(16px, 2.5vw, 19px)", lineHeight: 1.65 }}
           >
-            The story of Ibrahim <span className="whitespace-nowrap">(AS)</span>
+            The story of Ibrahim <span className="whitespace-nowrap">(as)</span>
             , retold from Shaykh Abul Hasan&rsquo;s <i>Qasas an-Nabiyyin</i>. Every vowel
             is marked, the English sits underneath, and every page is read
             aloud — so a child who is still sounding words out can get through
@@ -585,8 +585,8 @@ export default function Home() {
           >
             {storyPages} illustrated pages, one scene each. The hard parts of
             the story are told plainly in the text and left undrawn — restraint
-            belongs in the picture, never in the telling. Ibrahim himself is
-            never drawn: some pages show what he sees, on others he simply is
+            belongs in the picture, never in the telling. Ibrahim (as) is never
+            drawn: some pages show what he sees, on others he simply is
             not in the frame. Three of them:
           </p>
         </div>
@@ -771,7 +771,7 @@ export default function Home() {
               ],
               [
                 "Never drawn",
-                "Ibrahim is not depicted at all — not featured, not blank-faced, not shown from behind. Some pages show what he sees; on others he simply isn't in the frame.",
+                "Ibrahim (as) is not depicted at all: not featured, not blank-faced, not shown from behind. Some pages show what he sees; on others he simply isn't in the frame.",
               ],
             ].map(([title, body]) => (
               <li
