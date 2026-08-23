@@ -389,12 +389,18 @@ The ustadh supplied everything the book left out
        * nobody, and because a reader deciding whether to trust the Arabic
        * wants to know who checked it.
        *
-       * Credits say what each person did and nothing beyond it. An earlier
-       * draft had Haneefah art-directing the illustrations through repeated
-       * revisions; she read it and said that is not what happened, so it now
-       * says only that she chose what each page shows, which is what she
-       * confirmed. Same with the recordings: Marjan Ahmed listened to all
-       * fifty, not Akhlaaq Choudry. Ask the person before crediting them.
+       * Credits say what each person did and nothing beyond it. Haneefah
+       * corrected a draft that had her drawing the illustrations; she did
+       * not draw them, she chose and rejected them, which the QA records in
+       * the book repo document at length. Marjan Ahmed listened to all fifty
+       * recordings, not Akhlaaq Choudry. Ask the person before crediting.
+       *
+       * THE AI DISCLOSURE IS DELIBERATE AND SHOULD STAY. Saying it plainly
+       * costs nothing next to being found out, and the work that followed
+       * the generation is the actual argument: a character bible, a
+       * depiction rule with no exceptions, and a reviewer who rejected 22
+       * pages in one pass and then rejected the batch sent to fix them.
+       * Hiding the tool would also hide that.
        * ---------------------------------------------------------------- */}
       <section className="mx-auto w-full max-w-[720px] px-6 py-16 sm:px-8 lg:py-20">
         <div className="reveal">
@@ -403,13 +409,42 @@ The ustadh supplied everything the book left out
             className="text-ink mt-4 font-semibold text-balance"
             style={{ fontSize: "clamp(24px, 3.6vw, 32px)", lineHeight: 1.25 }}
           >
-            Checked line by line
+            How the pictures were made
           </h2>
           <p
             className="text-ink/75 mt-5"
             style={{ fontSize: "17px", lineHeight: 1.75 }}
           >
-            Haneefah, the editor's daughter, chose what each page shows.
+            We generated the illustrations with AI image tools, then revised
+            them against a written standard until they earned their place. We
+            would rather say that here than leave you to wonder.
+
+            What it took: a character bible fixing how the idols, the
+            buildings and the clothing look from one page to the next. A
+            depiction rule with no exceptions. And a reviewer who kept
+            sending them back.
+          </p>
+          <p
+            className="text-ink/75 mt-5"
+            style={{ fontSize: "17px", lineHeight: 1.75 }}
+          >
+            Haneefah, the editor's daughter, holds a diploma in art. She chose
+            what each page shows, then reviewed every generated page against
+            the ones already accepted. In one pass she rejected more than
+            twenty of them: the style had drifted, some had gone photo-real,
+            some carried speckling the accepted pages did not have. She
+            rejected the batch produced to fix those as well.
+          </p>
+          <p
+            className="text-ink/75 mt-5"
+            style={{ fontSize: "17px", lineHeight: 1.75 }}
+          >
+            The faces took the longest. No person in this book has facial
+            features and no Prophet appears at all, and image generators
+            fight both rules. Page after page came back with a carved face on
+            an idol or eyes on a bystander in the crowd, and went back again.
+            The rule you read about above cost more than any other decision in
+            the book.
           </p>
           <p
             className="text-ink/75 mt-5"
