@@ -29,12 +29,12 @@ import { getBook } from "@/lib/parse";
 export const metadata: Metadata = {
   title: "Why we made this book",
   description:
-    "Abul Hasan Ali al-Hasani wrote Qasas an-Nabiyyin for his nephew because there was nothing else for Muslim children to read. This edition adds what a classroom used to supply.",
+    "Abul Hasan Ali al-Hasani wrote Qasas an-Nabiyyin for his nephew because there was nothing else for Muslim children to read. This edition supplies what the classroom used to.",
   alternates: { canonical: "./" },
   openGraph: {
     title: "Why we made this book | Qasas Kids",
     description:
-      "The reader that has taught Arabic to non-Arabs for generations — and what a child needs to get through it without a teacher in the room.",
+      "The reader that has taught Arabic to non-Arabs for generations, and what a child needs to get through it without a teacher in the room.",
     url: "./",
   },
 };
@@ -68,17 +68,18 @@ export default function AboutPage() {
             className="text-ink mt-5 font-semibold text-balance"
             style={{ fontSize: "clamp(30px, 5vw, 44px)", lineHeight: 1.15 }}
           >
-            The book was never the problem. The{" "}
-            <span className="text-brand-blue">missing teacher</span> was.
+            This book has taught Arabic for generations. It always came{" "}
+            <span className="text-brand-blue">with a teacher</span>.
           </h1>
           <p
             className="text-ink/75 mt-6"
             style={{ fontSize: "18px", lineHeight: 1.7 }}
           >
-            <i>Qasas an-Nabiyyin</i> has taught Arabic to non-Arabs for
-            generations. It is fully vowelled, carefully graded, and loved by
-            the teachers who use it. But it was written for a room with a
-            teacher in it — and most of our children are not in that room.
+            Seminaries across the world teach Arabic from{" "}
+            <i>Qasas an-Nabiyyin</i>. Every word carries its vowels, the
+            language rises story by story, and the teachers who use it love
+            it. It was written for a room with an ustadh in it. Your child is
+            reading at the kitchen table.
           </p>
         </div>
       </section>
@@ -129,10 +130,9 @@ export default function AboutPage() {
             className="text-ink/75 reveal mt-8"
             style={{ fontSize: "17px", lineHeight: 1.75 }}
           >
-            He does not blame the child for preferring stories. He blames the
-            adults for printing nothing better. Seventy years later we looked at
-            the same shelf in a different country and came to the same
-            conclusion — which is the entire reason this edition exists.
+            He blames the adults for printing nothing better. Seventy years
+            later we looked at the same shelf in a different country and
+            reached his conclusion. That is why we made this edition.
           </p>
         </div>
       </section>
@@ -155,31 +155,31 @@ export default function AboutPage() {
             className="text-ink/75 mt-5"
             style={{ fontSize: "17px", lineHeight: 1.75 }}
           >
-            Shaykh Abul Hasan bound himself to four conditions when he wrote. They are a
-            better description of how children learn a language than most of
-            what is written on the subject now.
+            He bound himself to four conditions. They describe how children
+            learn a language better than most of what gets written on the
+            subject now.
           </p>
         </div>
 
         <ol className="reveal mt-8 grid gap-5">
           <Rule n={1} title="The fewest words, repeated the most">
-            The vocabulary is kept to the barest minimum and fixed in the mind
-            by recurrence rather than by drill. A word met on one page returns
-            on the next, and the next — which is why the stories can be read
-            long before the reader could pass a test on them.
+            He keeps the vocabulary to a minimum and fixes it by recurrence.
+            A word you meet on one page comes back on the next, and the next.
+            Children read these stories long before they could pass a test on
+            them.
           </Rule>
           <Rule n={2} title="The language of the Qur'an">
-            The Arabic is Qur'anic, with verses set in place — in his phrase —
-            like the stone in a ring. A child who reads these stories is
-            reading toward the Qur'an, not away from it.
+            The Arabic is Qur'anic. He sets the verses in place, in his own
+            phrase, like the stone in a ring. A child who reads these stories
+            is reading toward the Qur'an.
           </Rule>
           <Rule n={3} title="Belief taught without a lesson">
-            Tawhid, prophethood and the hereafter are carried by the narrative
-            itself rather than listed and defined.
+            The narrative carries tawhid, prophethood and the hereafter. He
+            never stops to list them or define them.
           </Rule>
           <Rule n={4} title="The child never feels taught">
-            The stories are simplified so that nothing lands as a burden. What
-            is learned is taken in incidentally, while following a story.
+            He simplifies the stories so nothing lands as a burden. The child
+            takes it in while following the story.
           </Rule>
         </ol>
       </section>
@@ -203,19 +203,19 @@ export default function AboutPage() {
               className="text-ink/75 mt-5"
               style={{ fontSize: "17px", lineHeight: 1.75 }}
             >
-              This edition began with Shaykh Dr Mohammad Akram Nadwi, whose
-              student our editor has been since 2007. He returns to{" "}
-              <i>Qasas an-Nabiyyin</i> constantly — recommending it to students
-              beginning Arabic, to teachers building a syllabus, and to parents
-              asking where to start. After enough years of hearing a book
-              recommended, you sit down with it properly.
+              Our editor has studied with Shaykh Dr Mohammad Akram Nadwi
+              since 2007. In that time he has heard the Shaykh recommend{" "}
+              <i>Qasas an-Nabiyyin</i> to students beginning Arabic, to
+              teachers building a syllabus, and to parents asking where to
+              start. After enough years of that, you sit down and read it
+              yourself.
             </p>
             <p
               className="text-ink/75 mt-5"
               style={{ fontSize: "17px", lineHeight: 1.75 }}
             >
-              Writing on how to make progress in Arabic reading, he sets out the
-              order plainly:
+              Writing on how to make progress in Arabic reading, he sets out
+              the order:
             </p>
           </div>
 
@@ -240,20 +240,18 @@ export default function AboutPage() {
             className="text-ink/75 reveal mt-8"
             style={{ fontSize: "17px", lineHeight: 1.75 }}
           >
-            Among the books he names for that stage is{" "}
-            <i>Qisas al-Nabiyyin</i> itself. Elsewhere he is blunter about what
-            to avoid: those acquiring Arabic should keep away from books of
-            vocabulary lists and grammar rules, and read instead the writing of
-            people who used the language well — short sentences first, then
-            short stories, raising the level as they go.
+            He names <i>Qisas al-Nabiyyin</i> among the books for that stage.
+            Elsewhere he is blunter: keep away from vocabulary lists and
+            grammar books, and read the people who used the language well.
+            Short sentences first, then short stories, raising the level as
+            you go.
           </p>
           <p
             className="text-ink/75 reveal mt-5"
             style={{ fontSize: "17px", lineHeight: 1.75 }}
           >
-            A language, on this view, is not assembled from parts. It is
-            absorbed from meaning the learner can actually follow. That single
-            idea is the reason this edition looks the way it does.
+            You absorb a language from meaning you can follow. That idea
+            shaped every page of this edition.
           </p>
 
           <p
@@ -269,8 +267,8 @@ export default function AboutPage() {
             >
               akramnadwi.com
             </a>
-            . He is quoted here because his writing shaped this book — not as
-            an endorsement of it.
+. We quote him because his writing shaped this edition. He has not
+            endorsed it.
           </p>
         </div>
       </section>
@@ -286,31 +284,30 @@ export default function AboutPage() {
             className="text-ink mt-4 font-semibold text-balance"
             style={{ fontSize: "clamp(24px, 3.6vw, 32px)", lineHeight: 1.25 }}
           >
-            Everything a learner needed came from a person
+The ustadh supplied everything the book left out
           </h2>
           <p
             className="text-ink/75 mt-5"
             style={{ fontSize: "17px", lineHeight: 1.75 }}
           >
-            In a madrasa, <i>Qasas an-Nabiyyin</i> is taught aloud. The teacher
-            reads, gives the meaning of each new word, corrects the reading,
-            asks the child to retell the story back. For many students it is
-            their first meeting with Arabic vocabulary — and with translation,
-            supplied in the room.
+            In a madrasa the ustadh teaches this book aloud. He reads, gives
+            the meaning of each new word, corrects the reading, and asks the
+            child to retell the story back. For many students it is their first
+            meeting with Arabic vocabulary, and with translation, which he
+            supplies in the room.
           </p>
           <p
             className="text-ink/75 mt-5"
             style={{ fontSize: "17px", lineHeight: 1.75 }}
           >
-            Take the teacher away and the book does not become harder to
-            decode. It becomes impossible to understand. A child can sound out
-            every word on the page perfectly and still not know what happened.
+            Take the ustadh away and your child can still sound out every
+            word on the page. She will not know what happened in the story.
           </p>
           <p
             className="text-ink mt-5 font-semibold"
             style={{ fontSize: "18px", lineHeight: 1.7 }}
           >
-            So we put the teacher on the page.
+            So we put him on the page.
           </p>
         </div>
 
@@ -321,23 +318,23 @@ export default function AboutPage() {
             down and read it together.
           </Feature>
           <Feature title="Every new word, where it appears">
-            Glossed on the page it is first met, not in a glossary at the back
-            that no child turns to.
+            We gloss each word on the page where it first appears. Nobody
+            turns to a glossary at the back.
           </Feature>
           <Feature title="Read aloud by a native reader">
-            Every page, with the line highlighted as it is read — so
-            pronunciation comes from a voice, the way it always has.
+            A native reader reads every page, and the line lights up as he
+            reads it. Pronunciation comes from a voice, the way it always has.
           </Feature>
           <Feature title="Word families">
-            A root met on one page is recognised on another, which is how
-            Arabic actually rewards a reader.
+            You meet a root on one page and recognise it on another. That is
+            how Arabic rewards a reader.
           </Feature>
           <Feature title="A picture on every page">
             The image holds the meaning while the language is still arriving.
           </Feature>
           <Feature title="Practice that asks for answers">
-            Short exercises drawn from the page just read — producing the
-            language, not just recognising it.
+            Short exercises drawn from the page your child has just read.
+            They ask her to produce the language, not point at it.
           </Feature>
         </ul>
       </section>
@@ -362,27 +359,26 @@ export default function AboutPage() {
               style={{ fontSize: "17px", lineHeight: 1.75 }}
             >
               Not faceless, not from behind, not in silhouette, shadow or
-              reflection, and not by any substitute figure. Neither are angels.
-              Where a scene is seen through Ibrahim's eyes, you see only what he
-              saw — the night sky, the idol house, the fire — and no part of
-              him.
+              reflection, and not by any substitute figure. Nor do angels.
+              Where a scene is seen through Ibrahim's eyes you see the night
+              sky, the idol house, the fire, and no part of him.
             </p>
             <p
               className="text-ink/75 mt-5"
               style={{ fontSize: "17px", lineHeight: 1.75 }}
             >
-              No person in these pages is given facial features. This was
-              settled before the first drawing was made, and it has held on
-              every page since without exception.
+              We give no person in these pages facial features. We settled
+              that before the first drawing and have held it on every page
+              since.
             </p>
             <p
               className="text-ink/75 mt-5"
               style={{ fontSize: "17px", lineHeight: 1.75 }}
             >
-              We have also kept the stories whole. Language is simplified for a
-              young reader; episodes are not removed for being difficult. Where
-              the story is grave, the picture carries the weight of it without
-              dwelling on the act.
+              We kept the stories whole. We simplified the language for a
+              young reader and cut no episode for being difficult. Where the
+              story is grave, the picture carries the weight without dwelling
+              on the act.
             </p>
           </div>
         </div>
@@ -401,38 +397,38 @@ export default function AboutPage() {
             className="text-ink mt-4 font-semibold text-balance"
             style={{ fontSize: "clamp(24px, 3.6vw, 32px)", lineHeight: 1.25 }}
           >
-            The art was directed by an artist
+Haneefah directed the art
           </h2>
           <p
             className="text-ink/75 mt-5"
             style={{ fontSize: "17px", lineHeight: 1.75 }}
           >
             Haneefah art-directed this edition. She holds a diploma in art,
-            and it shows in the work: she decided what each page should show,
+            and it shows in the work. She decided what each page should show,
             took the illustrations through revision after revision until they
             held together as one book rather than fifty separate pictures, and
-            set the pages themselves. Where a page here feels right, it is
-            usually because she sent an earlier version back.
+            set the pages herself. Where a page here feels right, she sent an
+            earlier version back.
           </p>
           <p
             className="text-ink/75 mt-5"
             style={{ fontSize: "17px", lineHeight: 1.75 }}
           >
-            Ustadh Akhlaaq Choudry of Al Salam Institute — one of the editor's
-            own Arabic teachers — checked the vowelling word by word, listened
+            Ustadh Akhlaaq Choudry of Al Salam Institute, one of the editor's
+            own Arabic teachers, checked the vowelling word by word, listened
             to the recordings line by line against the page, and advised on the
-            typefaces, which sounds like a small matter until you watch a child
+            typefaces. That sounds like a small matter until you watch a child
             try to read a fully vowelled line set in the wrong one. Other
-            Arabic teachers read the text and corrected it, and ulema gave their
-            guidance on the illustrations.
+            Arabic teachers read the text and corrected it, and ulema gave
+            their guidance on the illustrations.
           </p>
           <p
             className="text-ink/75 mt-5"
             style={{ fontSize: "17px", lineHeight: 1.75 }}
           >
-            Whatever is correct in this book comes from its sources and its
-            teachers. The mistakes are ours, and we would be grateful to be told
-            of them.
+            Whatever is correct here comes from its sources and its teachers.
+            The mistakes are ours, and we would be grateful to be told of
+            them.
           </p>
         </div>
 
