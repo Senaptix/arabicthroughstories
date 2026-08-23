@@ -402,13 +402,18 @@ The ustadh supplied everything the book left out
        * pages in one pass and then rejected the batch sent to fix them.
        * Hiding the tool would also hide that.
        *
-       * The 587 is counted, not estimated: every png/jpg under generated/,
+       * "More than ten per page" is measured, not guessed: 587 distinct
+       * images across the book repo's working folders against 50 printed
+       * pages, which is 11.7. Counted as every png/jpg under generated/,
        * FlowImages/, art/, for-upload/, art-consistency/ and
-       * source-illustrations/ in the book repo, deduplicated by md5 and
-       * excluding contact sheets, approval cards and page-number overlays.
-       * 835 files, 248 of them copies. It is a floor rather than a total,
-       * since rejects that never left WhatsApp were never saved. Recount
-       * before changing the figure.
+       * source-illustrations/, deduplicated by md5, excluding contact
+       * sheets, approval cards and page-number overlays: 835 files, 248 of
+       * them copies. It understates the real ratio, since batches that were
+       * judged and discarded in a message thread were never saved.
+       *
+       * The ratio is public and the raw total is not, by the editor's
+       * decision. Naming the tools is also out. Neither adds anything a
+       * parent needs, and both date the book.
        * ---------------------------------------------------------------- */}
       <section className="mx-auto w-full max-w-[720px] px-6 py-16 sm:px-8 lg:py-20">
         <div className="reveal">
@@ -436,12 +441,10 @@ The ustadh supplied everything the book left out
             className="text-ink/75 mt-5"
             style={{ fontSize: "17px", lineHeight: 1.75 }}
           >
-            This project holds 587 distinct illustrations. Fifty of them are
-            in the book. The rest were rejected, and 587 is a floor rather
-            than a total: whole batches went past in a message thread and were
-            never saved, and we abandoned two generators outright, Flow and
-            Gemini, after months of trying to make them hold a style and a
-            rule at the same time.
+            It took about six months and several different tools, some of
+            which we abandoned after weeks of trying to make them hold a style
+            and a rule at the same time. For every page that made it into the
+            book, more than ten were generated and thrown away.
 
             Haneefah, the editor's daughter, holds a diploma in art. She chose
             what each page shows, then reviewed every generated page against
