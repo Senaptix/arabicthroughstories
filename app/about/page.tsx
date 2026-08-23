@@ -401,6 +401,14 @@ The ustadh supplied everything the book left out
        * depiction rule with no exceptions, and a reviewer who rejected 22
        * pages in one pass and then rejected the batch sent to fix them.
        * Hiding the tool would also hide that.
+       *
+       * The 587 is counted, not estimated: every png/jpg under generated/,
+       * FlowImages/, art/, for-upload/, art-consistency/ and
+       * source-illustrations/ in the book repo, deduplicated by md5 and
+       * excluding contact sheets, approval cards and page-number overlays.
+       * 835 files, 248 of them copies. It is a floor rather than a total,
+       * since rejects that never left WhatsApp were never saved. Recount
+       * before changing the figure.
        * ---------------------------------------------------------------- */}
       <section className="mx-auto w-full max-w-[720px] px-6 py-16 sm:px-8 lg:py-20">
         <div className="reveal">
@@ -428,12 +436,18 @@ The ustadh supplied everything the book left out
             className="text-ink/75 mt-5"
             style={{ fontSize: "17px", lineHeight: 1.75 }}
           >
+            This project holds 587 distinct illustrations. Fifty of them are
+            in the book. The rest were rejected, and the count only includes
+            what was kept: more went past in a message thread and were never
+            saved at all.
+
             Haneefah, the editor's daughter, holds a diploma in art. She chose
             what each page shows, then reviewed every generated page against
-            the ones already accepted. In one pass she rejected more than
-            twenty of them: the style had drifted, some had gone photo-real,
-            some carried speckling the accepted pages did not have. She
-            rejected the batch produced to fix those as well.
+            the ones already accepted. In one pass she sent back
+            twenty-two: the style had drifted, some had gone photo-real, some
+            carried speckling the accepted pages did not have. She rejected
+            the batch produced to fix those as well. Every page in this book
+            went through more than one version, and most through many.
           </p>
           <p
             className="text-ink/75 mt-5"
