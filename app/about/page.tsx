@@ -386,9 +386,15 @@ The ustadh supplied everything the book left out
 
       {/* ---------------------------------------------------------------- *
        * Who made it. Named contributions, because "a team" persuades
-       * nobody. Haneefah is credited as art director because that is the
-       * job she did — nineteen, diploma in art. Softening it to "helped
-       * with the pictures" would be a disservice dressed as modesty.
+       * nobody, and because a reader deciding whether to trust the Arabic
+       * wants to know who checked it.
+       *
+       * Credits say what each person did and nothing beyond it. An earlier
+       * draft had Haneefah art-directing the illustrations through repeated
+       * revisions; she read it and said that is not what happened, so it now
+       * says only that she chose what each page shows, which is what she
+       * confirmed. Same with the recordings: Marjan Ahmed listened to all
+       * fifty, not Akhlaaq Choudry. Ask the person before crediting them.
        * ---------------------------------------------------------------- */}
       <section className="mx-auto w-full max-w-[720px] px-6 py-16 sm:px-8 lg:py-20">
         <div className="reveal">
@@ -397,30 +403,32 @@ The ustadh supplied everything the book left out
             className="text-ink mt-4 font-semibold text-balance"
             style={{ fontSize: "clamp(24px, 3.6vw, 32px)", lineHeight: 1.25 }}
           >
-Haneefah directed the art
+            Checked line by line
           </h2>
           <p
             className="text-ink/75 mt-5"
             style={{ fontSize: "17px", lineHeight: 1.75 }}
           >
-            Haneefah art-directed this edition. She holds a diploma in art,
-            and it shows in the work. She decided what each page should show,
-            took the illustrations through revision after revision until they
-            held together as one book rather than fifty separate pictures, and
-            set the pages herself. Where a page here feels right, she sent an
-            earlier version back.
+            Haneefah, the editor's daughter, chose what each page shows.
+          </p>
+          <p
+            className="text-ink/75 mt-5"
+            style={{ fontSize: "17px", lineHeight: 1.75 }}
+          >
+            Maulana Marjan Ahmed, who translates much of Shaykh Akram's work
+            into Bangla, proofread every line of the Arabic and listened to all
+            fifty recordings against the text, correcting what he found.
           </p>
           <p
             className="text-ink/75 mt-5"
             style={{ fontSize: "17px", lineHeight: 1.75 }}
           >
             Ustadh Akhlaaq Choudry of Al Salam Institute, one of the editor's
-            own Arabic teachers, checked the vowelling word by word, listened
-            to the recordings line by line against the page, and advised on the
-            typefaces. That sounds like a small matter until you watch a child
-            try to read a fully vowelled line set in the wrong one. Other
-            Arabic teachers read the text and corrected it, and ulema gave
-            their guidance on the illustrations.
+            own Arabic teachers, gave a great deal of his time to checking the
+            text. Other Arabic teachers advised on the typefaces, which sounds
+            like a small matter until you watch a child try to read a fully
+            vowelled line set in the wrong one. Ulema gave their guidance on
+            the illustrations.
           </p>
           <p
             className="text-ink/75 mt-5"
