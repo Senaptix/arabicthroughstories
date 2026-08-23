@@ -437,9 +437,11 @@ The ustadh supplied everything the book left out
             style={{ fontSize: "17px", lineHeight: 1.75 }}
           >
             This project holds 587 distinct illustrations. Fifty of them are
-            in the book. The rest were rejected, and the count only includes
-            what was kept: more went past in a message thread and were never
-            saved at all.
+            in the book. The rest were rejected, and 587 is a floor rather
+            than a total: whole batches went past in a message thread and were
+            never saved, and we abandoned two generators outright, Flow and
+            Gemini, after months of trying to make them hold a style and a
+            rule at the same time.
 
             Haneefah, the editor's daughter, holds a diploma in art. She chose
             what each page shows, then reviewed every generated page against
