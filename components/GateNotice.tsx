@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getMembershipState } from "@/lib/access";
+import { CATALOGUE } from "@/lib/catalogue";
 
 /**
  * What a visitor without a current entitlement sees in place of gated content.
@@ -22,6 +23,49 @@ export default async function GateNotice({
   // Someone already signed in does not need telling to create an account —
   // they need the box that takes an order number, which now exists.
   const signedIn = membershipState !== "signed-out";
+
+  /*
+   * A book that is not on sale yet has no door through this gate: there is no
+   * order number to enter, because there is nothing to order. Telling a
+   * visitor to "enter the Amazon order number" for Yusuf would send them
+   * hunting for a listing that does not exist.
+   *
+   * The signal is CATALOGUE.published, NOT `buy_url === ""`. Ibrahim is
+   * published but its buy_url is still blank because the listing URL has not
+   * been pasted in, so keying off buy_url would have shown Ibrahim's paying
+   * buyers "this book is not published yet" instead of their activation route.
+   */
+  const notYetOnSale = !CATALOGUE.find((b) => b.slug === bookSlug)?.published;
+
+  if (notYetOnSale) {
+    return (
+      <section className="border-brand-blue/20 bg-sand/30 mb-10 rounded-2xl border px-6 py-7">
+        <h2
+          className="text-ink font-semibold"
+          style={{ fontSize: "clamp(19px, 3vw, 22px)", lineHeight: 1.3 }}
+        >
+          This book is not published yet.
+        </h2>
+        <p
+          className="text-ink/75 mt-3 max-w-[52ch]"
+          style={{ fontSize: "16px", lineHeight: 1.65 }}
+        >
+          The opening pages are free to read now. The rest of the text, the
+          recordings and the pictures arrive with the printed book — we will say
+          here when it is out.
+        </p>
+        <div className="mt-6 flex flex-wrap items-center gap-3">
+          <Link
+            href={`/books/${bookSlug}`}
+            className="bg-brand-blue text-paper inline-flex min-h-[48px] items-center rounded-xl px-5 font-medium"
+            style={{ fontSize: "16px" }}
+          >
+            Read the free pages
+          </Link>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="border-brand-blue/20 bg-sand/30 mb-10 rounded-2xl border px-6 py-7">

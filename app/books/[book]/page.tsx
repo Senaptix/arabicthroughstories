@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import HomeBar from "@/components/HomeBar";
 import PageIndex from "@/components/PageIndex";
 import Link from "next/link";
+import { CATALOGUE } from "@/lib/catalogue";
 import {
   getAllBooks,
   getBook,
@@ -98,6 +99,22 @@ export default async function BookOverview({
             Ages {book.age_range} · {book.page_count} pages · {vocab.length}{" "}
             words taught · fully vowelled
           </p>
+
+          {/* An unpublished book says so on its own page. Keyed on the
+              catalogue's `published` flag, not buy_url — Ibrahim is published
+              with a blank buy_url, so buy_url would mislabel it. */}
+          {!CATALOGUE.find((b) => b.slug === book.slug)?.published && (
+            <p
+              className="border-brand-blue/30 bg-sand/40 text-ink/75 mt-5 rounded-xl border px-4 py-3"
+              style={{ fontSize: "15px", lineHeight: 1.6 }}
+            >
+              <span className="text-brand-blue font-semibold">
+                Coming soon.
+              </span>{" "}
+              The printed book is still being made, and so are the recordings
+              and the pictures. The Arabic below is here to read now.
+            </p>
+          )}
         </header>
 
         {/* The page index comes FIRST. Someone opening this book wants the
