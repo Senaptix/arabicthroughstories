@@ -1,4 +1,4 @@
-import { getEntitlement, hasPendingActivation } from "@/lib/access";
+import { getSoonestEntitlement, hasPendingActivation } from "@/lib/access";
 
 /**
  * Tells a parent on provisional access that a receipt is still needed.
@@ -23,12 +23,13 @@ export default async function ReceiptNotice() {
   // member who claims another book stays `book_activation` while still owing
   // a receipt — and would never have been told.
   const [entitlement, pending] = await Promise.all([
-    getEntitlement(),
+    getSoonestEntitlement(),
     hasPendingActivation(),
   ]);
   if (!pending || !entitlement) return null;
 
-  // Both derived in getEntitlement(), which reads the clock once per request.
+  // Both derived in getEntitlements(), which reads the clock once per request.
+  // Soonest across every book: one outstanding receipt, one deadline that bites.
   const { expired, daysLeft: days } = entitlement;
   // Under a week is the point at which the wording should stop being calm.
   const urgent = expired || days <= 7;

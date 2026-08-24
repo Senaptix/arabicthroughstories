@@ -1,4 +1,6 @@
+import ActivationReview from "@/components/admin/ActivationReview";
 import { getAdminAccess } from "@/lib/admin";
+import { CATALOGUE } from "@/lib/catalogue";
 import { activationIssuerSecret } from "@/lib/activation-codes";
 import { createClient } from "@/lib/supabase/server";
 
@@ -10,16 +12,18 @@ import { createClient } from "@/lib/supabase/server";
  * families' email addresses should not become readable by being dropped
  * somewhere else later. Cheap here, since getAdminAccess is per-request.
  *
- * Read-only on purpose. Approving still happens in the Supabase table editor,
- * where the trigger grants the 12 months on one cell change. An approve button
- * here would need its own write path and its own audit story; the queue was
- * the missing half, not the approving.
+ * Approving happens HERE since 2026-08-24. It used to mean opening the
+ * Supabase table editor and changing a status cell by hand, which put a
+ * production database in front of a clerical job. The write path is a
+ * security-definer RPC behind the same two gates as code issuing: the app
+ * checks ADMIN_EMAILS, the database checks the issuer secret.
  */
 
 type PendingRow = {
   activation_id: string;
   email: string;
   order_number: string;
+  book_slugs: string[] | null;
   claimed_at: string;
   expires_at: string | null;
 };
@@ -76,46 +80,22 @@ export default async function PendingActivations() {
     <div className="space-y-3">
       <p className="text-ink/60 text-[14px]">
         {rows.length} waiting. Match each order number to the receipt in{" "}
-        <span className="font-medium">receipts@qasaskids.com</span>, then set
-        the row&rsquo;s status to <span className="font-medium">approved</span>{" "}
-        in Supabase — that one change grants the 12 months.
+        <span className="font-medium">receipts@qasaskids.com</span>, tick every
+        book the receipt covers, and approve. One order often contains both.
       </p>
 
       <ul className="divide-ink/10 border-ink/12 divide-y rounded-2xl border">
-        {rows.map((row) => {
-          const days = daysUntil(row.expires_at);
-          // Under a week means this parent is about to lose access while
-          // still waiting on us, which is the worst version of this queue
-          // going unread.
-          const pressing = days !== null && days <= 7;
-
-          return (
-            <li
-              key={row.activation_id}
-              className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 px-5 py-4"
-            >
-              <div className="min-w-0">
-                <p className="text-ink truncate text-[15px] font-medium">
-                  {row.email}
-                </p>
-                <p className="text-ink/60 mt-0.5 font-mono text-[14px]">
-                  {row.order_number}
-                </p>
-              </div>
-              <p
-                className={`text-[14px] ${
-                  pressing ? "text-brand-blue font-medium" : "text-ink/50"
-                }`}
-              >
-                {days === null
-                  ? "no access recorded"
-                  : days === 0
-                    ? "access ends today"
-                    : `${days} ${days === 1 ? "day" : "days"} of access left`}
-              </p>
-            </li>
-          );
-        })}
+        {rows.map((row) => (
+          <ActivationReview
+            key={row.activation_id}
+            activationId={row.activation_id}
+            email={row.email}
+            orderNumber={row.order_number}
+            claimedBooks={row.book_slugs ?? []}
+            daysLeft={daysUntil(row.expires_at)}
+            catalogue={CATALOGUE}
+          />
+        ))}
       </ul>
     </div>
   );

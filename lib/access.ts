@@ -75,38 +75,68 @@ export type Entitlement = {
 };
 
 /**
- * The parent's entitlement row, or null.
+ * Every entitlement this parent holds, keyed by book slug.
  *
- * Cached per request, so the page card, the gate notice and the account
- * banner can each ask without three round trips to the database.
+ * ONE row per book since 2026-08-24. Buying a book opens that book; it does
+ * not open the series. The site hosts the full text and audio of each title,
+ * so a shared entitlement was a substitute for the next purchase rather than a
+ * reward for the last one.
+ *
+ * Cached per request, so the page card, the gate notice and the account banner
+ * each ask without three round trips.
  */
-export const getEntitlement = cache(async (): Promise<Entitlement | null> => {
-  const parentId = await getParentId();
-  if (!parentId) return null;
+export const getEntitlements = cache(
+  async (): Promise<Map<string, Entitlement>> => {
+    const out = new Map<string, Entitlement>();
+    const parentId = await getParentId();
+    if (!parentId) return out;
 
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("entitlements")
-    .select("source, expires_at")
-    .eq("parent_id", parentId)
-    .maybeSingle();
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("entitlements")
+      .select("book_slug, source, expires_at")
+      .eq("parent_id", parentId);
 
-  if (error || !data) return null;
+    if (error || !data) return out;
 
-  // Read the clock HERE, not in a component. This function is cached per
-  // request, so every caller sees the same instant — and a React component
-  // that called Date.now() itself would be impure by the letter of the rule
-  // and unstable in spirit if it ever re-rendered.
-  const expiresAt = Date.parse(data.expires_at);
-  const now = Date.now();
+    // Read the clock HERE, not in a component. This function is cached per
+    // request, so every caller sees the same instant — and a React component
+    // that called Date.now() itself would be impure by the letter of the rule
+    // and unstable in spirit if it ever re-rendered.
+    const now = Date.now();
 
-  return {
-    source: data.source as EntitlementSource,
-    expiresAt,
-    expired: expiresAt <= now,
-    daysLeft: Math.max(0, Math.ceil((expiresAt - now) / 86_400_000)),
-  };
-});
+    for (const row of data) {
+      const expiresAt = Date.parse(row.expires_at);
+      out.set(row.book_slug, {
+        source: row.source as EntitlementSource,
+        expiresAt,
+        expired: expiresAt <= now,
+        daysLeft: Math.max(0, Math.ceil((expiresAt - now) / 86_400_000)),
+      });
+    }
+    return out;
+  },
+);
+
+/** This parent's entitlement for one book, or null. */
+export async function getEntitlement(
+  slug: string,
+): Promise<Entitlement | null> {
+  return (await getEntitlements()).get(slug) ?? null;
+}
+
+/**
+ * The entitlement running out soonest, across every book.
+ *
+ * For account-page notices that are about the PARENT rather than about a
+ * particular book — "your receipt is still outstanding" is one claim, not one
+ * per title, and the deadline that matters is the nearest one.
+ */
+export async function getSoonestEntitlement(): Promise<Entitlement | null> {
+  const all = [...(await getEntitlements()).values()];
+  if (all.length === 0) return null;
+  return all.reduce((a, b) => (b.expiresAt < a.expiresAt ? b : a));
+}
 
 /**
  * Does this parent have an order number waiting on a receipt?
@@ -132,15 +162,22 @@ export const hasPendingActivation = cache(async (): Promise<boolean> => {
   return !error && Boolean(data);
 });
 
-export const getMembershipState = cache(async (): Promise<MembershipState> => {
+/**
+ * Membership state FOR ONE BOOK. A parent can be active on Ibrahim and
+ * not-activated on Yusuf at the same time, and the gate notice has to say
+ * which of those it is.
+ */
+export async function getMembershipState(
+  slug: string,
+): Promise<MembershipState> {
   if (!(await getParentId())) return "signed-out";
-  const entitlement = await getEntitlement();
+  const entitlement = await getEntitlement(slug);
   if (!entitlement) return "not-activated";
   return entitlement.expiresAt > Date.now() ? "active" : "lapsed";
-});
+}
 
-export async function hasMembership(): Promise<boolean> {
-  return (await getMembershipState()) === "active";
+export async function hasMembership(slug: string): Promise<boolean> {
+  return (await getMembershipState(slug)) === "active";
 }
 
 /**
@@ -171,7 +208,7 @@ export async function canViewPage(
 ): Promise<boolean> {
   if (!GATE_ENABLED) return true;
   if (isFreePage(slug, page)) return true;
-  return hasMembership();
+  return hasMembership(slug);
 }
 
 /**

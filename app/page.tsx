@@ -922,6 +922,68 @@ export default function Home() {
       </section>
 
       {/* ---------------------------------------------------------------- *
+       * Next in the series — a placeholder, deliberately NOT a book entry.
+       *
+       * Hardcoded rather than driven by content/books, because getAllBooks()
+       * enumerates that directory and generateStaticParams builds a route for
+       * every file it finds. A stub yusuf.yaml fails parse.check.ts at
+       * prebuild and takes the live site down on the next five-minute deploy.
+       * This becomes real data the day the four required files exist —
+       * BOOK2_YUSUF_PLAN.md in the book repo lists them.
+       * ---------------------------------------------------------------- */}
+      <section className="bg-sand/25 border-ink/5 border-y">
+        <div className="mx-auto w-full max-w-[1100px] px-6 py-16 sm:px-8 lg:py-24">
+          <div className="reveal">
+            <Eyebrow>Next in the series</Eyebrow>
+            <h2
+              className="text-ink mt-4 max-w-[22ch] font-semibold text-balance"
+              style={{
+                fontSize: "clamp(28px, 5vw, 42px)",
+                lineHeight: 1.15,
+                letterSpacing: "-0.015em",
+              }}
+            >
+              Book two is the story of Yusuf.
+            </h2>
+          </div>
+
+          <div className="reveal border-ink/10 bg-paper mt-10 rounded-2xl border px-6 py-6 sm:px-8 sm:py-8">
+            <p
+              className="text-brand-blue font-semibold"
+              style={{ fontSize: "13px", letterSpacing: "0.1em" }}
+            >
+              COMING SOON
+            </p>
+            <p
+              className="text-ink/75 mt-4 max-w-[62ch]"
+              style={{ fontSize: "17px", lineHeight: 1.65 }}
+            >
+              The dream, the well, the years in Egypt, and the brothers who
+              came looking for food and did not know who was feeding them.
+              Shaykh Abul Hasan tells it in twenty-five short chapters, and
+              this edition keeps every one of them.
+            </p>
+            <p
+              className="text-ink/75 mt-4 max-w-[62ch]"
+              style={{ fontSize: "17px", lineHeight: 1.65 }}
+            >
+              It carries more than twice the Arabic of Ibrahim, so it takes
+              longer to make. The Arabic is transcribed. The English, the
+              recordings and the pictures are being built now, and this page
+              will say when they are ready.
+            </p>
+            <p
+              className="text-ink/50 mt-5 max-w-[62ch]"
+              style={{ fontSize: "15px", lineHeight: 1.6 }}
+            >
+              Book two opens the way this one does. Buy the book, add the order
+              to your account, and its companion opens for a year.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ---------------------------------------------------------------- *
        * The payoff — the same three letters, 48 pages later
        * ---------------------------------------------------------------- */}
       <section className="bg-night">

@@ -16,7 +16,8 @@ export default async function GateNotice({
   page: number;
   bookSlug: string;
 }) {
-  const membershipState = await getMembershipState();
+  // Per book: a parent active on Ibrahim is still outside Yusuf.
+  const membershipState = await getMembershipState(bookSlug);
   const hasLapsed = membershipState === "lapsed";
   // Someone already signed in does not need telling to create an account —
   // they need the box that takes an order number, which now exists.
