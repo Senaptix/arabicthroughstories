@@ -27,6 +27,15 @@ type Props = {
   /** Present on a real book route. Omitted by the signed-out landing demo. */
   bookSlug?: string;
   page?: number;
+  /**
+   * The next story page, or null at the end of the book.
+   *
+   * Without this the results screen was a dead end: a child finished every
+   * exercise and the only thing to press was "Start again", so the reward for
+   * getting them all right was doing them again. Carrying on is the thing they
+   * actually want, so it is the primary action.
+   */
+  nextPage?: number | null;
 };
 
 /** Deterministic shuffle: a seeded order, so the server and client agree
@@ -56,7 +65,7 @@ const TYPE_LABEL = {
   pattern: "Make a new sentence",
 } as const;
 
-export default function Practice({ exercises, words, bookSlug, page }: Props) {
+export default function Practice({ exercises, words, bookSlug, page, nextPage }: Props) {
   const [step, setStep] = useState(0);
   /** Per exercise: true right, false wrong, undefined not answered yet.
    *  Indexed by step, so a single one can be retried without losing the
@@ -128,6 +137,15 @@ export default function Practice({ exercises, words, bookSlug, page }: Props) {
     setRetryOf(i);
     setStep(i);
     setRun((r) => r + 1); // reset that exercise's own internal state
+    setProgressSaved(false);
+  }
+
+  function restart() {
+    setStep(0);
+    setResults([]);
+    setAnswered(false);
+    setRetryOf(null);
+    setRun((r) => r + 1);
     setProgressSaved(false);
   }
 
@@ -217,21 +235,36 @@ export default function Practice({ exercises, words, bookSlug, page }: Props) {
           })}
         </ul>
 
-        <button
-          type="button"
-          onClick={() => {
-            setStep(0);
-            setResults([]);
-            setAnswered(false);
-            setRetryOf(null);
-            setRun((r) => r + 1);
-            setProgressSaved(false);
-          }}
-          className="bg-brand-blue text-paper mt-6 inline-flex min-h-[48px] w-full items-center justify-center rounded-xl px-6 font-medium"
-          style={{ fontSize: "16px" }}
-        >
-          Start again
-        </button>
+        {/* Carrying on is the primary action, not repeating. "Start again"
+            was the only button here, which made finishing feel like a loop. */}
+        {bookSlug && nextPage ? (
+          <div className="mt-6 flex flex-col gap-2">
+            <a
+              href={`/books/${bookSlug}/p${nextPage}`}
+              className="bg-brand-blue text-paper inline-flex min-h-[48px] w-full items-center justify-center rounded-xl px-6 font-medium"
+              style={{ fontSize: "16px" }}
+            >
+              Go to page {nextPage} →
+            </a>
+            <button
+              type="button"
+              onClick={restart}
+              className="border-ink/15 text-ink/70 hover:border-ink/35 inline-flex min-h-[48px] w-full items-center justify-center rounded-xl border px-6 font-medium transition-colors"
+              style={{ fontSize: "16px" }}
+            >
+              Start again
+            </button>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={restart}
+            className="bg-brand-blue text-paper mt-6 inline-flex min-h-[48px] w-full items-center justify-center rounded-xl px-6 font-medium"
+            style={{ fontSize: "16px" }}
+          >
+            Start again
+          </button>
+        )}
       </div>
     );
   }

@@ -124,6 +124,12 @@ export default async function PracticePage({
               words={words.map((w) => ({ ar: w.ar, en: w.en }))}
               bookSlug={book.slug}
               page={page}
+              nextPage={
+                page + 1 <= book.page_count &&
+                !book.non_story_pages.includes(page + 1)
+                  ? page + 1
+                  : null
+              }
             />
           </div>
         </section>

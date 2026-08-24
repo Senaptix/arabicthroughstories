@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import { requireProgressAccess } from "@/lib/access";
-import { isPublishedPage, practiceProgressSchema } from "@/lib/progress";
+import { isTrackablePage, practiceProgressSchema } from "@/lib/progress";
 import { createClient } from "@/lib/supabase/server";
 
 export async function POST(request: Request) {
   const parsed = practiceProgressSchema.safeParse(await request.json().catch(() => null));
-  if (!parsed.success || !isPublishedPage(parsed.data.bookSlug, parsed.data.page)) {
+  if (!parsed.success || !isTrackablePage(parsed.data.bookSlug, parsed.data.page)) {
     return NextResponse.json({ error: "invalid_progress" }, { status: 400 });
   }
 

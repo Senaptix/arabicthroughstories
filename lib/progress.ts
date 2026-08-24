@@ -11,10 +11,19 @@ export const practiceProgressSchema = pageProgressSchema.extend({
   total: z.number().int().nonnegative(),
 }).refine((value) => value.correct <= value.total);
 
-export function isPublishedPage(bookSlug: string, page: number) {
+/**
+ * May reading progress be recorded against this page?
+ *
+ * Excludes non-story pages. The cover, the contents and the appendix carry no
+ * story text, so counting them inflates "pages completed" and — worse — lets
+ * `last_page` point at them, which offered a child "Continue page 1" and sent
+ * them to the cover. Nothing is read on those pages, so nothing is recorded.
+ */
+export function isTrackablePage(bookSlug: string, page: number) {
   try {
     const book = getBook(bookSlug);
-    return page <= book.page_count;
+    if (page > book.page_count) return false;
+    return !book.non_story_pages.includes(page);
   } catch {
     return false;
   }
