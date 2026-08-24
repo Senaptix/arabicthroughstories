@@ -1,0 +1,108 @@
+# Cumulative Vocabulary Index
+
+Every word taught in the book, in order of first appearance. **Check this
+before adding any glossary entry** — the teaching method depends on each word
+being introduced exactly once.
+
+⚠️ **IN PROGRESS — covers pages 3-12 of 59.** The Arabic for every page is
+already in `yusuf.pages.md`; the glossing of pages 13-59 has not been done yet.
+Pages beyond the range above will show their text with no word list until it
+is written. That is a gap, not a design decision.
+
+| #   | Arabic | English | First page |
+| --- | ------ | ------- | ---------- |
+| 1   | وَلَدٌ | a boy | 3 |
+| 2   | أَحَدَ عَشَرَ | eleven | 3 |
+| 3   | ذَكِيٌّ | clever | 3 |
+| 4   | إِخْوَةٌ | brothers | 3 |
+| 5   | رُؤْيَا | a dream | 3 |
+| 6   | عَجِيبَةٌ | strange | 3 |
+| 7   | كَوْكَبٌ | a star | 3 |
+| 8   | الشَّمْسُ | the sun | 3 |
+| 9   | الْقَمَرُ | the moon | 3 |
+| 10  | يَسْجُدُ | he prostrates | 3 |
+| 11  | تَعَجَّبَ | he was surprised | 3 |
+| 12  | فَهِمَ | he understood | 3 |
+| 13  | حَكَى | he told | 4 |
+| 14  | يَا أَبَتِ | O my father | 4 |
+| 15  | سَاجِدِينَ | prostrating | 4 |
+| 16  | نَبِيٌّ | a Prophet | 4 |
+| 17  | فَرِحَ | he was happy | 4 |
+| 18  | بَارَكَ | he blessed | 4 |
+| 19  | شَأْنٌ | a great place | 4 |
+| 20  | بِشَارَةٌ | good news | 4 |
+| 21  | عِلْمٌ | knowledge | 4 |
+| 22  | نُبُوَّةٌ | prophethood | 4 |
+| 23  | أَنْعَمَ | he favoured | 5 |
+| 24  | جَدٌّ | a grandfather | 5 |
+| 25  | آلٌ | a family | 5 |
+| 26  | شَيْخٌ كَبِيرٌ | an old man | 5 |
+| 27  | طَبَائِعُ | natures | 5 |
+| 28  | يَغْلِبُ | he overcomes | 5 |
+| 29  | الشَّيْطَانُ | Shaytan | 5 |
+| 30  | الإِنْسَانُ | a person | 5 |
+| 31  | لَا تُخْبِرْ | do not tell | 5 |
+| 32  | يَحْسُدُ | he envies | 5 |
+| 33  | عَدُوٌّ | an enemy | 5 |
+| 34  | أُمٌّ | a mother | 6 |
+| 35  | حُبٌّ شَدِيدٌ | great love | 6 |
+| 36  | يَغْضَبُونَ | they are angry | 6 |
+| 37  | صَغِيرَانِ | two small ones | 6 |
+| 38  | ضَعِيفَانِ | two weak ones | 6 |
+| 39  | شُبَّانٌ | young men | 6 |
+| 40  | أَقْوِيَاءُ | strong ones | 6 |
+| 41  | أَمْرٌ | a thing | 7 |
+| 42  | اشْتَدَّ | it grew strong | 7 |
+| 43  | حَسَدٌ | envy | 7 |
+| 44  | اجْتَمَعَ | he gathered | 7 |
+| 45  | اقْتُلُوا | kill! | 7 |
+| 46  | اطْرَحُوهُ | throw him | 7 |
+| 47  | خَالِصاً | yours alone | 7 |
+| 48  | بِئْرٌ | a well | 7 |
+| 49  | طَرِيقٌ | a road | 7 |
+| 50  | الْمُسَافِرِينَ | the travellers | 7 |
+| 51  | وَافَقَ | he agreed | 7 |
+| 52  | اتَّفَقُوا | they agreed | 8 |
+| 53  | رَأْيٌ | a plan | 8 |
+| 54  | يَخَافُ | he fears | 8 |
+| 55  | يُرْسِلُ | he sends | 8 |
+| 56  | عَزَمُوا | they were set on | 8 |
+| 57  | الشَّرُّ | evil | 8 |
+| 58  | الْعَزِيزُ | the dear one | 8 |
+| 59  | أَبْنَاءُ | sons | 8 |
+| 60  | دَائِماً | always | 9 |
+| 61  | يَرْتَعْ | he grazes | 9 |
+| 62  | لَحَافِظُونَ | surely guarding | 9 |
+| 63  | عَاقِلٌ | wise | 9 |
+| 64  | حَلِيمٌ | gentle | 9 |
+| 65  | يَبْعُدَ | he goes far | 9 |
+| 66  | الذِّئْبُ | the wolf | 9 |
+| 67  | غَافِلُونَ | heedless | 9 |
+| 68  | حَاضِرُونَ | present | 9 |
+| 69  | أَذِنَ | he gave permission | 9 |
+| 70  | غَابَةٌ | a forest | 10 |
+| 71  | أَلْقَوْا | they threw | 10 |
+| 72  | يَرْحَمُوا | they had mercy | 10 |
+| 73  | قَلْبٌ | a heart | 10 |
+| 74  | عَمِيقَةٌ | deep | 10 |
+| 75  | مُظْلِمَةٌ | dark | 10 |
+| 76  | وَحِيداً | alone | 10 |
+| 77  | بَشَّرَ | he gave good news | 10 |
+| 78  | لَا تَحْزَنْ | do not grieve | 10 |
+| 79  | لَا تَخَفْ | do not fear | 10 |
+| 80  | فَرَغُوا | they finished | 11 |
+| 81  | صَدَقْتَ | you spoke the truth | 11 |
+| 82  | آيَةٌ | a sign | 11 |
+| 83  | الدَّمُ | the blood | 11 |
+| 84  | كَبْشٌ | a ram | 11 |
+| 85  | ذَبَحُوهُ | they slaughtered it | 11 |
+| 86  | قَمِيصٌ | a shirt | 11 |
+| 87  | صَبَغُوهُ | they dyed it | 11 |
+| 88  | يُصَدِّقُ | he believes | 11 |
+| 89  | عِشَاءً | at nightfall | 12 |
+| 90  | يَبْكُونَ | weeping | 12 |
+| 91  | نَسْتَبِقُ | we race | 12 |
+| 92  | مَتَاعٌ | belongings | 12 |
+| 93  | كَذِبٌ | false | 12 |
+| 94  | أَعْقَلَ | wiser | 12 |
+| 95  | أَوْلَادٌ | sons | 12 |

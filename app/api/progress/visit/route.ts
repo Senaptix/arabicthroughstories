@@ -30,11 +30,22 @@ export async function POST(request: Request) {
     },
     { onConflict: "child_id,book_slug,page_number" },
   );
+  // "Continue" must track the FURTHEST page reached, not the last one
+  // visited. Re-reading an earlier page — from the free preview, a shared
+  // link, or a child clicking back — must never pull last_page backward.
+  const { data: existingBook } = await supabase
+    .from("book_progress")
+    .select("last_page")
+    .eq("child_id", context.profile.id)
+    .eq("book_slug", parsed.data.bookSlug)
+    .maybeSingle();
+  const lastPage = Math.max(existingBook?.last_page ?? 0, parsed.data.page);
+
   const bookResult = await supabase.from("book_progress").upsert(
     {
       child_id: context.profile.id,
       book_slug: parsed.data.bookSlug,
-      last_page: parsed.data.page,
+      last_page: lastPage,
       last_seen_at: now,
     },
     { onConflict: "child_id,book_slug" },

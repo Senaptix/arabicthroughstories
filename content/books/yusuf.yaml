@@ -1,0 +1,40 @@
+slug: yusuf
+title_en: The Story of Yusuf
+# From the source's own title page: قِصَّةُ سَيِّدِنَا يُوسُف / أَحْسَنُ الْقَصَصِ.
+# CONFIRM BEFORE LAUNCH — the vowelling here was read off the scan, and the
+# editor may want the cover to carry a phrase from the story instead, the way
+# Book 1 uses مَنْ كَسَرَ الْأَصْنَامَ؟ rather than its formal title.
+title_ar: أَحْسَنُ الْقَصَصِ
+series: qisas-an-nabiyyin
+series_order: 2
+
+# Cover, contents, and 57 story pages. The back matter — the page-ordered
+# glossary and the word-family appendix — is not designed yet, so it is not
+# declared here. Adding it later raises page_count and extends
+# non_story_pages; parse.check.ts will demand text for anything in between,
+# which is the guard working as intended.
+page_count: 59
+age_range: "7 and up"
+
+# The Amazon listing. LEAVE EMPTY until it is live — the buy button is hidden
+# entirely while this is blank rather than pointing nowhere.
+buy_url: ""
+
+# No recordings yet. Book 1's narrator should record Book 2: a different voice
+# breaks the series for a child who has just spent a term with the first one.
+audio_status: none
+
+non_story_pages: [1, 2]
+
+# Same depth as Book 1. For a family who already owns Ibrahim this preview is
+# the shop window — they read the opening of Yusuf, meet the gate, and that
+# gate is the reason to buy the second book.
+preview_pages: 10
+
+# Empty until there is a Yusuf marketing page. Sample pages need an English
+# rendering beside the Arabic, and the English is only written as far as
+# printed page 12.
+sample_pages: []
+
+# No audio, so no read-along.
+read_alongs: []

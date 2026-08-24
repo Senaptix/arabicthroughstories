@@ -952,7 +952,7 @@ export default function Home() {
               className="text-brand-blue font-semibold"
               style={{ fontSize: "13px", letterSpacing: "0.1em" }}
             >
-              COMING SOON
+              THE TEXT IS UP — AUDIO AND PICTURES TO COME
             </p>
             <p
               className="text-ink/75 mt-4 max-w-[62ch]"
@@ -967,11 +967,20 @@ export default function Home() {
               className="text-ink/75 mt-4 max-w-[62ch]"
               style={{ fontSize: "17px", lineHeight: 1.65 }}
             >
-              It carries more than twice the Arabic of Ibrahim, so it takes
-              longer to make. The Arabic is transcribed. The English, the
-              recordings and the pictures are being built now, and this page
-              will say when they are ready.
+              All fifty-seven pages of his Arabic are on the site now, fully
+              vowelled. The recordings have not started, the word lists reach
+              page twelve so far, and the pictures are still being made. You can
+              read the opening pages today without an account.
             </p>
+            <div className="mt-6">
+              <Link
+                href="/books/yusuf"
+                className="border-brand-blue text-brand-blue hover:bg-brand-blue/5 inline-flex min-h-[48px] items-center rounded-xl border px-5 font-medium transition-colors"
+                style={{ fontSize: "16px" }}
+              >
+                Read the first pages of Yusuf
+              </Link>
+            </div>
             <p
               className="text-ink/50 mt-5 max-w-[62ch]"
               style={{ fontSize: "15px", lineHeight: 1.6 }}
