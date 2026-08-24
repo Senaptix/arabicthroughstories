@@ -6,9 +6,13 @@ import BookReader, { type ReaderPage } from "@/components/BookReader";
 import Eyebrow from "@/components/Eyebrow";
 import Practice from "@/components/Practice";
 import ReadAlong from "@/components/ReadAlong";
+import TextPreview, { type PreviewPage } from "@/components/TextPreview";
 import {
+  getAllBooks,
   getBook,
+  getPageNumbers,
   getReadAlong,
+  parsePageText,
   parseExercises,
   parseRootFamilies,
   parseVocabulary,
@@ -113,6 +117,30 @@ export default function Home() {
   // companion home. Keeping the image, vocabulary and read-along sources
   // together ensures the page being shown and its support material cannot
   // drift apart.
+  /*
+   * Book two's preview is TEXT, because book two has no artwork yet.
+   *
+   * Driven off content/books rather than hardcoded, so this section appears
+   * by itself when a third book lands and disappears if Yusuf is removed.
+   * `next` is the first book after this one in series order that is not the
+   * book this page is selling.
+   */
+  const next = getAllBooks().find((b) => b.slug !== SLUG);
+  const nextPreview: PreviewPage[] = next
+    ? (() => {
+        const text = parsePageText(next.slug);
+        return getPageNumbers(next)
+          .filter(
+            (n) => n <= next.preview_pages && !next.non_story_pages.includes(n),
+          )
+          .map((n) => ({ n, lines: text.get(n) ?? [] }))
+          .filter((p) => p.lines.length > 0);
+      })()
+    : [];
+  const nextStoryPages = next
+    ? next.page_count - next.non_story_pages.length
+    : 0;
+
   const readerPages: ReaderPage[] = Array.from(
     { length: book.preview_pages },
     (_, idx) => {
@@ -967,22 +995,26 @@ export default function Home() {
               className="text-ink/75 mt-4 max-w-[62ch]"
               style={{ fontSize: "17px", lineHeight: 1.65 }}
             >
-              All fifty-seven pages of his Arabic are on the site now, fully
-              vowelled. The recordings have not started, the word lists reach
-              page twelve so far, and the pictures are still being made. You can
-              read the opening pages today without an account.
+              All {nextStoryPages} pages of his Arabic are on the site now,
+              fully vowelled. Read the opening below — no account needed. The
+              recordings, the word lists and the pictures are still being made,
+              and the printed book follows them.
             </p>
-            <div className="mt-6">
-              <Link
-                href="/books/yusuf"
-                className="border-brand-blue text-brand-blue hover:bg-brand-blue/5 inline-flex min-h-[48px] items-center rounded-xl border px-5 font-medium transition-colors"
-                style={{ fontSize: "16px" }}
-              >
-                Read the first pages of Yusuf
-              </Link>
-            </div>
+
+            {/* The preview itself, not a link to one. Someone who has just
+                read about book two should be able to read book two. */}
+            {nextPreview.length > 0 && next && (
+              <div className="mt-7">
+                <TextPreview
+                  pages={nextPreview}
+                  totalStoryPages={nextStoryPages}
+                  slug={next.slug}
+                />
+              </div>
+            )}
+
             <p
-              className="text-ink/50 mt-5 max-w-[62ch]"
+              className="text-ink/50 mt-6 max-w-[62ch]"
               style={{ fontSize: "15px", lineHeight: 1.6 }}
             >
               Book two opens the way this one does. Buy the book, add the order

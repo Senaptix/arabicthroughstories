@@ -6,10 +6,11 @@ series_order: 1
 page_count: 54
 age_range: "7 and up"
 
-# The Amazon listing. LEAVE EMPTY until it is live — the landing page hides
-# the buy button entirely while this is blank rather than showing one that
-# goes nowhere. Pasting the URL here is the only change needed to go live.
-buy_url: ""
+# The Amazon listing. LIVE since 24 August 2026 — the Kindle edition is on
+# sale and the paperback follows within days. Setting this switched on the
+# hero CTA, the look-inside CTA and the nav button; they render nothing while
+# it is blank, which is how the site shipped before the listing existed.
+buy_url: "https://amzn.eu/d/00MdbO1C"
 audio_status: none
 # Cover, contents, and the two word-family appendix pages carry no story
 # text and so have no per-page glossary or audio clip.
