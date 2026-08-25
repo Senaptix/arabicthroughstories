@@ -120,7 +120,7 @@ export default function Home() {
   // together ensures the page being shown and its support material cannot
   // drift apart.
   /*
-   * Book two's preview is TEXT, because book two has no artwork yet.
+   * Part 2's preview is TEXT, because Part 2 has no artwork yet.
    *
    * Driven off content/books rather than hardcoded, so this section appears
    * by itself when a third book lands and disappears if Yusuf is removed.
@@ -249,8 +249,10 @@ export default function Home() {
           >
             We are making an illustrated edition of it, one story at a time.
             Every vowel marked, the English on the same page, every page read
-            aloud. <strong className="text-ink font-semibold">Book one is
-            out now.</strong>
+            aloud.{" "}
+            <strong className="text-ink font-semibold">
+              Volume 1, Part 1 is out now.
+            </strong>
           </p>
 
           <p
@@ -280,7 +282,7 @@ export default function Home() {
                   className="bg-brand-blue text-paper inline-flex min-h-[48px] items-center rounded-2xl px-6 font-medium transition-transform duration-150 ease-out hover:-translate-y-0.5"
                   style={{ fontSize: "16px" }}
                 >
-                  {buyLabel(book.series_order)}
+                  {buyLabel(book.slug)}
                 </a>
                 <a
                   href="#inside"
@@ -332,9 +334,9 @@ export default function Home() {
        *
        * This sits directly under the hero because the hero now introduces the
        * WORK rather than one book, and the obvious next question is "which
-       * stories?". Everything below this point is the case for book one in
-       * particular; this is what tells a visitor book one is part of
-       * something, and that book two's Arabic can already be read.
+       * stories?". Everything below this point is the case for Volume 1 Part 1
+       * in particular; this is what tells a visitor it is part of something,
+       * and that Part 2's Arabic can already be read.
        * ---------------------------------------------------------------- */}
       <section
         id="stories"
@@ -356,11 +358,12 @@ export default function Home() {
             className="text-ink/70 mt-4 max-w-[58ch]"
             style={{ fontSize: "17px", lineHeight: 1.65 }}
           >
-            Shaykh Abul Hasan published these in four volumes between 1944 and
-            1977. Each story becomes its own illustrated book here. Ibrahim is
-            printed and on sale; Yusuf&rsquo;s Arabic is on the site now and you
-            can read it today while the recordings and the pictures are made.
-            The rest are still to come, in his order.
+            Shaykh Abul Hasan published these between 1944 and 1977. Teachers
+            know the set as Books 1 to 5, the fifth being the Seerah — so we
+            keep his numbering and call each story a <strong>Part</strong> of
+            its volume, never &ldquo;Book one&rdquo;. Volume 1, Part 1 is
+            printed and on sale; Part 2, Yusuf, has its Arabic on the site now
+            while the recordings and pictures are made.
           </p>
         </div>
 
@@ -415,7 +418,7 @@ export default function Home() {
                   className="bg-brand-blue text-paper inline-flex min-h-[48px] items-center rounded-2xl px-7 font-medium transition-transform duration-150 ease-out hover:-translate-y-0.5"
                   style={{ fontSize: "16px" }}
                 >
-                  {buyLabel(book.series_order)}
+                  {buyLabel(book.slug)}
                 </a>
               </div>
             )}
@@ -1030,7 +1033,7 @@ export default function Home() {
                 letterSpacing: "-0.015em",
               }}
             >
-              Book two is the story of Yusuf.
+              Part 2 is the story of Yusuf.
             </h2>
           </div>
 
@@ -1061,7 +1064,7 @@ export default function Home() {
             </p>
 
             {/* The preview itself, not a link to one. Someone who has just
-                read about book two should be able to read book two. */}
+                read about Part 2 should be able to read Part 2. */}
             {nextPreview.length > 0 && next && (
               <div className="mt-7">
                 <TextPreview
@@ -1076,8 +1079,8 @@ export default function Home() {
               className="text-ink/50 mt-6 max-w-[62ch]"
               style={{ fontSize: "15px", lineHeight: 1.6 }}
             >
-              Book two opens the way this one does. Buy the book, add the order
-              to your account, and its companion opens for a year.
+              Part 2 opens the way Part 1 does. Buy the book, add the order to
+              your account, and its companion opens for a year.
             </p>
           </div>
         </div>

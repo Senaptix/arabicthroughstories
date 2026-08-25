@@ -31,8 +31,10 @@ export type CatalogueStatus =
   | "planned";
 
 export type CatalogueEntry = {
-  /** Which of the four published volumes this story belongs to. */
+  /** Which of the published volumes this story belongs to. */
   volume: number;
+  /** Position within that volume. Volume 1 is Part 1 Ibrahim, Part 2 Yusuf. */
+  part: number;
   /** The prophet, as a reader would name the story. */
   prophet: string;
   /** Our edition's English title, where it has one. */
@@ -43,6 +45,20 @@ export type CatalogueEntry = {
   slug?: string;
   status: CatalogueStatus;
 };
+
+/**
+ * NAMING — read this before changing a label.
+ *
+ * Shaykh Abul Hasan's set is five books: Books 1-4 are the stories of the
+ * Prophets and Book 5 is the Seerah. To a teacher, "Book 1" therefore means
+ * the whole of the first volume, both its stories.
+ *
+ * So this edition never says "Book one". Our printed Ibrahim is
+ * **Part 1 of Volume 1**, and Yusuf is Part 2 of Volume 1. Ustadh Akhlaaq
+ * raised this: calling Ibrahim "Book 1" collides with what every teacher
+ * already means by it, and there is no version of that confusion worth having
+ * in front of the people most likely to recommend the book.
+ */
 
 /** الجزء الأول … الجزء الرابع, as the deck names them. */
 export const VOLUME_TITLES: Record<number, string> = {
@@ -55,6 +71,7 @@ export const VOLUME_TITLES: Record<number, string> = {
 export const CATALOGUE: readonly CatalogueEntry[] = [
   {
     volume: 1,
+    part: 1,
     prophet: "Ibrahim",
     titleEn: "Who Broke the Idols?",
     titleAr: "من كسر الأصنام؟",
@@ -63,6 +80,7 @@ export const CATALOGUE: readonly CatalogueEntry[] = [
   },
   {
     volume: 1,
+    part: 2,
     prophet: "Yusuf",
     titleEn: "The Best of Stories",
     titleAr: "أحسن القصص",
@@ -71,6 +89,7 @@ export const CATALOGUE: readonly CatalogueEntry[] = [
   },
   {
     volume: 2,
+    part: 1,
     prophet: "Nuh",
     titleEn: "Nuh's Ark",
     titleAr: "سفينة نوح",
@@ -78,6 +97,7 @@ export const CATALOGUE: readonly CatalogueEntry[] = [
   },
   {
     volume: 2,
+    part: 2,
     prophet: "Hud",
     titleEn: "The Storm",
     titleAr: "العاصفة",
@@ -85,6 +105,7 @@ export const CATALOGUE: readonly CatalogueEntry[] = [
   },
   {
     volume: 2,
+    part: 3,
     prophet: "Salih",
     titleEn: "The She-Camel of Thamud",
     titleAr: "ناقة ثمود",
@@ -92,12 +113,14 @@ export const CATALOGUE: readonly CatalogueEntry[] = [
   },
   {
     volume: 3,
+    part: 1,
     prophet: "Musa",
     titleAr: "قصة سيدنا موسى عليه السلام",
     status: "planned",
   },
   {
     volume: 4,
+    part: 1,
     prophet: "",
     titleEn: "A Look Back at the Earlier Stories",
     titleAr: "نظرة على القصص السابقة",
@@ -105,53 +128,40 @@ export const CATALOGUE: readonly CatalogueEntry[] = [
   },
   {
     volume: 4,
+    part: 2,
     prophet: "Shu'aib",
     titleAr: "قصة سيدنا شعيب عليه السلام",
     status: "planned",
   },
   {
     volume: 4,
+    part: 3,
     prophet: "Dawud and Sulayman",
     titleAr: "قصة سيدنا داود وسليمان عليهما السلام",
     status: "planned",
   },
   {
     volume: 4,
+    part: 4,
     prophet: "Ayyub and Yunus",
     titleAr: "قصة سيدنا أيوب ويونس عليهما السلام",
     status: "planned",
   },
   {
     volume: 4,
+    part: 5,
     prophet: "Zakariya",
     titleAr: "قصة سيدنا زكريا عليه السلام",
     status: "planned",
   },
   {
     volume: 4,
+    part: 6,
     prophet: "Isa",
     titleAr: "قصة سيدنا عيسى عليه السلام",
     status: "planned",
   },
 ];
-
-/**
- * The label for a buy button — "Get book one", not "Get the book".
- *
- * This site sells one part of a four-volume work, and "the book" made it sound
- * like there is only ever one. Derived from the yaml's `series_order` so it
- * says "book two" by itself the day Yusuf lists, rather than needing a hunt
- * through four call sites.
- */
-const ORDINALS = [
-  "", "one", "two", "three", "four", "five", "six",
-  "seven", "eight", "nine", "ten", "eleven", "twelve",
-];
-
-export function buyLabel(seriesOrder: number | null | undefined): string {
-  const word = seriesOrder ? ORDINALS[seriesOrder] : undefined;
-  return word ? `Get book ${word}` : "Get the book";
-}
 
 /** Buyable — the signal the gate and the coming-soon notices key off. */
 export function isPublished(slug: string): boolean {
@@ -160,6 +170,18 @@ export function isPublished(slug: string): boolean {
 
 export function catalogueEntry(slug: string): CatalogueEntry | undefined {
   return CATALOGUE.find((b) => b.slug === slug);
+}
+
+/** "Volume 1, Part 1" — how this edition names a story. Never "Book one". */
+export function partLabel(slug: string): string | null {
+  const e = catalogueEntry(slug);
+  return e ? `Volume ${e.volume}, Part ${e.part}` : null;
+}
+
+/** The label for a buy button. */
+export function buyLabel(slug: string): string {
+  const p = partLabel(slug);
+  return p ? `Get ${p}` : "Get the book";
 }
 
 /**

@@ -17,6 +17,11 @@ import {
  * Grouped by الجزء because that is how the work is published and taught, and
  * because it explains the gaps: volume two is three stories, not one.
  *
+ * NAMING. Never "Book one". Shaykh Abul Hasan's set is five books — Books 1-4
+ * are the Prophets' stories and Book 5 is the Seerah — so to a teacher "Book
+ * 1" already means the whole first volume. Each story is a PART of its volume,
+ * and the volume heading says which Book it is so a teacher recognises it.
+ *
  * Deliberately shows the unmade ones too. A list that quietly stopped after
  * the two we have would read as a two-book series; the point is that it is
  * not. Being honest about what is not started costs nothing and makes the two
@@ -52,19 +57,30 @@ export default function SeriesIndex({
     <div className="flex flex-col gap-8">
       {volumes.map((v) => (
         <div key={v}>
-          <p
-            lang="ar"
-            dir="rtl"
-            className="text-brand-blue mb-3"
-            style={{
-              fontFamily: "var(--font-arabic)",
-              fontSize: "18px",
-              lineHeight: 1.9,
-              textAlign: "start",
-            }}
-          >
-            {VOLUME_TITLES[v]}
-          </p>
+          <div className="mb-3 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            <p
+              lang="ar"
+              dir="rtl"
+              className="text-brand-blue"
+              style={{
+                fontFamily: "var(--font-arabic)",
+                fontSize: "18px",
+                lineHeight: 1.9,
+                textAlign: "start",
+              }}
+            >
+              {VOLUME_TITLES[v]}
+            </p>
+            <p className="text-ink/60 text-[14px] font-medium">
+              Volume {v}
+            </p>
+            {/* Teachers know the original set as Books 1-5. Saying so here is
+                what makes this list recognisable to the people most likely to
+                recommend it. */}
+            <p className="text-ink/40 text-[13px]">
+              Book {v} of Shaykh Abul Hasan&rsquo;s set
+            </p>
+          </div>
 
           <ul className="divide-ink/10 border-ink/12 divide-y overflow-hidden rounded-2xl border">
             {CATALOGUE.filter((s) => s.volume === v).map((story) => {
@@ -78,6 +94,7 @@ export default function SeriesIndex({
               const english =
                 story.titleEn ?? `The story of ${story.prophet}`;
               const sub = [
+                `Part ${story.part}`,
                 story.titleEn && story.prophet
                   ? `The story of ${story.prophet}`
                   : null,

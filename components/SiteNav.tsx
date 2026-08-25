@@ -21,9 +21,9 @@ import { getBook } from "@/lib/parse";
  * TWO buttons stay OUTSIDE the menu at every width, and their order is the
  * whole funnel:
  *
- *   The buy button is primary and blue, and NAMES the book — "Get book one",
- *   not "Get the book", because this site sells one part of a four-volume
- *   work. Most people arriving here have not bought anything, and selling the
+ *   The buy button is primary and blue, and NAMES the part — "Get Volume 1,
+ *   Part 1". Never "Book one": to a teacher "Book 1" means the whole first
+ *   volume. Most people arriving here have not bought anything, and selling the
  *   book is what this site is for.
  *
  *   "Book companion" is now the outline button rather than the blue one. It
@@ -46,9 +46,7 @@ function buyUrlFor(bookSlug?: string): { url: string; label: string } | null {
   const urlOf = (slug: string): { url: string; label: string } | null => {
     try {
       const b = getBook(slug);
-      return b.buy_url
-        ? { url: b.buy_url, label: buyLabel(b.series_order) }
-        : null;
+      return b.buy_url ? { url: b.buy_url, label: buyLabel(slug) } : null;
     } catch {
       return null;
     }
