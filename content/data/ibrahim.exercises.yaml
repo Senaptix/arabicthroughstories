@@ -191,6 +191,14 @@ pages:
             en: 'knows'
           - ar: 'يَسْأَلُ'
             en: 'asks'
+      - type: 'question'
+        ar: 'مَاذَا كَانَ يَأْكُلُ طَعَامَ الْأَصْنَامِ؟'
+        en: 'What was eating the idols'' food?'
+        answer: 'الْفَأْرَ'
+        options:
+          - 'الْفَأْرَ'
+          - 'الذُّبَابَ'
+          - 'النَّاسَ'
   - page: !!int '8'
     exercises:
       - type: 'match'
@@ -666,6 +674,14 @@ pages:
             en: 'This is my Lord!'
           - ar: 'لَا، هَذَا لَيْسَ رَبِّي.'
             en: 'No, this is not my Lord.'
+      - type: 'question'
+        ar: 'مَاذَا قَالَ إِبْرَاهِيمُ؟'
+        en: 'What did Ibrahim say about the star?'
+        answer: 'هَذَا رَبِّي'
+        options:
+          - 'هَذَا رَبِّي'
+          - 'أَنَا سَقِيمٌ'
+          - 'أَلَا تَتَكَلَّمُونَ'
   - page: !!int '20'
     exercises:
       - type: 'choose'
@@ -789,6 +805,14 @@ pages:
             en: 'alive'
           - ar: 'قَوِيٌّ'
             en: 'strong'
+      - type: 'question'
+        ar: 'مَنْ رَبُّ إِبْرَاهِيمَ؟'
+        en: 'Who is Ibrahim''s Lord?'
+        answer: 'اللهُ'
+        options:
+          - 'اللهُ'
+          - 'الشَّمْسُ'
+          - 'الْمَلِكُ'
   - page: !!int '24'
     exercises:
       - type: 'match'
@@ -849,6 +873,14 @@ pages:
             en: 'We worship the idols.'
           - ar: 'لَا، وَلَكِنْ وَجَدْنَا آبَاءَنَا يَفْعَلُونَ هَكَذَا.'
             en: 'No, but we found our fathers doing this.'
+      - type: 'question'
+        ar: 'مَاذَا كَانَ يَعْبُدُ قَوْمُ إِبْرَاهِيمَ؟'
+        en: 'What did Ibrahim''s people worship?'
+        answer: 'الْأَصْنَامَ'
+        options:
+          - 'الْأَصْنَامَ'
+          - 'اللَّهَ'
+          - 'الْمَلِكَ'
   - page: !!int '26'
     exercises:
       - type: 'match'
@@ -981,6 +1013,14 @@ pages:
             en: 'to the king.'
           - ar: 'لِلْأَصْنَامِ.'
             en: 'to the idols.'
+      - type: 'question'
+        ar: 'مَنْ كَانَ يَسْجُدُ لِلْمَلِكِ؟'
+        en: 'Who prostrated to the king?'
+        answer: 'النَّاسُ'
+        options:
+          - 'النَّاسُ'
+          - 'إِبْرَاهِيمُ'
+          - 'هَاجَرُ'
   - page: !!int '30'
     exercises:
       - type: 'match'
@@ -1249,6 +1289,14 @@ pages:
             en: 'another city'
           - ar: 'قَرْيَةٍ'
             en: 'a village'
+      - type: 'question'
+        ar: 'مَنْ ذَهَبَ إِلَى مَكَّةَ؟'
+        en: 'Who went to Makkah?'
+        answer: 'إِبْرَاهِيمُ'
+        options:
+          - 'إِبْرَاهِيمُ'
+          - 'إِسْحَاقُ'
+          - 'الْمَلِكُ'
   - page: !!int '38'
     exercises:
       - type: 'match'
@@ -1381,6 +1429,14 @@ pages:
           - 'بَيْنَ'
           - 'الصَّفَا'
           - 'وَالْمَرْوَةِ.'
+      - type: 'question'
+        ar: 'مَنْ كَانَتِ تَبْحَثُ عَنِ الْمَاءِ؟'
+        en: 'Who was searching for water?'
+        answer: 'هَاجَرُ'
+        options:
+          - 'هَاجَرُ'
+          - 'إِبْرَاهِيمُ'
+          - 'سَارَةُ'
   - page: !!int '42'
     exercises:
       - type: 'match'
@@ -1452,6 +1508,14 @@ pages:
             en: 'advises'
           - ar: 'يَعْرِفُ'
             en: 'knows'
+      - type: 'question'
+        ar: 'مَنْ كَانَ يَجْرِي وَيَلْعَبُ؟'
+        en: 'Who was running and playing?'
+        answer: 'إِسْمَاعِيلُ'
+        options:
+          - 'إِسْمَاعِيلُ'
+          - 'إِبْرَاهِيمُ'
+          - 'إِسْحَاقُ'
   - page: !!int '44'
     exercises:
       - type: 'match'
@@ -1593,6 +1657,14 @@ pages:
             en: 'Ibrahim'
           - ar: 'قَوْمَهُ'
             en: 'his people'
+      - type: 'question'
+        ar: 'مَاذَا قَالَ جِبْرِيلُ؟'
+        en: 'What did Jibril say?'
+        answer: 'اذْبَحْ هَذَا'
+        options:
+          - 'اذْبَحْ هَذَا'
+          - 'أَنَا سَقِيمٌ'
+          - 'هَذَا رَبِّي'
   - page: !!int '48'
     exercises:
       - type: 'choose'
@@ -1619,6 +1691,14 @@ pages:
           - 'يَكُنْ'
           - 'بَيْتٌ'
           - 'لِلَّهِ.'
+      - type: 'question'
+        ar: 'مَاذَا أَرَادَ إِبْرَاهِيمُ أَنْ يَبْنِيَ؟'
+        en: 'What did Ibrahim want to build?'
+        answer: 'بَيْتًا'
+        options:
+          - 'بَيْتًا'
+          - 'كَوْكَبًا'
+          - 'رَجُلًا'
   - page: !!int '49'
     exercises:
       - type: 'match'
