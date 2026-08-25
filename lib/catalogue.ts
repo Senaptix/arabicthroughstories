@@ -1,21 +1,26 @@
 /**
- * The SERIES: every story in Qasas an-Nabiyyin lil-Atfal that this edition
- * covers, in the order Shaykh Abul Hasan wrote them.
+ * The SERIES: every story in Qasas an-Nabiyyin lil-Atfal, grouped into the
+ * four volumes Shaykh Abul Hasan published them in.
+ *
+ * GENERATED from the editor's own teaching slides — "03 Qasas Introduction
+ * 3.pptx", slide 5, which lists the work's structure as it is taught. Rebuild
+ * with scratchpad/gen_catalogue.py rather than editing by hand.
+ *
+ * The Arabic titles are copied out of that deck, never retyped. They are HIS
+ * titles, not descriptions: Nuh's story is سفينة نوح, Hud's is العاصفة,
+ * Salih's is ناقة ثمود. An earlier version of this file used generic
+ * "قصة سيدنا X" titles taken from a third-party app; those were wrong, and so
+ * was its story list — Ayyub and Yunus are ONE story, and Zakariya stands
+ * alone.
  *
  * This is not the same list as `getAllBooks()`. That enumerates content/books —
- * the stories whose Arabic, audio and vocabulary actually exist on this site.
- * This list is deliberately wider, because the site is an edition of a
- * twelve-story work and a visitor should see the whole shape of it, including
- * the parts not made yet. A story with no `slug` has no pages to link to.
+ * the stories whose Arabic actually exists on this site. This list is wider on
+ * purpose: the site is an edition of a whole work, and a visitor should see
+ * the shape of it including the parts not made yet. A story with no `slug` has
+ * no pages to link to.
  *
  * Asma also approves receipts against this list, so a story can be sold and
  * granted before its companion content ships.
- *
- * ARABIC TITLES ONLY WHERE WE HAVE OUR OWN. Ibrahim and Yusuf carry the titles
- * from their own yaml. The rest are left without Arabic on purpose: the only
- * Arabic titles available for them come from a third-party app whose text has
- * already been shown to differ from the printed book, and unverified Arabic
- * does not go on this site.
  */
 export type CatalogueStatus =
   /** Buyable now. */
@@ -26,38 +31,108 @@ export type CatalogueStatus =
   | "planned";
 
 export type CatalogueEntry = {
+  /** Which of the four published volumes this story belongs to. */
+  volume: number;
   /** The prophet, as a reader would name the story. */
   prophet: string;
-  /** Our edition's title, where it has one. */
+  /** Our edition's English title, where it has one. */
   titleEn?: string;
+  /** Shaykh Abul Hasan's own Arabic title for the story. */
+  titleAr: string;
   /** Present only when there are pages to link to. */
   slug?: string;
   status: CatalogueStatus;
 };
 
+/** الجزء الأول … الجزء الرابع, as the deck names them. */
+export const VOLUME_TITLES: Record<number, string> = {
+  1: "الجزء الأول",
+  2: "الجزء الثاني",
+  3: "الجزء الثالث",
+  4: "الجزء الرابع",
+};
+
 export const CATALOGUE: readonly CatalogueEntry[] = [
   {
+    volume: 1,
     prophet: "Ibrahim",
     titleEn: "Who Broke the Idols?",
+    titleAr: "من كسر الأصنام؟",
     slug: "ibrahim",
     status: "on-sale",
   },
   {
+    volume: 1,
     prophet: "Yusuf",
     titleEn: "The Best of Stories",
+    titleAr: "أحسن القصص",
     slug: "yusuf",
     status: "text-online",
   },
-  { prophet: "Nuh", status: "planned" },
-  { prophet: "Hud", status: "planned" },
-  { prophet: "Salih", status: "planned" },
-  { prophet: "Musa", status: "planned" },
-  { prophet: "Shu'aib", status: "planned" },
-  { prophet: "Dawud and Sulayman", status: "planned" },
-  { prophet: "Ayyub", status: "planned" },
-  { prophet: "Yunus", status: "planned" },
-  { prophet: "Zakariya and Yahya", status: "planned" },
-  { prophet: "Isa", status: "planned" },
+  {
+    volume: 2,
+    prophet: "Nuh",
+    titleEn: "Nuh's Ark",
+    titleAr: "سفينة نوح",
+    status: "planned",
+  },
+  {
+    volume: 2,
+    prophet: "Hud",
+    titleEn: "The Storm",
+    titleAr: "العاصفة",
+    status: "planned",
+  },
+  {
+    volume: 2,
+    prophet: "Salih",
+    titleEn: "The She-Camel of Thamud",
+    titleAr: "ناقة ثمود",
+    status: "planned",
+  },
+  {
+    volume: 3,
+    prophet: "Musa",
+    titleAr: "قصة سيدنا موسى عليه السلام",
+    status: "planned",
+  },
+  {
+    volume: 4,
+    prophet: "",
+    titleEn: "A Look Back at the Earlier Stories",
+    titleAr: "نظرة على القصص السابقة",
+    status: "planned",
+  },
+  {
+    volume: 4,
+    prophet: "Shu'aib",
+    titleAr: "قصة سيدنا شعيب عليه السلام",
+    status: "planned",
+  },
+  {
+    volume: 4,
+    prophet: "Dawud and Sulayman",
+    titleAr: "قصة سيدنا داود وسليمان عليهما السلام",
+    status: "planned",
+  },
+  {
+    volume: 4,
+    prophet: "Ayyub and Yunus",
+    titleAr: "قصة سيدنا أيوب ويونس عليهما السلام",
+    status: "planned",
+  },
+  {
+    volume: 4,
+    prophet: "Zakariya",
+    titleAr: "قصة سيدنا زكريا عليه السلام",
+    status: "planned",
+  },
+  {
+    volume: 4,
+    prophet: "Isa",
+    titleAr: "قصة سيدنا عيسى عليه السلام",
+    status: "planned",
+  },
 ];
 
 /** Buyable — the signal the gate and the coming-soon notices key off. */

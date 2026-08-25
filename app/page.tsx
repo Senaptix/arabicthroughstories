@@ -350,16 +350,17 @@ export default function Home() {
               letterSpacing: "-0.015em",
             }}
           >
-            Twelve stories, made one at a time.
+            Four volumes, made one story at a time.
           </h2>
           <p
             className="text-ink/70 mt-4 max-w-[58ch]"
             style={{ fontSize: "17px", lineHeight: 1.65 }}
           >
-            Each story becomes its own illustrated book. Ibrahim is printed and
-            on sale. Yusuf&rsquo;s Arabic is on the site now and you can read it
-            today, while the recordings and the pictures are made. The rest are
-            still to come, in the order Shaykh Abul Hasan wrote them.
+            Shaykh Abul Hasan published these in four volumes between 1944 and
+            1977. Each story becomes its own illustrated book here. Ibrahim is
+            printed and on sale; Yusuf&rsquo;s Arabic is on the site now and you
+            can read it today while the recordings and the pictures are made.
+            The rest are still to come, in his order.
           </p>
         </div>
 
