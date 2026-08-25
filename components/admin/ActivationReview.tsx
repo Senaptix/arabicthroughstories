@@ -50,6 +50,12 @@ export default function ActivationReview({
   // on us, which is the worst version of this queue going unread.
   const pressing = daysLeft !== null && daysLeft <= 7;
 
+  // Only stories that exist can be granted. The catalogue also lists the ones
+  // not started in this edition; those have no slug and nothing to unlock.
+  const grantable = catalogue.filter(
+    (b): b is CatalogueEntry & { slug: string } => Boolean(b.slug),
+  );
+
   if (state.ok) {
     return (
       <li className="px-5 py-4">
@@ -88,7 +94,7 @@ export default function ActivationReview({
             Books on this receipt
           </legend>
           <div className="mt-2 flex flex-wrap gap-x-5 gap-y-2">
-            {catalogue.map((book) => (
+            {grantable.map((book) => (
               <label
                 key={book.slug}
                 className="text-ink/80 flex min-h-[32px] items-center gap-2 text-[15px]"
@@ -100,8 +106,8 @@ export default function ActivationReview({
                   defaultChecked={claimedBooks.includes(book.slug)}
                   className="h-4 w-4"
                 />
-                {book.title}
-                {!book.published && (
+                {book.titleEn ?? book.prophet}
+                {book.status !== "on-sale" && (
                   <span className="text-ink/45 text-[13px]">(not yet live)</span>
                 )}
               </label>

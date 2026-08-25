@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getMembershipState } from "@/lib/access";
-import { CATALOGUE } from "@/lib/catalogue";
+import { isPublished } from "@/lib/catalogue";
 
 /**
  * What a visitor without a current entitlement sees in place of gated content.
@@ -30,12 +30,12 @@ export default async function GateNotice({
    * visitor to "enter the Amazon order number" for Yusuf would send them
    * hunting for a listing that does not exist.
    *
-   * The signal is CATALOGUE.published, NOT `buy_url === ""`. Ibrahim is
+   * The signal is the catalogue status, NOT `buy_url === ""`. Ibrahim is
    * published but its buy_url is still blank because the listing URL has not
    * been pasted in, so keying off buy_url would have shown Ibrahim's paying
    * buyers "this book is not published yet" instead of their activation route.
    */
-  const notYetOnSale = !CATALOGUE.find((b) => b.slug === bookSlug)?.published;
+  const notYetOnSale = !isPublished(bookSlug);
 
   if (notYetOnSale) {
     return (

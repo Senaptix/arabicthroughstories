@@ -1,37 +1,84 @@
 /**
- * Every book that can be BOUGHT, which is not the same list as every book that
- * has companion content.
+ * The SERIES: every story in Qasas an-Nabiyyin lil-Atfal that this edition
+ * covers, in the order Shaykh Abul Hasan wrote them.
  *
- * `getAllBooks()` enumerates content/books — the books whose Arabic, audio and
- * vocabulary exist. This list is deliberately separate and wider, because a
- * book goes on sale before its companion ships: Yusuf is on Amazon and its
- * receipts need approving while its content is still being built.
+ * This is not the same list as `getAllBooks()`. That enumerates content/books —
+ * the stories whose Arabic, audio and vocabulary actually exist on this site.
+ * This list is deliberately wider, because the site is an edition of a
+ * twelve-story work and a visitor should see the whole shape of it, including
+ * the parts not made yet. A story with no `slug` has no pages to link to.
  *
- * Asma approves against THIS list. Driving her queue off getAllBooks() would
- * make it impossible to grant a book that has been sold but not yet published,
- * which is exactly the case that matters at launch.
+ * Asma also approves receipts against this list, so a story can be sold and
+ * granted before its companion content ships.
  *
- * Adding a book here does not publish anything. It only lets an entitlement be
- * granted for it, so the day the content lands the people who already bought
- * it are already inside.
+ * ARABIC TITLES ONLY WHERE WE HAVE OUR OWN. Ibrahim and Yusuf carry the titles
+ * from their own yaml. The rest are left without Arabic on purpose: the only
+ * Arabic titles available for them come from a third-party app whose text has
+ * already been shown to differ from the printed book, and unverified Arabic
+ * does not go on this site.
  */
+export type CatalogueStatus =
+  /** Buyable now. */
+  | "on-sale"
+  /** Arabic readable on the site; recordings, pictures and print still to come. */
+  | "text-online"
+  /** Not started in this edition. */
+  | "planned";
+
 export type CatalogueEntry = {
-  slug: string;
-  /** Shown to the reviewer in the approval queue. */
-  title: string;
-  /** False until the companion content ships. */
-  published: boolean;
+  /** The prophet, as a reader would name the story. */
+  prophet: string;
+  /** Our edition's title, where it has one. */
+  titleEn?: string;
+  /** Present only when there are pages to link to. */
+  slug?: string;
+  status: CatalogueStatus;
 };
 
 export const CATALOGUE: readonly CatalogueEntry[] = [
-  { slug: "ibrahim", title: "Who Broke the Idols? — Ibrahim", published: true },
-  { slug: "yusuf", title: "The Story of Yusuf", published: false },
+  {
+    prophet: "Ibrahim",
+    titleEn: "Who Broke the Idols?",
+    slug: "ibrahim",
+    status: "on-sale",
+  },
+  {
+    prophet: "Yusuf",
+    titleEn: "The Best of Stories",
+    slug: "yusuf",
+    status: "text-online",
+  },
+  { prophet: "Nuh", status: "planned" },
+  { prophet: "Hud", status: "planned" },
+  { prophet: "Salih", status: "planned" },
+  { prophet: "Musa", status: "planned" },
+  { prophet: "Shu'aib", status: "planned" },
+  { prophet: "Dawud and Sulayman", status: "planned" },
+  { prophet: "Ayyub", status: "planned" },
+  { prophet: "Yunus", status: "planned" },
+  { prophet: "Zakariya and Yahya", status: "planned" },
+  { prophet: "Isa", status: "planned" },
 ];
 
-export function catalogueTitle(slug: string): string {
-  return CATALOGUE.find((b) => b.slug === slug)?.title ?? slug;
+/** Buyable — the signal the gate and the coming-soon notices key off. */
+export function isPublished(slug: string): boolean {
+  return CATALOGUE.some((b) => b.slug === slug && b.status === "on-sale");
 }
 
-export function isCatalogueSlug(slug: string): boolean {
-  return CATALOGUE.some((b) => b.slug === slug);
+export function catalogueEntry(slug: string): CatalogueEntry | undefined {
+  return CATALOGUE.find((b) => b.slug === slug);
 }
+
+/**
+ * The work this site is an edition of.
+ *
+ * The Arabic is the source's own running head, exactly as the editor supplied
+ * it and as it is printed at the top of every page of his copy. Unvowelled
+ * there and unvowelled here — a title is not the teaching text, and vowelling
+ * it would be inventing pointing the book itself does not use.
+ */
+export const SERIES = {
+  titleAr: "قصص النبيين للأطفال",
+  titleEn: "Qasas an-Nabiyyin lil-Atfal",
+  author: "Shaykh Sayyid Abul Hasan Ali al-Hasani an-Nadwi",
+} as const;

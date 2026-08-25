@@ -8,7 +8,7 @@ import {
   generateActivationCode,
 } from "@/lib/activation-codes";
 import { sendActivationCodeEmail } from "@/lib/activation-email";
-import { isCatalogueSlug } from "@/lib/catalogue";
+import { catalogueEntry } from "@/lib/catalogue";
 import { createClient } from "@/lib/supabase/server";
 
 export type IssueCodeState = {
@@ -121,7 +121,7 @@ export async function approveActivation(
   const books = formData
     .getAll("book")
     .map(String)
-    .filter((slug) => isCatalogueSlug(slug));
+    .filter((slug) => catalogueEntry(slug) !== undefined);
   if (books.length === 0) {
     return { message: "Tick at least one book before approving." };
   }

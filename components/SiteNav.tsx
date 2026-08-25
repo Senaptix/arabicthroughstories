@@ -53,7 +53,7 @@ function buyUrlFor(bookSlug?: string): string | null {
     if (own) return own;
   }
   for (const entry of CATALOGUE) {
-    if (entry.published) {
+    if (entry.status === "on-sale" && entry.slug) {
       const url = urlOf(entry.slug);
       if (url) return url;
     }
@@ -73,6 +73,7 @@ export default function SiteNav({ bookSlug, hideInside }: Props) {
   const buyUrl = buyUrlFor(bookSlug);
 
   const links = [
+    { href: "/#stories", label: "The stories" },
     ...(hideInside ? [] : [{ href: "/#inside", label: "Look inside" }]),
     { href: "/about", label: "Why we made this" },
     ...(bookSlug

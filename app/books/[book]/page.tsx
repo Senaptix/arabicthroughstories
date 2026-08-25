@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import HomeBar from "@/components/HomeBar";
 import PageIndex from "@/components/PageIndex";
 import Link from "next/link";
-import { CATALOGUE } from "@/lib/catalogue";
+import { isPublished } from "@/lib/catalogue";
 import {
   getAllBooks,
   getBook,
@@ -103,7 +103,7 @@ export default async function BookOverview({
           {/* An unpublished book says so on its own page. Keyed on the
               catalogue's `published` flag, not buy_url — Ibrahim is published
               with a blank buy_url, so buy_url would mislabel it. */}
-          {!CATALOGUE.find((b) => b.slug === book.slug)?.published && (
+          {!isPublished(book.slug) && (
             <p
               className="border-brand-blue/30 bg-sand/40 text-ink/75 mt-5 rounded-xl border px-4 py-3"
               style={{ fontSize: "15px", lineHeight: 1.6 }}

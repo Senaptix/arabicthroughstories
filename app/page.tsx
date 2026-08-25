@@ -7,6 +7,8 @@ import Eyebrow from "@/components/Eyebrow";
 import Practice from "@/components/Practice";
 import ReadAlong from "@/components/ReadAlong";
 import TextPreview, { type PreviewPage } from "@/components/TextPreview";
+import SeriesIndex from "@/components/SeriesIndex";
+import { SERIES } from "@/lib/catalogue";
 import {
   getAllBooks,
   getBook,
@@ -141,6 +143,12 @@ export default function Home() {
     ? next.page_count - next.non_story_pages.length
     : 0;
 
+  // The index shows each story's Arabic title from its OWN yaml. Stories with
+  // no book file have no verified Arabic title, so they show English only.
+  const arabicTitles: Record<string, string> = Object.fromEntries(
+    getAllBooks().map((b) => [b.slug, b.title_ar]),
+  );
+
   const readerPages: ReaderPage[] = Array.from(
     { length: book.preview_pages },
     (_, idx) => {
@@ -194,7 +202,7 @@ export default function Home() {
               lineHeight: 1.8,
             }}
           >
-            {book.title_ar}
+            {SERIES.titleAr}
           </span>
           <span aria-hidden="true" className="text-ink/25 hidden sm:inline">
             ·
@@ -203,7 +211,7 @@ export default function Home() {
             className="text-ink/60"
             style={{ fontSize: "14px", letterSpacing: "0.06em" }}
           >
-            {book.title_en}
+            {SERIES.titleEn}
           </span>
         </p>
 
@@ -220,20 +228,29 @@ export default function Home() {
               letterSpacing: "-0.02em",
             }}
           >
-            The Arabic book your
+            The book that has taught
             <br />
-            child can <span className="text-brand-blue">actually finish</span>.
+            Arabic to children for{" "}
+            <span className="text-brand-blue">seventy years</span>.
           </h1>
 
           <p
             className="text-ink/75 mt-6 max-w-[46ch]"
             style={{ fontSize: "clamp(16px, 2.5vw, 19px)", lineHeight: 1.65 }}
           >
-            The story of Ibrahim <span className="whitespace-nowrap">(as)</span>
-            , retold from Shaykh Abul Hasan&rsquo;s <i>Qasas an-Nabiyyin</i>. Every vowel
-            is marked, the English sits underneath, and every page is read
-            aloud — so a child who is still sounding words out can get through
-            all {storyPages} of them, and understand what they read.
+            <i>Qasas an-Nabiyyin lil-Atfal</i> — twelve stories of the Prophets,
+            written by Shaykh Abul Hasan Ali al-Hasani an-Nadwi for children
+            learning Arabic, and taught in seminaries ever since.
+          </p>
+
+          <p
+            className="text-ink/75 mt-4 max-w-[46ch]"
+            style={{ fontSize: "clamp(16px, 2.5vw, 19px)", lineHeight: 1.65 }}
+          >
+            We are making an illustrated edition of it, one story at a time.
+            Every vowel marked, the English on the same page, every page read
+            aloud. <strong className="text-ink font-semibold">Book one is
+            out now.</strong>
           </p>
 
           <p
@@ -307,6 +324,47 @@ export default function Home() {
               priority
             />
           </div>
+        </div>
+      </section>
+
+      {/* ---------------------------------------------------------------- *
+       * The stories — the whole work, and where each one has got to.
+       *
+       * This sits directly under the hero because the hero now introduces the
+       * WORK rather than one book, and the obvious next question is "which
+       * stories?". Everything below this point is the case for book one in
+       * particular; this is what tells a visitor book one is part of
+       * something, and that book two's Arabic can already be read.
+       * ---------------------------------------------------------------- */}
+      <section
+        id="stories"
+        className="mx-auto w-full max-w-[820px] scroll-mt-8 px-6 py-16 sm:px-8 lg:py-20"
+      >
+        <div className="reveal">
+          <Eyebrow>The stories</Eyebrow>
+          <h2
+            className="text-ink mt-4 max-w-[24ch] font-semibold text-balance"
+            style={{
+              fontSize: "clamp(28px, 5vw, 42px)",
+              lineHeight: 1.15,
+              letterSpacing: "-0.015em",
+            }}
+          >
+            Twelve stories, made one at a time.
+          </h2>
+          <p
+            className="text-ink/70 mt-4 max-w-[58ch]"
+            style={{ fontSize: "17px", lineHeight: 1.65 }}
+          >
+            Each story becomes its own illustrated book. Ibrahim is printed and
+            on sale. Yusuf&rsquo;s Arabic is on the site now and you can read it
+            today, while the recordings and the pictures are made. The rest are
+            still to come, in the order Shaykh Abul Hasan wrote them.
+          </p>
+        </div>
+
+        <div className="reveal mt-8">
+          <SeriesIndex arabicTitles={arabicTitles} />
         </div>
       </section>
 
