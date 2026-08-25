@@ -135,6 +135,24 @@ export const CATALOGUE: readonly CatalogueEntry[] = [
   },
 ];
 
+/**
+ * The label for a buy button — "Get book one", not "Get the book".
+ *
+ * This site sells one part of a four-volume work, and "the book" made it sound
+ * like there is only ever one. Derived from the yaml's `series_order` so it
+ * says "book two" by itself the day Yusuf lists, rather than needing a hunt
+ * through four call sites.
+ */
+const ORDINALS = [
+  "", "one", "two", "three", "four", "five", "six",
+  "seven", "eight", "nine", "ten", "eleven", "twelve",
+];
+
+export function buyLabel(seriesOrder: number | null | undefined): string {
+  const word = seriesOrder ? ORDINALS[seriesOrder] : undefined;
+  return word ? `Get book ${word}` : "Get the book";
+}
+
 /** Buyable — the signal the gate and the coming-soon notices key off. */
 export function isPublished(slug: string): boolean {
   return CATALOGUE.some((b) => b.slug === slug && b.status === "on-sale");

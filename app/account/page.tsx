@@ -8,6 +8,8 @@ import ReceiptNotice from "@/components/account/ReceiptNotice";
 import BookClaimer from "@/components/account/BookClaimer";
 import { signOut, switchProfile } from "./actions";
 import { getActiveProfile, getParentId, getProfiles } from "@/lib/account";
+import { getEntitlements } from "@/lib/access";
+import { isPublished } from "@/lib/catalogue";
 import { getAllBooks } from "@/lib/parse";
 import { createClient } from "@/lib/supabase/server";
 
@@ -24,6 +26,10 @@ export default async function AccountPage({
   const profiles = await getProfiles(parentId);
   const active = await getActiveProfile(parentId);
   const books = getAllBooks();
+  // Which books this parent actually holds. Entitlements are per book since
+  // 2026-08-24, so with a series this is the difference between "your books"
+  // and "every book we publish".
+  const entitlements = await getEntitlements();
   const query = await searchParams;
   const supabase = await createClient();
   const [bookResult, pageResult] = active
@@ -114,18 +120,53 @@ export default async function AccountPage({
               </div>
             </div>
 
+            {/* Owned books first. With one book the order never mattered;
+                with a series, a parent should not have to hunt past ten they
+                have not bought to reach the one they are reading. */}
             <div className="mt-8 grid gap-8 md:grid-cols-2">
-              {books.map((book) => {
+              {[...books]
+                .sort((a, b) => {
+                  const av = entitlements.get(a.slug);
+                  const bv = entitlements.get(b.slug);
+                  const rank = (e?: { expired: boolean }) =>
+                    e && !e.expired ? 0 : 1;
+                  return rank(av) - rank(bv);
+                })
+                .map((book) => {
                 const current = progress.find((item) => item.book_slug === book.slug);
                 const completed = pages.filter((item) => item.book_slug === book.slug && item.read_completed_at).length;
                 const practised = pages.filter((item) => item.book_slug === book.slug && item.practice_completed_at).length;
+                const ent = entitlements.get(book.slug);
+                const active = Boolean(ent && !ent.expired);
                 return (
-                  <article key={book.slug} className="border-l-2 border-brand-blue pl-5">
+                  <article key={book.slug} className={`border-l-2 pl-5 ${active ? "border-brand-blue" : "border-ink/15"}`}>
                     <p lang="ar" dir="rtl" className="text-[24px] leading-[1.8]" style={{ fontFamily: "var(--font-arabic)", textAlign: "start" }}>{book.title_ar}</p>
                     <h3 className="mt-1 text-[19px] font-medium">{book.title_en}</h3>
+
+                    {/* Say plainly whether this book is open to them. Without
+                        it a parent with several books cannot tell which one
+                        will hit a gate until they hit it. */}
+                    <p className="mt-2 text-[13px] font-medium">
+                      {active ? (
+                        <span className="text-brand-blue">
+                          Full access
+                          {ent && ent.daysLeft <= 30 ? ` · ${ent.daysLeft} ${ent.daysLeft === 1 ? "day" : "days"} left` : ""}
+                        </span>
+                      ) : isPublished(book.slug) ? (
+                        <span className="text-ink/50">
+                          Free preview only ·{" "}
+                          <Link href="/account#add-a-book" className="text-brand-blue underline-offset-4 hover:underline">
+                            add this book
+                          </Link>
+                        </span>
+                      ) : (
+                        <span className="text-ink/50">Not published yet · free to read</span>
+                      )}
+                    </p>
+
                     <p className="mt-3 text-[14px] leading-6 text-ink/55">{completed} pages completed · {practised} practice sets</p>
                     <div className="mt-5 flex flex-wrap gap-3">
-                      <Link href={current ? `/books/${book.slug}/p${current.last_page}` : `/books/${book.slug}`} className="inline-flex min-h-[46px] items-center rounded-xl bg-brand-blue px-5 text-[14px] font-medium text-paper">
+                      <Link href={current ? `/books/${book.slug}/p${current.last_page}` : `/books/${book.slug}`} className={`inline-flex min-h-[46px] items-center rounded-xl px-5 text-[14px] font-medium ${active ? "bg-brand-blue text-paper" : "border border-brand-blue text-brand-blue"}`}>
                         {current ? `Continue page ${current.last_page}` : "Open book companion"}
                       </Link>
                       <Link href={`/account/my-words?book=${book.slug}`} className="inline-flex min-h-[46px] items-center rounded-xl border border-brand-blue px-5 text-[14px] font-medium text-brand-blue">My Words</Link>

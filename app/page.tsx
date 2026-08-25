@@ -8,7 +8,7 @@ import Practice from "@/components/Practice";
 import ReadAlong from "@/components/ReadAlong";
 import TextPreview, { type PreviewPage } from "@/components/TextPreview";
 import SeriesIndex from "@/components/SeriesIndex";
-import { SERIES } from "@/lib/catalogue";
+import { buyLabel, SERIES } from "@/lib/catalogue";
 import {
   getAllBooks,
   getBook,
@@ -280,7 +280,7 @@ export default function Home() {
                   className="bg-brand-blue text-paper inline-flex min-h-[48px] items-center rounded-2xl px-6 font-medium transition-transform duration-150 ease-out hover:-translate-y-0.5"
                   style={{ fontSize: "16px" }}
                 >
-                  Get the book
+                  {buyLabel(book.series_order)}
                 </a>
                 <a
                   href="#inside"
@@ -415,7 +415,7 @@ export default function Home() {
                   className="bg-brand-blue text-paper inline-flex min-h-[48px] items-center rounded-2xl px-7 font-medium transition-transform duration-150 ease-out hover:-translate-y-0.5"
                   style={{ fontSize: "16px" }}
                 >
-                  Get the book
+                  {buyLabel(book.series_order)}
                 </a>
               </div>
             )}

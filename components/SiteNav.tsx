@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CATALOGUE } from "@/lib/catalogue";
+import { buyLabel, CATALOGUE } from "@/lib/catalogue";
 import { getBook } from "@/lib/parse";
 
 /**
@@ -21,8 +21,10 @@ import { getBook } from "@/lib/parse";
  * TWO buttons stay OUTSIDE the menu at every width, and their order is the
  * whole funnel:
  *
- *   "Get the book" is primary and blue. Most people arriving here have not
- *   bought anything, and selling the book is what this site is for.
+ *   The buy button is primary and blue, and NAMES the book — "Get book one",
+ *   not "Get the book", because this site sells one part of a four-volume
+ *   work. Most people arriving here have not bought anything, and selling the
+ *   book is what this site is for.
  *
  *   "Book companion" is now the outline button rather than the blue one. It
  *   is the way in for someone who ALREADY owns the book, so it must never be
@@ -30,7 +32,7 @@ import { getBook } from "@/lib/parse";
  */
 
 /**
- * Where "Get the book" points, or null if nothing is on sale yet.
+ * Where the buy button points and what it says, or null if nothing is on sale.
  *
  * Prefers the book being read, so a Yusuf page sells Yusuf the day it lists.
  * Falls back to the first published book that has a listing, because this nav
@@ -40,10 +42,13 @@ import { getBook } from "@/lib/parse";
  * disappears entirely rather than pointing nowhere. Same rule the hero CTA
  * has always followed.
  */
-function buyUrlFor(bookSlug?: string): string | null {
-  const urlOf = (slug: string): string | null => {
+function buyUrlFor(bookSlug?: string): { url: string; label: string } | null {
+  const urlOf = (slug: string): { url: string; label: string } | null => {
     try {
-      return getBook(slug).buy_url || null;
+      const b = getBook(slug);
+      return b.buy_url
+        ? { url: b.buy_url, label: buyLabel(b.series_order) }
+        : null;
     } catch {
       return null;
     }
@@ -70,7 +75,7 @@ type Props = {
 };
 
 export default function SiteNav({ bookSlug, hideInside }: Props) {
-  const buyUrl = buyUrlFor(bookSlug);
+  const buy = buyUrlFor(bookSlug);
 
   const links = [
     { href: "/#stories", label: "The stories" },
@@ -119,15 +124,15 @@ export default function SiteNav({ bookSlug, hideInside }: Props) {
           </svg>
         </summary>
         <nav className="border-ink/10 bg-paper absolute right-0 z-20 mt-2 w-[240px] rounded-2xl border p-2 shadow-[0_18px_40px_-24px_rgba(26,42,74,0.45)]">
-          {buyUrl && (
+          {buy && (
             <>
               <a
-                href={buyUrl}
+                href={buy.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-brand-blue text-paper flex min-h-[48px] items-center justify-center rounded-xl px-3 text-[15px] font-medium"
               >
-                Get the book on Amazon
+                {buy.label} on Amazon
               </a>
               <div className="border-ink/10 my-2 border-t" />
             </>
@@ -147,15 +152,15 @@ export default function SiteNav({ bookSlug, hideInside }: Props) {
       {/* The sale. Blue, present at every width, never behind the hamburger.
           The label shortens below sm for the same reason the companion label
           does: three controls plus the lockup is tight on a 360px phone. */}
-      {buyUrl && (
+      {buy && (
         <a
-          href={buyUrl}
+          href={buy.url}
           target="_blank"
           rel="noopener noreferrer"
           className="bg-brand-blue text-paper inline-flex min-h-[44px] shrink-0 items-center rounded-xl px-3 text-[14px] font-medium whitespace-nowrap sm:px-4 transition-transform duration-150 ease-out hover:-translate-y-0.5"
         >
           <span className="sm:hidden">Buy</span>
-          <span className="hidden sm:inline">Get the book</span>
+          <span className="hidden sm:inline">{buy.label}</span>
         </a>
       )}
 
