@@ -78,6 +78,14 @@ pages:
             en: 'he worships'
           - ar: 'يَبِيعُ'
             en: 'sells'
+      - type: 'question'
+        ar: 'مَاذَا كَانَ فِي الْبَيْتِ؟'
+        en: 'What was in the house?'
+        answer: 'أَصْنَامٌ'
+        options:
+          - 'أَصْنَامٌ'
+          - 'حِجَارَةٌ'
+          - 'طَعَامٌ'
   - page: !!int '5'
     exercises:
       - type: 'match'
@@ -135,6 +143,14 @@ pages:
           - 'أَنَّ'
           - 'الْأَصْنَامَ'
           - 'حِجَارَةٌ.'
+      - type: 'question'
+        ar: 'مَنْ كَانَ يَعْرِفُ أَنَّ الْأَصْنَامَ حِجَارَةٌ؟'
+        en: 'Who knew that the idols were stones?'
+        answer: 'إِبْرَاهِيمُ'
+        options:
+          - 'إِبْرَاهِيمُ'
+          - 'آزَرُ'
+          - 'النَّاسُ'
   - page: !!int '7'
     exercises:
       - type: 'match'
@@ -211,6 +227,14 @@ pages:
             en: 'asks'
           - ar: 'يَرَى'
             en: 'sees'
+      - type: 'question'
+        ar: 'مَنْ كَانَ يَقُولُ لِوَالِدِهِ؟'
+        en: 'Who spoke to his father?'
+        answer: 'إِبْرَاهِيمُ'
+        options:
+          - 'إِبْرَاهِيمُ'
+          - 'آزَرُ'
+          - 'النَّاسُ'
   - page: !!int '9'
     exercises:
       - type: 'match'
@@ -323,6 +347,14 @@ pages:
             en: 'the children'
           - ar: 'رَجُلٌ'
             en: 'man'
+      - type: 'question'
+        ar: 'مَاذَا قَالَ إِبْرَاهِيمُ؟'
+        en: 'What did Ibrahim say?'
+        answer: 'أَنَا سَقِيمٌ'
+        options:
+          - 'أَنَا سَقِيمٌ'
+          - 'أَلَا تَخْرُجُ مَعَنَا'
+          - 'أَلَا تَتَكَلَّمُونَ'
   - page: !!int '12'
     exercises:
       - type: 'match'
@@ -357,6 +389,14 @@ pages:
             en: 'hears'
           - ar: 'تَشْرَبُ'
             en: 'she/it drinks'
+      - type: 'question'
+        ar: 'مَاذَا قَالَ إِبْرَاهِيمُ لِلْأَصْنَامِ؟'
+        en: 'What did Ibrahim say to the idols?'
+        answer: 'أَلَا تَتَكَلَّمُونَ'
+        options:
+          - 'أَلَا تَتَكَلَّمُونَ'
+          - 'أَلَا تَخْرُجُ مَعَنَا'
+          - 'أَنَا سَقِيمٌ'
   - page: !!int '13'
     exercises:
       - type: 'match'
@@ -539,6 +579,14 @@ pages:
             en: 'the people'
           - ar: 'إِبْرَاهِيمُ'
             en: 'Ibrahim'
+      - type: 'question'
+        ar: 'مَا عِقَابُ إِبْرَاهِيمَ؟'
+        en: 'What punishment did they choose for Ibrahim?'
+        answer: 'حَرِّقُوهُ'
+        options:
+          - 'حَرِّقُوهُ'
+          - 'أَنَا سَقِيمٌ'
+          - 'أَلَا تَتَكَلَّمُونَ'
   - page: !!int '18'
     exercises:
       - type: 'match'
@@ -578,6 +626,14 @@ pages:
             en: 'happy'
           - ar: 'سَالِمٌ'
             en: 'safe'
+      - type: 'question'
+        ar: 'مَاذَا كَانَتِ النَّارُ؟'
+        en: 'What did the fire become?'
+        answer: 'بَرْدًا وَسَلَامًا'
+        options:
+          - 'بَرْدًا وَسَلَامًا'
+          - 'الطَّعَامَ وَالشَّرَابَ'
+          - 'طَعَامٌ وَشَرَابٌ'
   - page: !!int '19'
     exercises:
       - type: 'match'
