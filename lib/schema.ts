@@ -59,6 +59,31 @@ export const ExerciseSchema = z.discriminatedUnion("type", [
   }),
 
   /**
+   * A comprehension question about the page: مَنْ كَسَرَ الْأَصْنَامَ؟ — four
+   * answers, tap one.
+   *
+   * The only exercise that asks whether the child FOLLOWED THE STORY rather
+   * than whether they remember a word. Everything else here tests vocabulary
+   * or word order; a child can pass all of it having understood nothing.
+   *
+   * Modelled on the teacher's own revision slides, which ask exactly this and
+   * in this form (مَنْ يَعْبُدُ الْأَصْنَامَ؟ / Who worshipped the idols?).
+   * The English is shown beneath, because the question is about comprehension
+   * and a child who cannot yet read the question cannot show what they
+   * understood of the story.
+   *
+   * Every option is a word or phrase FROM THAT PAGE, so the corpus guard
+   * applies unchanged — no carve-out, nothing relaxed.
+   */
+  z.object({
+    type: z.literal("question"),
+    ar: z.string().min(1),
+    en: z.string().min(1),
+    answer: z.string().min(1),
+    options: z.array(z.string().min(1)).min(2),
+  }),
+
+  /**
    * Make a new sentence like this one. UNGRADED: every option produces a
    * valid sentence, which is the point — it is production practice, not a
    * test with a single right answer.

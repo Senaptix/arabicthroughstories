@@ -36,6 +36,14 @@ pages:
           - 'رَجُلٌ'
           - 'مَشْهُورٌ'
           - 'جِدًّا.'
+      - type: 'question'
+        ar: 'مَنْ كَانَ يَبِيعُ الْأَصْنَامَ؟'
+        en: 'Who sold the idols?'
+        answer: 'آزَرُ'
+        options:
+          - 'آزَرُ'
+          - 'إِبْرَاهِيمُ'
+          - 'النَّاسُ'
   - page: !!int '4'
     exercises:
       - type: 'match'
@@ -92,6 +100,14 @@ pages:
           - 'النَّاسَ'
           - 'يَعْبُدُونَ'
           - 'الأَصْنَامَ.'
+      - type: 'question'
+        ar: 'مَنْ كَانَ يَرَى النَّاسَ يَسْجُدُونَ لِلْأَصْنَامِ؟'
+        en: 'Who saw the people prostrating to the idols?'
+        answer: 'إِبْرَاهِيمُ'
+        options:
+          - 'إِبْرَاهِيمُ'
+          - 'آزَرُ'
+          - 'النَّاسُ'
   - page: !!int '6'
     exercises:
       - type: 'match'
@@ -266,6 +282,14 @@ pages:
             en: 'says'
           - ar: 'يَعْرِفُ'
             en: 'knows'
+      - type: 'question'
+        ar: 'مَنْ كَانَ يَغْضَبُ؟'
+        en: 'Who used to get angry and not understand?'
+        answer: 'النَّاسُ'
+        options:
+          - 'النَّاسُ'
+          - 'إِبْرَاهِيمُ'
+          - 'آزَرُ'
   - page: !!int '11'
     exercises:
       - type: 'match'
@@ -364,6 +388,14 @@ pages:
             en: 'Ibrahim'
           - ar: 'النَّاسُ'
             en: 'the people'
+      - type: 'question'
+        ar: 'مَنْ كَسَّرَ الْأَصْنَامَ؟'
+        en: 'Who broke the idols?'
+        answer: 'إِبْرَاهِيمُ'
+        options:
+          - 'إِبْرَاهِيمُ'
+          - 'النَّاسُ'
+          - 'آزَرُ'
   - page: !!int '14'
     exercises:
       - type: 'match'

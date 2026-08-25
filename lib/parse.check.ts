@@ -174,6 +174,38 @@ function checkBook(book: Book): number {
           `${where}: duplicate options make more than one answer correct`,
         );
       }
+      if (ex.type === "question") {
+        // The question text and every option are Arabic drawn from the page,
+        // so they go through the same corpus guard as everything else. The
+        // English gloss is not Arabic and is not checked.
+        assertInCorpus(ex.ar, where);
+        for (const o of ex.options) assertInCorpus(o, where);
+        assert.ok(
+          ex.options.includes(ex.answer),
+          `${where}: the answer is not among its own options`,
+        );
+        assert.equal(
+          new Set(ex.options).size,
+          ex.options.length,
+          `${where}: duplicate options make more than one answer correct`,
+        );
+        // A question whose answer is not on the page it belongs to is either
+        // mis-filed or unanswerable from what the child just read.
+        const pageWords = new Set(
+          (pageText.get(page) ?? [])
+            .flatMap((l) => l.replace(CITATION, " ").split(/\s+/))
+            .map(bare)
+            .filter(Boolean),
+        );
+        for (const w of ex.answer.split(/\s+/)) {
+          const t = bare(w);
+          if (!t) continue;
+          assert.ok(
+            pageWords.has(t),
+            `${where}: the answer "${ex.answer}" uses "${t}", which is not on page ${page}. A comprehension question must be answerable from its own page.`,
+          );
+        }
+      }
       if (ex.type === "order") {
         for (const w of ex.answer) assertInCorpus(w, where);
         // Must be a real line of that page, or the "correct" order is invented.

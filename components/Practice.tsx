@@ -62,6 +62,7 @@ const TYPE_LABEL = {
   match: "Match the words",
   choose: "Finish the sentence",
   order: "Put the words in order",
+  question: "About the story",
   pattern: "Make a new sentence",
 } as const;
 
@@ -298,6 +299,15 @@ export default function Practice({ exercises, words, bookSlug, page, nextPage }:
             answered={answered}
           />
         )}
+        {ex.type === "question" && (
+          <Question
+            key={`${run}-${step}`}
+            ex={ex}
+            seed={step + 1}
+            onDone={(ok) => record(step, ok)}
+            answered={answered}
+          />
+        )}
         {ex.type === "order" && (
           <Order
             key={`${run}-${step}`}
@@ -497,6 +507,74 @@ function Choose({
             <span key={i}>{w} </span>
           ),
         )}
+      </p>
+
+      <div className="flex flex-wrap gap-2">
+        {options.map((o) => {
+          const state = !answered
+            ? "idle"
+            : o === ex.answer
+              ? "right"
+              : o === picked
+                ? "wrong"
+                : "idle";
+          return (
+            <button
+              key={o}
+              type="button"
+              disabled={answered}
+              onClick={() => {
+                setPicked(o);
+                onDone(o === ex.answer);
+              }}
+              className={optionClass(state)}
+            >
+              <span lang="ar" dir="rtl" style={ar}>
+                {o}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * A comprehension question — the only exercise that asks whether the child
+ * followed the STORY rather than whether they remember a word.
+ *
+ * The English sits under the Arabic rather than replacing it. A child who
+ * cannot yet read the question unaided would otherwise be unable to show what
+ * they understood of the story, which is the one thing this is trying to find
+ * out. It is the same reasoning as the English on the printed page.
+ */
+function Question({
+  ex,
+  seed,
+  onDone,
+  answered,
+}: {
+  ex: Extract<Exercise, { type: "question" }>;
+  seed: number;
+  onDone: (ok: boolean) => void;
+  answered: boolean;
+}) {
+  const options = useMemo(() => shuffled(ex.options, seed), [ex.options, seed]);
+  const [picked, setPicked] = useState<string | null>(null);
+
+  return (
+    <div>
+      <Prompt>Answer the question about the story.</Prompt>
+
+      <p lang="ar" dir="rtl" style={{ ...ar, textAlign: "start" }}>
+        {ex.ar}
+      </p>
+      <p
+        className="text-ink/55 mt-1 mb-5"
+        style={{ fontSize: "15px", lineHeight: 1.5 }}
+      >
+        {ex.en}
       </p>
 
       <div className="flex flex-wrap gap-2">
