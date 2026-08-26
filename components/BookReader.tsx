@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
+import AudioNote from "./AudioNote";
 import ReadAlong from "./ReadAlong";
 import VocabCards from "./VocabCards";
 
@@ -155,6 +156,7 @@ export default function BookReader({
             lines={page.readAlong.lines}
             label={`page ${page.n}`}
           />
+          <AudioNote />
         </div>
       )}
 

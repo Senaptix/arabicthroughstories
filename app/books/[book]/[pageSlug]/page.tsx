@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Eyebrow from "@/components/Eyebrow";
 import HomeBar from "@/components/HomeBar";
+import AudioNote from "@/components/AudioNote";
 import PagePlayer from "@/components/PagePlayer";
 import ReadAlong from "@/components/ReadAlong";
 import VocabCards from "@/components/VocabCards";
@@ -155,6 +156,7 @@ export default async function PageCard({
                 lines={readAlong.lines}
                 label={`page ${page}`}
               />
+              <AudioNote />
             </div>
           </section>
         ) : (
@@ -185,6 +187,7 @@ export default async function PageCard({
                   Follow the words below as you listen — this page does not
                   highlight each line yet.
                 </p>
+                <AudioNote />
               </section>
             )}
 
