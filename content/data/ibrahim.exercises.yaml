@@ -280,6 +280,14 @@ pages:
             en: 'he understands'
           - ar: 'يَسْجُدُ'
             en: 'he prostrates'
+      - type: 'question'
+        ar: 'مَاذَا وَضَعَ آزَرُ لِلْأَصْنَامِ؟'
+        en: 'What did Azar put out for the idols?'
+        answer: 'الطَّعَامَ وَالشَّرَابَ'
+        options:
+          - 'الطَّعَامَ وَالشَّرَابَ'
+          - 'الْحِجَارَةَ'
+          - 'السِّكِّينَ'
   - page: !!int '10'
     exercises:
       - type: 'match'
@@ -476,6 +484,14 @@ pages:
             en: 'were amazed'
           - ar: 'دُهِشُوا'
             en: 'were astonished'
+      - type: 'question'
+        ar: 'مَنْ رَجَعَ إِلَى بَيْتِ الأَصْنَامِ؟'
+        en: 'Who came back to the house of idols?'
+        answer: 'النَّاسُ'
+        options:
+          - 'النَّاسُ'
+          - 'إِبْرَاهِيمُ'
+          - 'آزَرُ'
   - page: !!int '15'
     exercises:
       - type: 'match'
@@ -516,6 +532,14 @@ pages:
             en: 'to walk'
           - ar: 'يَكْسِرَ'
             en: 'to break'
+      - type: 'question'
+        ar: 'مَاذَا كَانَتِ الْأَصْنَامُ؟'
+        en: 'What were the idols?'
+        answer: 'حِجَارَةٌ'
+        options:
+          - 'حِجَارَةٌ'
+          - 'طَعَامٌ'
+          - 'مَاءٌ'
   - page: !!int '16'
     exercises:
       - type: 'match'
@@ -555,6 +579,14 @@ pages:
             en: 'do you not understand'
           - ar: 'تَعْقِلُونَ'
             en: 'do you not reason'
+      - type: 'question'
+        ar: 'مَنْ سَكَتَ وَخَجِلَ؟'
+        en: 'Who fell silent and was ashamed?'
+        answer: 'النَّاسُ'
+        options:
+          - 'النَّاسُ'
+          - 'إِبْرَاهِيمُ'
+          - 'هَاجَرُ'
   - page: !!int '17'
     exercises:
       - type: 'match'
@@ -712,6 +744,14 @@ pages:
             en: 'This is my Lord!'
           - ar: 'لَا، هَذَا لَيْسَ رَبِّي.'
             en: 'No, this is not my Lord.'
+      - type: 'question'
+        ar: 'مَاذَا رَأَى إِبْرَاهِيمُ كَبِيرًا وَجَمِيلًا؟'
+        en: 'What did Ibrahim see, big and beautiful?'
+        answer: 'الْقَمَرَ'
+        options:
+          - 'الْقَمَرَ'
+          - 'الشَّمْسَ'
+          - 'الْأَصْنَامَ'
   - page: !!int '21'
     exercises:
       - type: 'match'
@@ -742,6 +782,14 @@ pages:
             en: 'This is my Lord!'
           - ar: 'لَا، هَذَا لَيْسَ رَبِّي.'
             en: 'No, this is not my Lord.'
+      - type: 'question'
+        ar: 'مَاذَا كَانَتْ كَبِيرَةً جِدًّا؟'
+        en: 'What was very big?'
+        answer: 'الشَّمْسُ'
+        options:
+          - 'الشَّمْسُ'
+          - 'النَّارُ'
+          - 'الْأَصْنَامُ'
   - page: !!int '22'
     exercises:
       - type: 'match'
@@ -773,6 +821,14 @@ pages:
             en: 'the star'
           - ar: 'الْقَمَرُ'
             en: 'the moon'
+      - type: 'question'
+        ar: 'مَنْ نَصَرَ إِبْرَاهِيمَ؟'
+        en: 'Who helped Ibrahim?'
+        answer: 'اللهُ'
+        options:
+          - 'اللهُ'
+          - 'الشَّمْسُ'
+          - 'الْقَمَرُ'
   - page: !!int '23'
     exercises:
       - type: 'match'
@@ -844,6 +900,14 @@ pages:
             en: 'of the star.'
           - ar: 'الْقَمَرِ.'
             en: 'of the moon.'
+      - type: 'question'
+        ar: 'مَنْ هَدَى إِبْرَاهِيمَ؟'
+        en: 'Who guided Ibrahim?'
+        answer: 'اللهُ'
+        options:
+          - 'اللهُ'
+          - 'الْمَلِكُ'
+          - 'آزَرُ'
   - page: !!int '25'
     exercises:
       - type: 'match'
@@ -916,6 +980,14 @@ pages:
             en: 'does it benefit you?'
           - ar: 'تَضُرُّكُمْ؟'
             en: 'does it harm you?'
+      - type: 'question'
+        ar: 'مَاذَا قَالَ النَّاسُ؟'
+        en: 'What did the people say?'
+        answer: 'وَجَدْنَا آبَاءَنَا'
+        options:
+          - 'وَجَدْنَا آبَاءَنَا'
+          - 'أَنَا سَقِيمٌ'
+          - 'هَذَا رَبِّي'
   - page: !!int '27'
     exercises:
       - type: 'choose'
@@ -947,6 +1019,14 @@ pages:
             en: 'an enemy to these idols.'
           - ar: 'أَعْبُدُ رَبَّ الْعَالَمِينَ.'
             en: 'one who worships the Lord of the worlds.'
+      - type: 'question'
+        ar: 'مَنْ قَالَ: أَنَا عَدُوٌّ لِهَذِهِ الْأَصْنَامِ؟'
+        en: 'Who said: I am an enemy of these idols?'
+        answer: 'إِبْرَاهِيمُ'
+        options:
+          - 'إِبْرَاهِيمُ'
+          - 'الْمَلِكُ'
+          - 'آزَرُ'
   - page: !!int '28'
     exercises:
       - type: 'match'
@@ -980,6 +1060,14 @@ pages:
             en: 'feeds me'
           - ar: 'يَهْدِينِ'
             en: 'guides me'
+      - type: 'question'
+        ar: 'مَاذَا يَعْبُدُ إِبْرَاهِيمُ؟'
+        en: 'What does Ibrahim worship?'
+        answer: 'رَبَّ الْعَالَمِينَ'
+        options:
+          - 'رَبَّ الْعَالَمِينَ'
+          - 'الْأَصْنَامَ'
+          - 'الشَّمْسَ'
   - page: !!int '29'
     exercises:
       - type: 'match'
@@ -1058,6 +1146,14 @@ pages:
             en: 'My Lord is Allah.'
           - ar: 'أَنَا سَقِيمٌ.'
             en: 'I am sick.'
+      - type: 'question'
+        ar: 'مَنْ كَانَ لَا يَخَافُ أَحَدًا إِلَّا اللهَ؟'
+        en: 'Who feared no one but Allah?'
+        answer: 'إِبْرَاهِيمُ'
+        options:
+          - 'إِبْرَاهِيمُ'
+          - 'الْمَلِكُ'
+          - 'النَّاسُ'
   - page: !!int '31'
     exercises:
       - type: 'match'
@@ -1091,6 +1187,14 @@ pages:
             en: 'the king'
           - ar: 'إِبْرَاهِيمُ'
             en: 'Ibrahim'
+      - type: 'question'
+        ar: 'مَنْ كَانَ بَلِيدًا جِدًّا؟'
+        en: 'Who was very foolish?'
+        answer: 'الْمَلِكُ'
+        options:
+          - 'الْمَلِكُ'
+          - 'إِبْرَاهِيمُ'
+          - 'إِسْمَاعِيلُ'
   - page: !!int '32'
     exercises:
       - type: 'match'
@@ -1131,6 +1235,14 @@ pages:
             en: 'to make the king understand'
           - ar: 'يُفَهِّمَ قَوْمَهُ'
             en: 'to make his people understand'
+      - type: 'question'
+        ar: 'مَنْ خَجِلَ وَمَا وَجَدَ جَوَابًا؟'
+        en: 'Who was ashamed and found no answer?'
+        answer: 'الْمَلِكُ'
+        options:
+          - 'الْمَلِكُ'
+          - 'إِبْرَاهِيمُ'
+          - 'إِسْمَاعِيلُ'
   - page: !!int '33'
     exercises:
       - type: 'match'
@@ -1155,6 +1267,14 @@ pages:
           - 'أَبَتِ،'
           - 'اعْبُدِ'
           - 'الرَّحْمٰنَ!'
+      - type: 'question'
+        ar: 'مَنْ دَعَا وَالِدَهُ إِلَى اللهِ؟'
+        en: 'Who called his father to Allah?'
+        answer: 'إِبْرَاهِيمُ'
+        options:
+          - 'إِبْرَاهِيمُ'
+          - 'الْمَلِكُ'
+          - 'إِسْحَاقُ'
   - page: !!int '34'
     exercises:
       - type: 'match'
@@ -1190,6 +1310,14 @@ pages:
             en: 'Ibrahim''s people'
           - ar: 'وَالِدُ إِبْرَاهِيمَ'
             en: 'Ibrahim''s father'
+      - type: 'question'
+        ar: 'مَنْ كَانَ حَلِيمًا؟'
+        en: 'Who was gentle?'
+        answer: 'إِبْرَاهِيمُ'
+        options:
+          - 'إِبْرَاهِيمُ'
+          - 'الْمَلِكُ'
+          - 'آزَرُ'
   - page: !!int '35'
     exercises:
       - type: 'match'
@@ -1226,6 +1354,14 @@ pages:
             en: 'to worship'
           - ar: 'يَدْعُوَ'
             en: 'to call'
+      - type: 'question'
+        ar: 'إِلَى أَيْنَ أَرَادَ إِبْرَاهِيمُ أَنْ يَذْهَبَ؟'
+        en: 'Where did Ibrahim want to go?'
+        answer: 'مَدِينَةٍ أُخْرٰى'
+        options:
+          - 'مَدِينَةٍ أُخْرٰى'
+          - 'بَيْتِ الأَصْنَامِ'
+          - 'الْكَعْبَةِ'
   - page: !!int '36'
     exercises:
       - type: 'choose'
@@ -1252,6 +1388,14 @@ pages:
           - 'وَغَضِبَ'
           - 'وَالِدُ'
           - 'إِبْرَاهِيمَ.'
+      - type: 'question'
+        ar: 'مَنْ خَرَجَ مِنَ الْمَدِينَةِ؟'
+        en: 'Who left the city?'
+        answer: 'إِبْرَاهِيمُ'
+        options:
+          - 'إِبْرَاهِيمُ'
+          - 'إِسْحَاقُ'
+          - 'هَاجَرُ'
   - page: !!int '37'
     exercises:
       - type: 'match'
@@ -1339,6 +1483,14 @@ pages:
             en: 'an animal'
           - ar: 'بَشَرٌ'
             en: 'people'
+      - type: 'question'
+        ar: 'أَيْنَ لَمْ يَكُنْ عُشْبٌ وَلَا شَجَرَةٌ؟'
+        en: 'Where was there no grass and no tree?'
+        answer: 'مَكَّةَ'
+        options:
+          - 'مَكَّةَ'
+          - 'الشَّامِ'
+          - 'مِنًى'
   - page: !!int '39'
     exercises:
       - type: 'match'
@@ -1375,6 +1527,14 @@ pages:
             en: 'to worship'
           - ar: 'يَدْعُوَ'
             en: 'to call'
+      - type: 'question'
+        ar: 'مَنْ قَالَتْ: إِذًا لَا يُضَيِّعُنَا؟'
+        en: 'Who said: then He will not abandon us?'
+        answer: 'هَاجَرُ'
+        options:
+          - 'هَاجَرُ'
+          - 'سَارَةُ'
+          - 'النَّاسُ'
   - page: !!int '40'
     exercises:
       - type: 'match'
@@ -1407,6 +1567,14 @@ pages:
             en: 'the sun'
           - ar: 'الْقَمَرُ'
             en: 'the moon'
+      - type: 'question'
+        ar: 'مَنْ عَطِشَ وَبَكَى؟'
+        en: 'Who became thirsty and cried?'
+        answer: 'إِسْمَاعِيلُ'
+        options:
+          - 'إِسْمَاعِيلُ'
+          - 'إِبْرَاهِيمُ'
+          - 'إِسْحَاقُ'
   - page: !!int '41'
     exercises:
       - type: 'match'
@@ -1471,6 +1639,14 @@ pages:
             en: 'Hajar'
           - ar: 'إِسْمَاعِيلَ'
             en: 'Ismail'
+      - type: 'question'
+        ar: 'مَاذَا خَرَجَ مِنَ الْأَرْضِ؟'
+        en: 'What came out of the ground?'
+        answer: 'الْمَاءُ'
+        options:
+          - 'الْمَاءُ'
+          - 'النَّارُ'
+          - 'الشَّمْسُ'
   - page: !!int '43'
     exercises:
       - type: 'match'
@@ -1554,6 +1730,14 @@ pages:
             en: 'a prophet'
           - ar: 'حَلِيمًا'
             en: 'gentle'
+      - type: 'question'
+        ar: 'مَاذَا رَأَى إِبْرَاهِيمُ فِي الْمَنَامِ؟'
+        en: 'What did Ibrahim see in the dream?'
+        answer: 'أَنَّهُ يَذْبَحُ إِسْمَاعِيلَ'
+        options:
+          - 'أَنَّهُ يَذْبَحُ إِسْمَاعِيلَ'
+          - 'هَذَا رَبِّي'
+          - 'أَنَا سَقِيمٌ'
   - page: !!int '45'
     exercises:
       - type: 'match'
@@ -1585,6 +1769,14 @@ pages:
             en: 'Ibrahim'
           - ar: 'إِسْمَاعِيلُ'
             en: 'Ismail'
+      - type: 'question'
+        ar: 'مَنْ أَسْلَمَ لِأَمْرِ اللهِ؟'
+        en: 'Who submitted to the command of Allah?'
+        answer: 'إِبْرَاهِيمُ وَإِسْمَاعِيلُ'
+        options:
+          - 'إِبْرَاهِيمُ وَإِسْمَاعِيلُ'
+          - 'الْمَلِكُ'
+          - 'النَّاسُ'
   - page: !!int '46'
     exercises:
       - type: 'match'
@@ -1621,6 +1813,14 @@ pages:
             en: 'the axe'
           - ar: 'سِكِّينًا'
             en: 'a knife'
+      - type: 'question'
+        ar: 'مَاذَا أَخَذَ إِبْرَاهِيمُ مَعَهُ؟'
+        en: 'What did Ibrahim take with him?'
+        answer: 'سِكِّينًا'
+        options:
+          - 'سِكِّينًا'
+          - 'بَيْتًا'
+          - 'كَوْكَبًا'
   - page: !!int '47'
     exercises:
       - type: 'match'
@@ -1731,6 +1931,14 @@ pages:
             en: 'Ibrahim built the Kaaba with his hand'
           - ar: 'إِسْمَاعِيلُ يَبْنِي الْكَعْبَةَ بِيَدِهِ'
             en: 'Ismail built the Kaaba with his hand'
+      - type: 'question'
+        ar: 'مَاذَا كَانَ إِبْرَاهِيمُ يَبْنِي؟'
+        en: 'What was Ibrahim building?'
+        answer: 'الْكَعْبَةَ'
+        options:
+          - 'الْكَعْبَةَ'
+          - 'الْأَصْنَامَ'
+          - 'الْحِجَارَةَ'
   - page: !!int '50'
     exercises:
       - type: 'match'
@@ -1770,6 +1978,14 @@ pages:
             en: 'the Hajj'
           - ar: 'الشَّامِ'
             en: 'Shaam'
+      - type: 'question'
+        ar: 'إِلَى أَيْنَ نَتَوَجَّهُ فِي كُلِّ صَلَاةٍ؟'
+        en: 'Where do we turn in every prayer?'
+        answer: 'الْكَعْبَةِ'
+        options:
+          - 'الْكَعْبَةِ'
+          - 'الشَّامِ'
+          - 'مِنًى'
   - page: !!int '51'
     exercises:
       - type: 'choose'
@@ -1794,6 +2010,14 @@ pages:
           - 'الشَّامِ،'
           - 'وَسَكَنَ'
           - 'إِسْحَاقُ.'
+      - type: 'question'
+        ar: 'أَيْنَ سَكَنَ إِبْرَاهِيمُ؟'
+        en: 'Where did Ibrahim settle?'
+        answer: 'الشَّامِ'
+        options:
+          - 'الشَّامِ'
+          - 'مَكَّةَ'
+          - 'مِنًى'
   - page: !!int '52'
     exercises:
       - type: 'match'
@@ -1831,3 +2055,11 @@ pages:
             en: 'his brother'
           - ar: 'إِسْحَاقُ'
             en: 'Ishaq'
+      - type: 'question'
+        ar: 'مَنْ بَنَى بَيْتًا لِلَّهِ فِي الشَّامِ؟'
+        en: 'Who built a house for Allah in Sham?'
+        answer: 'إِسْحَاقُ'
+        options:
+          - 'إِسْحَاقُ'
+          - 'إِسْمَاعِيلُ'
+          - 'آزَرُ'
