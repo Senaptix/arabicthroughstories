@@ -122,14 +122,29 @@ function checkBook(book: Book): number {
    * ---------------------------------------------------------------- */
 
   const corpus = new Set<string>();
+
+  /* The conjunction وَ is a proclitic, not part of the word it attaches to:
+   * the book writing `وَكَانَتْ` means it uses `كَانَتْ`. Admitting both forms
+   * matters for grammar, not just convenience — a question opening with `مَنْ`
+   * takes no conjunction, and without this the only waw-less form in the
+   * corpus may be one carrying a kasra that is correct solely because of the
+   * word that followed it in the book (`كَانَتِ النَّارُ`). That is how page 41
+   * came to ask `مَنْ كَانَتِ تَبْحَثُ`, breaking the sukūn on تاء التأنيث.
+   *
+   * The cost: for a word whose first root letter is waw (`وَلَدٌ`), this also
+   * admits a meaningless remainder (`لَدٌ`). Junk entries only ever widen the
+   * corpus, and the guard is a floor rather than a native read either way. */
+  const add = (t: string) => {
+    if (!t) return;
+    corpus.add(t);
+    if (t.startsWith("وَ") && t.length > 2) corpus.add(t.slice(2));
+  };
+
   for (const lines of pageText.values()) {
     for (const line of lines)
-      for (const w of line.replace(CITATION, " ").split(/\s+/)) {
-        const t = bare(w);
-        if (t) corpus.add(t);
-      }
+      for (const w of line.replace(CITATION, " ").split(/\s+/)) add(bare(w));
   }
-  for (const v of vocab) for (const w of v.ar.split(/\s+/)) corpus.add(bare(w));
+  for (const v of vocab) for (const w of v.ar.split(/\s+/)) add(bare(w));
 
   function assertInCorpus(s: string, where: string) {
     for (const w of s.split(/\s+/)) {
