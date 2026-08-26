@@ -1,0 +1,237 @@
+# Practice exercises — pages 3-7
+#
+# GENERATED, then reviewed. Every Arabic string here was resolved from the
+# verified corpus (yusuf.pages.md / yusuf.vocabulary.md), never typed.
+# lib/parse.check.ts re-checks every token against that corpus on each
+# build, so a typo or an invented word fails the build.
+#
+# The guard proves each WORD is real and correctly spelled. It does NOT
+# prove a new COMBINATION is grammatically correct — a case ending right
+# in isolation can be wrong in a new position. The `pattern` exercises
+# recombine words and still need a native read before they are final.
+#
+# Page 4's second line is a Qur'anic quotation carrying ﴿ ﴾ and a citation.
+# No `order` or `choose` is built from it: reassembling a verse as a word
+# puzzle is not appropriate, and the bracket tokens would become draggable
+# pieces. See EXERCISE_SPEC.md rule 6.
+#
+# The vowels here are only as sound as yusuf.pages.md, which has not yet had
+# a native check — see the warning at the top of that file.
+pages:
+  - page: !!int '3'
+    exercises:
+      - type: 'match'
+      - type: 'choose'
+        gap: !!int '8'
+        answer: 'أَخاً'
+        sentence:
+          - 'كَانَ'
+          - 'يُوسُفُ'
+          - 'وَلَداً'
+          - 'صَغِيراً،'
+          - 'وَكَانَ'
+          - 'لَهُ'
+          - 'أَحَدَ'
+          - 'عَشَرَ'
+          - 'أَخاً.'
+        options:
+          - 'أَخاً'
+          - 'كَوْكَباً'
+          - 'وَلَداً'
+      - type: 'order'
+        answer:
+          - 'ذَاتَ'
+          - 'لَيْلَةٍ'
+          - 'رَأَى'
+          - 'يُوسُفُ'
+          - 'رُؤْيَا'
+          - 'عَجِيبَةً.'
+      - type: 'pattern'
+        stem:
+          - 'رَأَى'
+          - 'يُوسُفُ'
+        options:
+          - ar: 'الشَّمْسَ'
+            en: 'the sun'
+          - ar: 'الْقَمَرَ'
+            en: 'the moon'
+          - ar: 'كَوْكَباً'
+            en: 'a star'
+      - type: 'question'
+        ar: 'مَنْ رَأَى رُؤْيَا عَجِيبَةً؟'
+        en: 'Who saw a strange dream?'
+        answer: 'يُوسُفُ'
+        options:
+          - 'يُوسُفُ'
+          - 'يَعْقُوبُ'
+          - 'الشَّمْسُ'
+  - page: !!int '4'
+    exercises:
+      - type: 'match'
+      - type: 'choose'
+        gap: !!int '3'
+        answer: 'نَبِيًّا'
+        sentence:
+          - 'وَكَانَ'
+          - 'أَبُوهُ'
+          - 'يَعْقُوبُ'
+          - 'نَبِيًّا.'
+        options:
+          - 'نَبِيًّا'
+          - 'وَلَداً'
+          - 'عَدُوًّا'
+      - type: 'order'
+        answer:
+          - 'فَرِحَ'
+          - 'يَعْقُوبُ'
+          - 'بِهٰذِهِ'
+          - 'الرُّؤْيَا'
+          - 'كَثِيراً.'
+      - type: 'pattern'
+        stem:
+          - 'هٰذِهِ'
+          - 'الرُّؤْيَا'
+        options:
+          - ar: 'بِشَارَةٌ'
+            en: 'good news'
+          - ar: 'عَجِيبَةٌ'
+            en: 'strange'
+      - type: 'question'
+        ar: 'مَنْ فَرِحَ بِهٰذِهِ الرُّؤْيَا؟'
+        en: 'Who was happy about this dream?'
+        answer: 'يَعْقُوبُ'
+        options:
+          - 'يَعْقُوبُ'
+          - 'يُوسُفُ'
+          - 'الشَّيْطَانُ'
+  - page: !!int '5'
+    exercises:
+      - type: 'match'
+      - type: 'choose'
+        gap: !!int '2'
+        answer: 'شَيْخاً'
+        sentence:
+          - 'وَكَانَ'
+          - 'يَعْقُوبُ'
+          - 'شَيْخاً'
+          - 'كَبِيراً،'
+          - 'وَكَانَ'
+          - 'يَعْرِفُ'
+          - 'طَبَائِعَ'
+          - 'النَّاسِ.'
+        options:
+          - 'شَيْخاً'
+          - 'وَلَداً'
+          - 'غُلاماً'
+      - type: 'order'
+        answer:
+          - 'فَإِنَّهُمْ'
+          - 'يَحْسُدُونَكَ،'
+          - 'وَيَكُونُونَ'
+          - 'لَكَ'
+          - 'عَدُوًّا.'
+      - type: 'pattern'
+        stem:
+          - 'أَنْعَمَ'
+          - 'اللهُ'
+          - 'عَلَى'
+        options:
+          - ar: 'إِسْحَاقَ'
+            en: 'Ishaq'
+          - ar: 'إِبْرَاهِيمَ'
+            en: 'Ibrahim'
+      - type: 'question'
+        ar: 'مَاذَا قَالَ يَعْقُوبُ لِيُوسُفَ؟'
+        en: 'What did Yaqub say to Yusuf?'
+        answer: 'لَا تُخْبِرْ'
+        options:
+          - 'لَا تُخْبِرْ'
+          - 'لَا تَحْزَنْ'
+          - 'لَا تَخَفْ'
+  - page: !!int '6'
+    exercises:
+      - type: 'match'
+      - type: 'choose'
+        gap: !!int '1'
+        answer: 'يَعْقُوبُ'
+        sentence:
+          - 'وَكَانَ'
+          - 'يَعْقُوبُ'
+          - 'يُحِبُّهُمَا'
+          - 'حُبًّا'
+          - 'شَدِيداً،'
+          - 'وَكَانَ'
+          - 'لَا'
+          - 'يُحِبُّ'
+          - 'مِثْلَهُمَا'
+          - 'أَحَداً.'
+        options:
+          - 'يَعْقُوبُ'
+          - 'يُوسُفُ'
+          - 'بِنْيَامِينُ'
+      - type: 'order'
+        answer:
+          - 'وَكَانَ'
+          - 'يُوسُفُ'
+          - 'لَهُ'
+          - 'أَخٌ'
+          - 'آخَرُ'
+          - 'مِنْ'
+          - 'أُمِّهِ'
+          - 'اسْمُهُ'
+          - 'بِنْيَامِينُ.'
+      - type: 'pattern'
+        stem:
+          - 'وَكَانَ'
+          - 'الإِخْوَةُ'
+          - 'يَحْسُدُونَ'
+        options:
+          - ar: 'يُوسُفَ'
+            en: 'Yusuf'
+          - ar: 'بِنْيَامِينَ'
+            en: 'Binyamin'
+      - type: 'question'
+        ar: 'مَنْ كَانَ يَحْسُدُ يُوسُفَ؟'
+        en: 'Who envied Yusuf?'
+        answer: 'الإِخْوَةُ'
+        options:
+          - 'الإِخْوَةُ'
+          - 'يَعْقُوبُ'
+          - 'بِنْيَامِينُ'
+  - page: !!int '7'
+    exercises:
+      - type: 'match'
+      - type: 'choose'
+        gap: !!int '1'
+        answer: 'أَمْرٌ'
+        sentence:
+          - 'هٰذَا'
+          - 'أَمْرٌ'
+          - 'عَجِيبٌ!'
+        options:
+          - 'أَمْرٌ'
+          - 'وَلَدٌ'
+          - 'قَلْبٌ'
+      - type: 'order'
+        answer:
+          - 'وَوَافَقَ'
+          - 'عَلَيْهِ'
+          - 'جَمِيعُ'
+          - 'الإِخْوَةِ.'
+      - type: 'pattern'
+        stem:
+          - 'أَلْقُوهُ'
+          - 'فِي'
+        options:
+          - ar: 'بِئْرٍ'
+            en: 'a well'
+          - ar: 'طَرِيقٍ'
+            en: 'a road'
+      - type: 'question'
+        ar: 'مَاذَا قَالَ الإِخْوَةُ؟'
+        en: 'What did the brothers say?'
+        answer: 'اقْتُلُوا يُوسُفَ'
+        options:
+          - 'اقْتُلُوا يُوسُفَ'
+          - 'بَارَكَ اللهُ'
+          - 'لَا تُخْبِرْ'
