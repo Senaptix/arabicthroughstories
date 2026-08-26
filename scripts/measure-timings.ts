@@ -54,8 +54,9 @@
  * gets a plain player instead of a read-along (see the page-card route).
  *
  * Usage:
- *   npx tsx scripts/measure-timings.ts          propose cues for pages that
- *       have none, and re-check the committed ones against the detector
+ *   npx tsx scripts/measure-timings.ts [slug]   propose cues for pages that
+ *       have none, and re-check the committed ones against the detector.
+ *       Slug defaults to ibrahim.
  */
 
 import { execFileSync, spawnSync } from "node:child_process";
@@ -63,7 +64,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { getRecordedPages, parsePageText, parseTimings } from "../lib/parse";
 
-const SLUG = "ibrahim";
+const SLUG = process.argv[2] ?? "ibrahim";
 const AUDIO_DIR = path.join(process.cwd(), "public", "audio", SLUG);
 const TIMINGS = path.join(
   process.cwd(),
