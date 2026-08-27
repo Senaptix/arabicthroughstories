@@ -25,6 +25,8 @@ export type ReaderPage = {
   words: { ar: string; en: string }[];
   /** The clip and line cues, where this page has been recorded. */
   readAlong: { src: string; lines: { at: number; ar: string }[] } | null;
+  /** True for a human recording — hides AudioNote's synthetic-voice caveat. */
+  humanNarrated: boolean;
 };
 
 export default function BookReader({
@@ -156,7 +158,7 @@ export default function BookReader({
             lines={page.readAlong.lines}
             label={`page ${page.n}`}
           />
-          <AudioNote />
+          <AudioNote hidden={page.humanNarrated} />
         </div>
       )}
 

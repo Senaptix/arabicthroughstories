@@ -160,6 +160,7 @@ export default function Home() {
           .filter((w) => w.page === n)
           .map((w) => ({ ar: w.ar, en: w.en })),
         readAlong: getReadAlong(book.slug, n),
+        humanNarrated: book.human_narrated_pages.includes(n),
       };
     },
   );

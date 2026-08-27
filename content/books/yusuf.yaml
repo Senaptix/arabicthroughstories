@@ -20,11 +20,16 @@ age_range: "7 and up"
 # entirely while this is blank rather than pointing nowhere.
 buy_url: ""
 
-# No recordings yet. Book 1's narrator should record Book 2: a different voice
-# breaks the series for a child who has just spent a term with the first one.
+# Pages 3-12 recorded: 3-5 by Marjan (Book 1's narrator, so the series keeps
+# one voice), 6-12 Fasih TTS pending her re-recording. audio_status stays
+# none until the whole book is done, matching Ibrahim's own field.
 audio_status: none
 
 non_story_pages: [1, 2]
+
+# Pages read by Marjan rather than TTS. AudioNote checks this per page — a
+# human recording gets no synthetic-voice caveat, a TTS one still does.
+human_narrated_pages: [3, 4, 5]
 
 # Same depth as Book 1. For a family who already owns Ibrahim this preview is
 # the shop window — they read the opening of Yusuf, meet the gate, and that

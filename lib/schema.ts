@@ -130,6 +130,15 @@ export const BookSchema = z.object({
   /** Pages that carry no story text (cover, contents, appendix). */
   non_story_pages: z.array(z.number().int().positive()).default([]),
   /**
+   * Pages whose audio is a human recording, not synthetic TTS.
+   *
+   * AudioNote's synthetic-voice caveat is per-page true or false, never
+   * per-book: a book can carry a mix (Yusuf's early pages re-recorded by
+   * Marjan while later ones are still Fasih TTS), and showing the caveat on
+   * a human recording is as wrong as omitting it from a synthetic one.
+   */
+  human_narrated_pages: z.array(z.number().int().positive()).default([]),
+  /**
    * Sample pages for the marketing page — a taste, not the book.
    *
    * The website is a COMPANION: audio, vocabulary and word families belong

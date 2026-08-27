@@ -156,7 +156,7 @@ export default async function PageCard({
                 lines={readAlong.lines}
                 label={`page ${page}`}
               />
-              <AudioNote />
+              <AudioNote hidden={book.human_narrated_pages.includes(page)} />
             </div>
           </section>
         ) : (
@@ -187,7 +187,7 @@ export default async function PageCard({
                   Follow the words below as you listen — this page does not
                   highlight each line yet.
                 </p>
-                <AudioNote />
+                <AudioNote hidden={book.human_narrated_pages.includes(page)} />
               </section>
             )}
 
