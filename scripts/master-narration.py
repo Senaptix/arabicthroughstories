@@ -61,20 +61,61 @@ MASTER = (
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
+_MODEL = None
+
+
 def enhance(src, dest):
-    """ClearVoice speech enhancement, via the community Space.
+    """ClearVoice speech enhancement — MossFormer2_SE_48K, run locally.
 
-    The Alibaba original sits in RUNTIME_ERROR; mmwmm's fork is the one that
-    runs. Local install needs torch + torchvision + opencv (~3 GB) and is the
-    better home for this if the Space ever goes the same way.
+    Was called through the community Space. It stopped returning audio
+    mid-batch: HTTP answered in under a second while the job never came back,
+    and the Alibaba original had already been sitting in RUNTIME_ERROR. Two of
+    the three hosted enhancers tried for this pipeline failed the same way, so
+    the model runs here now. The checkpoint downloads once (~200 MB, cached in
+    ~/.cache/huggingface) and nothing about the sound changes — same model,
+    same weights.
+
+    Slower than a GPU Space when that Space is healthy. That is the trade: a
+    minute or two per page against a dependency that can vanish mid-book.
     """
-    from gradio_client import Client, handle_file
+    global _MODEL
+    import tempfile
 
-    token_file = os.path.expanduser("~/.hf_token")
-    token = open(token_file).read().strip() if os.path.exists(token_file) else None
-    client = Client("mmwmm/ClearVoice", token=token)
-    out = client.predict(handle_file(src), "48000 Hz", api_name="/predict")
-    shutil.copy(out if isinstance(out, str) else out[0], dest)
+    from clearvoice import ClearVoice
+
+    if _MODEL is None:
+        _MODEL = ClearVoice(
+            task="speech_enhancement", model_names=["MossFormer2_SE_48K"]
+        )
+
+    # output_path is a DIRECTORY, not a file: the result lands at
+    # <dir>/<model>/<input filename>, keeping the input's extension whatever
+    # the content is. Paths are absolutised — a relative one resolves against
+    # the library's cwd rather than ours, and the file appears elsewhere.
+    with tempfile.TemporaryDirectory() as staging:
+        _MODEL(
+            input_path=os.path.abspath(src),
+            online_write=True,
+            output_path=staging,
+        )
+        produced = os.path.join(
+            staging, "MossFormer2_SE_48K", os.path.basename(src)
+        )
+        if not os.path.exists(produced):
+            found = [
+                os.path.join(r, f) for r, _, fs in os.walk(staging) for f in fs
+            ]
+            raise RuntimeError(
+                f"ClearVoice wrote nothing for {src}; staging held {found}"
+            )
+        # Transcode rather than copy: the file carries the input's extension
+        # regardless of content, so a copy to dest.wav leaves MP3 bytes behind
+        # a .wav name and Praat refuses to open it. Fold to mono here too —
+        # Praat's pitch shift takes mono only, and the page ships mono.
+        subprocess.run(
+            ["ffmpeg", "-y", "-i", produced, "-ac", "1", dest, "-loglevel", "error"],
+            check=True,
+        )
 
 
 def shift_pitch(src, dest):
