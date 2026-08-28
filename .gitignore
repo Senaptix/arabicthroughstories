@@ -40,3 +40,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Model weights, downloaded on demand by scripts/master-narration.py.
+# ~212MB, re-fetched automatically if missing — never in the repo.
+checkpoints/
