@@ -28,6 +28,15 @@ rejected by ear as sounding like a voice changer even with formants
 preserved; PSOLA works on pitch periods directly and keeps the speaker
 sounding like themselves. See AUDIO_PLAN.md in the book repo.
 
+CALIBRATION, unresolved. The settings below were tuned against Yusuf 3-5,
+which the reader had already edited in Audio Evolution — so the compressor
+was acting on audio that had been levelled once already. Later takes are
+expected to arrive raw. Raw is the better input (one processing stage, and
+this chain levels every page identically, which is what evened the volume
+across 3-5), but a compressor tuned on pre-flattened audio has more range
+to act on than it was set for. Run the first raw take through and compare
+against the approved sound before batching the rest.
+
 Usage: python scripts/master-narration.py <slug> <page>=<take.wav> ...
   e.g. python scripts/master-narration.py yusuf 3=../raw/YusufPg3.wav
 """
