@@ -139,6 +139,26 @@ export default async function BookOverview({
             pages={storyPages}
             recorded={[...recorded]}
           />
+
+          {/* Blue means "has audio", but with almost every tile blue this
+              index read as "everything here is already open" — it was
+              reported as the gate having failed. It has not: /books/x/pN
+              beyond the preview shows the gate notice signed out. What was
+              missing is the sentence saying so, on the page where the tiles
+              are. Copy, not plumbing: telling PageIndex which pages are
+              locked would mean reading the session here and turning a static
+              route dynamic to grey out some squares. */}
+          <p className="mt-4 text-[15px] leading-6 text-[var(--ink)]/60">
+            Pages up to {book.preview_pages} are the free preview. The rest
+            open when you add this book to your{" "}
+            <Link
+              href="/account/sign-up"
+              className="text-brand-blue font-medium underline underline-offset-4"
+            >
+              parent account
+            </Link>
+            .
+          </p>
         </section>
 
         {/* The word families, as a way in rather than a wall of them. */}

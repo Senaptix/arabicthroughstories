@@ -303,6 +303,29 @@ export default function Home() {
               </a>
             )}
           </div>
+
+          {/* The account, said out loud on the sales page. It used to exist
+              only as an unlabelled book glyph in the header, and parents
+              reported the site as having no sign-in at all. One line under
+              the buttons, where someone who has just bought the book is
+              looking, costs nothing and answers the question. */}
+          <p className="text-ink/60 mt-5" style={{ fontSize: "15px" }}>
+            Already have the book?{" "}
+            <Link
+              href="/account/sign-up"
+              className="text-brand-blue font-medium underline underline-offset-4"
+            >
+              Create your parent account
+            </Link>{" "}
+            to open the companion, or{" "}
+            <Link
+              href="/account/sign-in"
+              className="text-brand-blue font-medium underline underline-offset-4"
+            >
+              sign in
+            </Link>
+            .
+          </p>
         </div>
 
         {/* Hero art. The book's own pages, tilted like loose sheets — no stock

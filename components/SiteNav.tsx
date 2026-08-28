@@ -85,7 +85,17 @@ export default function SiteNav({ bookSlug, hideInside }: Props) {
   ];
 
   return (
-    <div className="flex items-center gap-2 sm:gap-4">
+    /* ml-auto below sm is load-bearing, not tidying. On the landing page the
+       header is flex-wrap: a hero-size lockup plus these three controls does
+       not fit a phone, so the nav wraps onto its own line — and
+       `justify-between` with one item on a line puts it hard LEFT. The menu
+       panel below is anchored `right-0`, so it opened at x = -172 and was
+       clipped away by the page's overflow-x-hidden. Measured on the live site
+       at 375px AND at 412px, so it was never an iPhone bug; Android just
+       tends to meet this menu on a book page, where HomeBar never wraps.
+       Right-aligning the wrapped row is what keeps `right-0` pointing at
+       screen. sm:ml-0 leaves the desktop header's justify-between alone. */
+    <div className="ml-auto flex items-center gap-2 sm:ml-0 sm:gap-4">
       {/* Wide screens: the links are short enough to simply show. A
           hamburger on a desktop hides three words behind a click. */}
       <div className="hidden items-center gap-5 sm:flex">
@@ -100,7 +110,54 @@ export default function SiteNav({ bookSlug, hideInside }: Props) {
         ))}
       </div>
 
-      {/* Narrow screens: disclosure menu. */}
+      {/* The sale. Blue, present at every width, never behind the hamburger.
+          The label shortens below sm for the same reason the companion label
+          does: three controls plus the lockup is tight on a 360px phone. */}
+      {buy && (
+        <a
+          href={buy.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="bg-brand-blue text-paper inline-flex min-h-[44px] shrink-0 items-center rounded-xl px-3 text-[14px] font-medium whitespace-nowrap sm:px-4 transition-transform duration-150 ease-out hover:-translate-y-0.5"
+        >
+          <span className="sm:hidden">Buy</span>
+          <span className="hidden sm:inline">{buy.label}</span>
+        </a>
+      )}
+
+      {/* The way in for a parent. Named "Sign in" rather than "Book
+          companion", and labelled at EVERY width rather than icon-only on a
+          phone: bug reports said the site looked like it had no accounts at
+          all, which is exactly what an unlabelled book glyph looks like.
+          Measured at 360px on a book page — lockup, menu, Buy and this label
+          end at 336 of 360, no overflow — so the label costs nothing that the
+          icon was buying.
+
+          /account, not /account/sign-in, because /account redirects a
+          signed-out visitor to sign-in and sign-in redirects a signed-in one
+          back to /account. One href is right in both states.
+
+          ponytail: the LABEL is state-blind — a signed-in parent still reads
+          "Sign in" and lands in their area. Fixing that means making SiteNav
+          async and calling getParentId(), which drags the static landing page
+          into dynamic rendering for one word. Do it if parents complain. */}
+      <Link
+        href="/account"
+        className="border-brand-blue/40 text-brand-blue hover:border-brand-blue inline-flex min-h-[44px] shrink-0 items-center rounded-xl border px-3 text-[14px] font-medium whitespace-nowrap transition-colors duration-150 ease-out sm:px-4"
+      >
+        Sign in
+      </Link>
+
+      {/* Narrow screens: disclosure menu, and LAST in the row on purpose.
+          The panel is anchored `right-0` to this <details>, so wherever the
+          hamburger sits is where the panel's right edge sits. With the menu
+          first, its right edge was ~200px from the left on a phone and a
+          240px panel opened at x = -29, off-screen and clipped. Last in the
+          row puts that edge at the row's own right edge, which is the one
+          place the panel can always open inward. Verified by measuring
+          getBoundingClientRect at 320/360/375/412 on both the landing header
+          and HomeBar. Measure the rect; a screenshot harness has lied about
+          this bar's layout before. */}
       <details className="group relative sm:hidden">
         <summary
           aria-label="Menu"
@@ -146,61 +203,6 @@ export default function SiteNav({ bookSlug, hideInside }: Props) {
           ))}
         </nav>
       </details>
-
-      {/* The sale. Blue, present at every width, never behind the hamburger.
-          The label shortens below sm for the same reason the companion label
-          does: three controls plus the lockup is tight on a 360px phone. */}
-      {buy && (
-        <a
-          href={buy.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="bg-brand-blue text-paper inline-flex min-h-[44px] shrink-0 items-center rounded-xl px-3 text-[14px] font-medium whitespace-nowrap sm:px-4 transition-transform duration-150 ease-out hover:-translate-y-0.5"
-        >
-          <span className="sm:hidden">Buy</span>
-          <span className="hidden sm:inline">{buy.label}</span>
-        </a>
-      )}
-
-      {/* Shortened below sm for breathing room, not because it broke:
-          measured in a real 360px viewport, "Book companion" still fits
-          beside the lockup and the menu button with no overflow. It just
-          leaves the bar edge-to-edge, and ~30px of air is worth more than
-          the word "Book" on a phone. The label still names what it opens —
-          the thing that came with the book, not "sign in".
-
-          Headless screenshots said this was clipped at 390px. They were
-          wrong: `chrome --headless --window-size` did not give a true 390px
-          CSS viewport here, and the rendering it produced had the wrong
-          breakpoint applied. Measure getBoundingClientRect in a real
-          viewport before believing a screenshot harness about layout. */}
-      <Link
-        href="/account"
-        aria-label="Book companion"
-        className="border-brand-blue/40 text-brand-blue hover:border-brand-blue inline-flex min-h-[44px] shrink-0 items-center rounded-xl border px-3 text-[14px] font-medium whitespace-nowrap transition-colors sm:px-4 duration-150 ease-out"
-      >
-        {/* Icon-only below sm. Measured: with a text label the row needed
-            390px, which overflows a 360px Android phone — and 360 is one of
-            the two commonest widths there is. The companion is the secondary
-            action now that the book is on sale, so it is the one that gives
-            up its label rather than the sale. aria-label keeps it announced. */}
-        <svg
-          className="sm:hidden"
-          width="18"
-          height="18"
-          viewBox="0 0 18 18"
-          fill="none"
-          aria-hidden="true"
-        >
-          <path
-            d="M2.5 3.5h5a2 2 0 0 1 2 2v9a1.6 1.6 0 0 0-1.6-1.6H2.5zM15.5 3.5h-5a2 2 0 0 0-2 2v9a1.6 1.6 0 0 1 1.6-1.6h5.4z"
-            stroke="currentColor"
-            strokeWidth="1.4"
-            strokeLinejoin="round"
-          />
-        </svg>
-        <span className="hidden sm:inline">Book companion</span>
-      </Link>
     </div>
   );
 }
