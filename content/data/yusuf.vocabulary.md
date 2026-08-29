@@ -4,8 +4,8 @@ Every word taught in the book, in order of first appearance. **Check this
 before adding any glossary entry** — the teaching method depends on each word
 being introduced exactly once.
 
-⚠️ **IN PROGRESS — covers pages 3-12 of 59.** The Arabic for every page is
-already in `yusuf.pages.md`; the glossing of pages 13-59 has not been done yet.
+⚠️ **IN PROGRESS — covers pages 3-20 of 59.** The Arabic for every page is
+already in `yusuf.pages.md`; the glossing of pages 21-59 has not been done yet.
 Pages beyond the range above will show their text with no word list until it
 is written. That is a gap, not a design decision.
 
@@ -106,3 +106,85 @@ is written. That is a gap, not a design decision.
 | 93  | كَذِبٌ | false | 12 |
 | 94  | أَعْقَلَ | wiser | 12 |
 | 95  | أَوْلَادٌ | sons | 12 |
+| 96  | جَرَحَ | he wounded | 13 |
+| 97  | شَقَّ | he tore | 13 |
+| 98  | سَالِمٌ | undamaged | 13 |
+| 99  | مَوْضُوعَةٌ | made up | 13 |
+| 100  | قِصَّةٌ | a story | 13 |
+| 101  | صَبَرَ | he was patient | 13 |
+| 102  | صَبْرٌ جَمِيلٌ | beautiful patience | 13 |
+| 103  | الطَّعَامُ | the food | 14 |
+| 104  | الْفِرَاشُ | the bed | 14 |
+| 105  | نَامَ | he slept | 14 |
+| 106  | نَسِيَ | he forgot | 14 |
+| 107  | يَذْكُرُ | he remembers | 14 |
+| 108  | مُوحِشَةٌ | lonely | 14 |
+| 109  | اللَّيْلُ | the night | 14 |
+| 110  | جَمَاعَةٌ | a group | 15 |
+| 111  | تُسَافِرُ | travelling | 15 |
+| 112  | عَطِشَ | he was thirsty | 15 |
+| 113  | بَحَثَ | he searched | 15 |
+| 114  | أَدْلَى | he let down | 15 |
+| 115  | دَلْوٌ | a bucket | 15 |
+| 116  | نَزَعَ | he pulled up | 15 |
+| 117  | ثَقِيلَةٌ | heavy | 15 |
+| 118  | غُلَامٌ | a boy | 15 |
+| 119  | دَهِشَ | he was amazed | 15 |
+| 120  | نَادَى | he called out | 15 |
+| 121  | بُشْرَى | what good news | 15 |
+| 122  | أَخْفَوْهُ | they hid him | 16 |
+| 123  | وَصَلَ | he arrived | 16 |
+| 124  | السُّوقُ | the market | 16 |
+| 125  | يَشْتَرِي | he buys | 16 |
+| 126  | دَرَاهِمُ | dirhams | 16 |
+| 127  | مَعْدُودَةٌ | a few | 16 |
+| 128  | بَاعَ | he sold | 16 |
+| 129  | التُّجَّارُ | the merchants | 16 |
+| 130  | قَصْرٌ | a palace | 16 |
+| 131  | أَكْرِمِي | treat kindly | 16 |
+| 132  | رَشِيدٌ | well-guided | 16 |
+| 133  | رَاوَدَتْ | she tried to tempt | 17 |
+| 134  | الْخِيَانَةُ | betrayal | 17 |
+| 135  | أَبَى | he refused | 17 |
+| 136  | كَلَّا | never | 17 |
+| 137  | أَخُونُ | I betray | 17 |
+| 138  | سَيِّدِي | my master | 17 |
+| 139  | أَحْسَنَ | he was good to | 17 |
+| 140  | شَكَتْ | she complained | 17 |
+| 141  | كَاذِبَةٌ | lying | 17 |
+| 142  | أَمِينٌ | trustworthy | 17 |
+| 143  | الْخَاطِئِينَ | the wrongdoers | 17 |
+| 144  | جَمَالٌ | beauty | 18 |
+| 145  | بَشَرٌ | a human being | 18 |
+| 146  | مَلَكٌ كَرِيمٌ | a noble angel | 18 |
+| 147  | غَضَبٌ | anger | 18 |
+| 148  | السِّجْنُ | the prison | 18 |
+| 149  | أَحَبُّ | more beloved | 18 |
+| 150  | بَرِيءٌ | innocent | 18 |
+| 151  | دَخَلَ | he entered | 18 |
+| 152  | أَهْلُ السِّجْنِ | the prisoners | 19 |
+| 153  | شَابٌّ | a young man | 19 |
+| 154  | عَظِيمٌ | great | 19 |
+| 155  | صَدْرٌ | a chest | 19 |
+| 156  | رَحِيمٌ | merciful | 19 |
+| 157  | عَظَّمُوهُ | they honoured him | 19 |
+| 158  | قَصَّا | the two told | 19 |
+| 159  | أَعْصِرُ | I press | 19 |
+| 160  | خَمْرٌ | wine | 19 |
+| 161  | أَحْمِلُ | I carry | 19 |
+| 162  | خُبْزٌ | bread | 19 |
+| 163  | الطَّيْرُ | the birds | 19 |
+| 164  | التَّأْوِيلُ | the meaning | 20 |
+| 165  | عَالِمٌ | knowing | 20 |
+| 166  | الأَنْبِيَاءُ | the Prophets | 20 |
+| 167  | زَمَانٌ | a time | 20 |
+| 168  | يَعْبُدُونَ | they worship | 20 |
+| 169  | غَيْرَ | other than | 20 |
+| 170  | أَرْبَابٌ | lords | 20 |
+| 171  | الْبَرُّ | the land | 20 |
+| 172  | الْبَحْرُ | the sea | 20 |
+| 173  | الرِّزْقُ | provision | 20 |
+| 174  | الْمَطَرُ | the rain | 20 |
+| 175  | يَضْحَكُ | he laughs | 20 |
+| 176  | يَبْكِي | he weeps | 20 |
+| 177  | يَدْعُوَ | to call | 20 |
