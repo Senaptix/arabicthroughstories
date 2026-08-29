@@ -1,6 +1,7 @@
 import { cache } from "react";
 import { getBook } from "@/lib/parse";
 import { getParentId, requireProgressContext } from "@/lib/account";
+import { getAdminAccess } from "@/lib/admin";
 import { createClient } from "@/lib/supabase/server";
 
 /**
@@ -208,7 +209,25 @@ export async function canViewPage(
 ): Promise<boolean> {
   if (!GATE_ENABLED) return true;
   if (isFreePage(slug, page)) return true;
+  if (await isAdmin()) return true;
   return hasMembership(slug);
+}
+
+/**
+ * Admins see every page of every book.
+ *
+ * Not a convenience: the audio, the line cues and the word lists all have to
+ * be checked on the page a reader actually sees, and most of a book sits
+ * behind the gate long before it is published. Without this the only ways to
+ * proof a page were to grant yourself an entitlement or to widen the preview,
+ * and widening the preview to check page 11 publishes page 11.
+ *
+ * Membership is unaffected — this is a separate question with a separate
+ * answer, decided by ADMIN_EMAILS rather than by anything a visitor controls.
+ */
+async function isAdmin(): Promise<boolean> {
+  const { allowed } = await getAdminAccess();
+  return allowed;
 }
 
 /**
