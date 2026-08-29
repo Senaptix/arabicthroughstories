@@ -12,6 +12,7 @@ import QuranicText from "@/components/QuranicText";
 import GateNotice from "@/components/GateNotice";
 import PageProgress from "@/components/PageProgress";
 import { canViewPage } from "@/lib/access";
+import { getParentId } from "@/lib/account";
 import {
   getAllBooks,
   getBook,
@@ -98,6 +99,8 @@ export default async function PageCard({
   // The ONE access check. While lib/access.ts has GATE_ENABLED off this is
   // always true and the page renders exactly as it always has.
   const canView = await canViewPage(slug, page);
+  // Free: getParentId is cached per request and canViewPage just called it.
+  const signedIn = (await getParentId()) !== null;
 
   const isStoryPage = !book.non_story_pages.includes(page);
   // Per page, not per book: a clip exists for this page or it does not.
@@ -115,7 +118,11 @@ export default async function PageCard({
           (ACCESS_MODEL.md). Page cards are reached by turning pages and by
           following root-family links, so every one of them needs a way back
           out rather than relying on browser history. */}
-      <HomeBar bookSlug={book.slug} />
+      {/* This route already reads the session to answer canViewPage, so
+          telling the nav costs nothing here — and this is the page where a
+          stale "Sign in" was reported, sitting above "Saving progress for
+          Sara". */}
+      <HomeBar bookSlug={book.slug} signedIn={signedIn} />
 
       <main className="mx-auto w-full max-w-[640px] px-6 py-8 sm:px-8">
         {/* Meta bar — page number left, book right */}

@@ -70,9 +70,18 @@ type Props = {
   /** The landing page already renders "Look inside" a screen below; linking
    *  to an anchor on the page you are on is noise, so it can be dropped. */
   hideInside?: boolean;
+  /**
+   * Whether a parent is signed in, so the link can say so.
+   *
+   * Passed only by routes that already read the session, which is why it is
+   * optional rather than looked up here: reading it inside this component
+   * would make the static landing page render per request for one word.
+   * Left unset, the link reads "Sign in" as it always did.
+   */
+  signedIn?: boolean;
 };
 
-export default function SiteNav({ bookSlug, hideInside }: Props) {
+export default function SiteNav({ bookSlug, hideInside, signedIn }: Props) {
   const buy = buyUrlFor(bookSlug);
 
   const links = [
@@ -137,15 +146,17 @@ export default function SiteNav({ bookSlug, hideInside }: Props) {
           signed-out visitor to sign-in and sign-in redirects a signed-in one
           back to /account. One href is right in both states.
 
-          ponytail: the LABEL is state-blind — a signed-in parent still reads
-          "Sign in" and lands in their area. Fixing that means making SiteNav
-          async and calling getParentId(), which drags the static landing page
-          into dynamic rendering for one word. Do it if parents complain. */}
+          The label was state-blind, and it was reported: a book page saying
+          "Saving progress for Sara" above a button offering to sign you in
+          reads as a broken session. It is now told, rather than looking the
+          session up itself — see `signedIn` above for why. Routes that do not
+          pass it still read "Sign in", which is right for the landing page
+          and harmless elsewhere, since the href is correct in both states. */}
       <Link
         href="/account"
         className="border-brand-blue/40 text-brand-blue hover:border-brand-blue inline-flex min-h-[44px] shrink-0 items-center rounded-xl border px-3 text-[14px] font-medium whitespace-nowrap transition-colors duration-150 ease-out sm:px-4"
       >
-        Sign in
+        {signedIn ? "Your account" : "Sign in"}
       </Link>
 
       {/* Narrow screens: disclosure menu, and LAST in the row on purpose.

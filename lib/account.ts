@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import type { AvatarKey } from "@/lib/profile";
@@ -11,12 +12,16 @@ export type ChildProfile = {
   created_at: string;
 };
 
-export async function getParentId() {
+/**
+ * Cached per request: the access seam, the nav and anything else asking who
+ * this is share one token validation rather than each doing its own.
+ */
+export const getParentId = cache(async () => {
   const supabase = await createClient();
   const { data, error } = await supabase.auth.getClaims();
   if (error || typeof data?.claims?.sub !== "string") return null;
   return data.claims.sub;
-}
+});
 
 export async function getProfiles(parentId: string): Promise<ChildProfile[]> {
   const supabase = await createClient();
