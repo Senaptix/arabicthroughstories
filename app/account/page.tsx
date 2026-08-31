@@ -170,6 +170,16 @@ export default async function AccountPage({
                         {current ? `Continue page ${current.last_page}` : "Open book companion"}
                       </Link>
                       <Link href={`/account/my-words?book=${book.slug}`} className="inline-flex min-h-[46px] items-center rounded-xl border border-brand-blue px-5 text-[14px] font-medium text-brand-blue">My Words</Link>
+                      {/* "Continue" above jumps straight into the last page
+                          read, which is right for picking up a story — but it
+                          is then the only link on this card, and there was no
+                          way back to the page grid without clicking into that
+                          page first and using its own nav. This is the same
+                          /books/[book] link "Continue" itself uses before any
+                          progress exists. */}
+                      {current && (
+                        <Link href={`/books/${book.slug}`} className="inline-flex min-h-[46px] items-center rounded-xl border border-brand-blue px-5 text-[14px] font-medium text-brand-blue">All pages</Link>
+                      )}
                     </div>
                   </article>
                 );
