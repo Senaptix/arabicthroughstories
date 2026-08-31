@@ -544,10 +544,13 @@ function Choose({
  * A comprehension question — the only exercise that asks whether the child
  * followed the STORY rather than whether they remember a word.
  *
- * The English sits under the Arabic rather than replacing it. A child who
- * cannot yet read the question unaided would otherwise be unable to show what
- * they understood of the story, which is the one thing this is trying to find
- * out. It is the same reasoning as the English on the printed page.
+ * The English is a hint, tapped for rather than shown. A child who cannot yet
+ * read the question unaided needs SOME way to see it, or the exercise tests
+ * reading rather than the comprehension it is named for — but showing it
+ * unasked let the question be skimmed in English before the Arabic was even
+ * attempted, which is the opposite of what a reading exercise wants by
+ * default. Revealed, not hidden again: once read there is nothing left to
+ * protect, and hiding an already-seen translation only invites re-tapping.
  */
 function Question({
   ex,
@@ -562,6 +565,7 @@ function Question({
 }) {
   const options = useMemo(() => shuffled(ex.options, seed), [ex.options, seed]);
   const [picked, setPicked] = useState<string | null>(null);
+  const [showEnglish, setShowEnglish] = useState(false);
 
   return (
     <div>
@@ -570,12 +574,23 @@ function Question({
       <p lang="ar" dir="rtl" style={{ ...ar, textAlign: "start" }}>
         {ex.ar}
       </p>
-      <p
-        className="text-ink/55 mt-1 mb-5"
-        style={{ fontSize: "15px", lineHeight: 1.5 }}
-      >
-        {ex.en}
-      </p>
+
+      {showEnglish ? (
+        <p
+          className="text-ink/55 mt-1 mb-5"
+          style={{ fontSize: "15px", lineHeight: 1.5 }}
+        >
+          {ex.en}
+        </p>
+      ) : (
+        <button
+          type="button"
+          onClick={() => setShowEnglish(true)}
+          className="text-brand-blue mt-2 mb-5 inline-flex min-h-[32px] items-center text-[14px] font-medium underline-offset-4 hover:underline"
+        >
+          Show in English
+        </button>
+      )}
 
       <div className="flex flex-wrap gap-2">
         {options.map((o) => {
@@ -712,6 +727,7 @@ function Pattern({
   onDone: () => void;
 }) {
   const [picked, setPicked] = useState<{ ar: string; en: string } | null>(null);
+  const [showEnglish, setShowEnglish] = useState(false);
 
   return (
     <div>
@@ -753,15 +769,24 @@ function Pattern({
         ))}
       </div>
 
-      {picked && (
-        <p
-          className="text-ink/70 mt-4"
-          style={{ fontSize: "15px", lineHeight: 1.6 }}
-        >
-          You made a sentence meaning &ldquo;{picked.en}&rdquo;. Every one of
-          these works — try another.
-        </p>
-      )}
+      {picked &&
+        (showEnglish ? (
+          <p
+            className="text-ink/70 mt-4"
+            style={{ fontSize: "15px", lineHeight: 1.6 }}
+          >
+            You made a sentence meaning &ldquo;{picked.en}&rdquo;. Every one
+            of these works — try another.
+          </p>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setShowEnglish(true)}
+            className="text-brand-blue mt-4 inline-flex min-h-[32px] items-center text-[14px] font-medium underline-offset-4 hover:underline"
+          >
+            Show in English
+          </button>
+        ))}
     </div>
   );
 }

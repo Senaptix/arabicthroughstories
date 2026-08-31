@@ -68,9 +68,11 @@ export const ExerciseSchema = z.discriminatedUnion("type", [
    *
    * Modelled on the teacher's own revision slides, which ask exactly this and
    * in this form (مَنْ يَعْبُدُ الْأَصْنَامَ؟ / Who worshipped the idols?).
-   * The English is shown beneath, because the question is about comprehension
-   * and a child who cannot yet read the question cannot show what they
-   * understood of the story.
+   * The English is a tap-to-reveal hint under the Arabic (Practice.tsx),
+   * because the question is about comprehension and a child who cannot yet
+   * read the question cannot show what they understood of the story — but
+   * shown unasked it let the question be skimmed in English before the
+   * Arabic was even attempted.
    *
    * Every option is a word or phrase FROM THAT PAGE, so the corpus guard
    * applies unchanged — no carve-out, nothing relaxed.
