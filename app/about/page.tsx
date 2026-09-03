@@ -35,7 +35,7 @@ import { getBook } from "@/lib/parse";
 export const metadata: Metadata = {
   title: "Why we made this book",
   description:
-    "Abul Hasan Ali al-Hasani wrote Qasas an-Nabiyyin for his nephew because there was nothing else for Muslim children to read. This edition supplies what the classroom used to.",
+    "Abul Hasan Ali al-Hasani wrote Qisas al-Nabiyyin for his nephew because there was nothing else for Muslim children to read. This edition supplies what the classroom used to.",
   alternates: { canonical: "./" },
   openGraph: {
     title: "Why we made this book | Qasas Kids",
@@ -82,7 +82,7 @@ export default function AboutPage() {
             style={{ fontSize: "18px", lineHeight: 1.7 }}
           >
             Seminaries across the world teach Arabic from{" "}
-            <i>Qasas an-Nabiyyin</i>. Every word carries its vowels, the
+            <i>Qisas al-Nabiyyin</i>. Every word carries its vowels, the
             language rises story by story, and the teachers who use it love
             it. It was written for a room with an ustadh in it. Your child is
             reading at the kitchen table.
@@ -110,7 +110,7 @@ export default function AboutPage() {
               style={{ fontSize: "17px", lineHeight: 1.75 }}
             >
               Shaykh Sayyid Abul Hasan Ali al-Hasani an-Nadwi wrote the first
-              volume of <i>Qasas an-Nabiyyin</i> for a child in his own family.
+              volume of <i>Qisas al-Nabiyyin</i> for a child in his own family.
               He opens the book by explaining why.
             </p>
           </div>
@@ -127,7 +127,7 @@ export default function AboutPage() {
             you, the stories of the Prophets and Messengers in a simple style
             suited to your age and taste — and so I did.
             <Cite>
-              Abul Hasan Ali al-Hasani, preface to <i>Qasas an-Nabiyyin</i>,
+              Abul Hasan Ali al-Hasani, preface to <i>Qisas al-Nabiyyin</i>,
               vol. 1
             </Cite>
           </Quote>
@@ -211,7 +211,7 @@ export default function AboutPage() {
             >
               Our editor has studied with Shaykh Dr Mohammad Akram Nadwi
               since 2007. In that time he has heard the Shaykh recommend{" "}
-              <i>Qasas an-Nabiyyin</i> to students beginning Arabic, to
+              <i>Qisas al-Nabiyyin</i> to students beginning Arabic, to
               teachers building a syllabus, and to parents asking where to
               start. After enough years of that, you sit down and read it
               yourself.
@@ -567,7 +567,7 @@ The ustadh supplied everything the book left out
               style={{ fontSize: "14px", lineHeight: 1.6 }}
             >
               {book.title_en} — book {book.series_order} of the{" "}
-              <i>Qasas an-Nabiyyin</i> readers.
+              <i>Qisas al-Nabiyyin</i> readers.
             </p>
             <p
               className="text-ink/45 mt-1"

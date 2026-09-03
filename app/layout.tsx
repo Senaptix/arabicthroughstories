@@ -36,11 +36,14 @@ const latin = Lexend_Deca({
 });
 
 export const metadata: Metadata = {
-  // Qasas, not Qisas: the title is قَصَص (the masdar, as in سورة القصص), and
-  // the published Zam Zam edition romanises it "Qasas un Nabiyyeen" too.
-  // "Qisas" would be قِصَص, the plural of قِصَّة — a common misreading. The
-  // repo name and the `series` slug still say qisas; those are identifiers,
-  // not reader-facing text.
+  // Qisas, not Qasas: corrected 2026-09-02 on Shaykh Akram's direct
+  // feedback after reviewing the book, and confirmed by the kasrah under
+  // the ق in the editor's own Dar Ibn Kathir copy — قِصَص (qiṣaṣ, "stories"),
+  // not قَصَص (qaṣaṣ, the masdar "narration"). The Zam Zam edition's "Qasas
+  // un Nabiyyeen" and this repo's own earlier metadata are among the
+  // sources of the widespread but unvowelled misreading. Brand name stays
+  // "Qasas Kids" (see applicationName, title, siteName below) — the domain
+  // was kept on purpose and is not part of this correction.
   // Required for the OpenGraph image below. Facebook and WhatsApp fetch that
   // URL from their own servers, so a relative path is meaningless to them —
   // without this Next cannot make it absolute and the share card silently

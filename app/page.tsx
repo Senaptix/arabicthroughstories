@@ -239,7 +239,7 @@ export default function Home() {
             className="text-ink/75 mt-6 max-w-[46ch]"
             style={{ fontSize: "clamp(16px, 2.5vw, 19px)", lineHeight: 1.65 }}
           >
-            <i>Qasas an-Nabiyyin lil-Atfal</i> — twelve stories of the Prophets,
+            <i>Qisas al-Nabiyyin lil-Atfal</i> — twelve stories of the Prophets,
             written by Shaykh Abul Hasan Ali al-Hasani an-Nadwi for children
             learning Arabic, and taught in seminaries ever since.
           </p>
@@ -1201,7 +1201,7 @@ export default function Home() {
               style={{ fontSize: "14px", lineHeight: 1.6 }}
             >
               {book.title_en} — book {book.series_order} of the{" "}
-              <i>Qasas an-Nabiyyin</i> readers.
+              <i>Qisas al-Nabiyyin</i> readers.
             </p>
             <p
               className="text-ink/45 mt-1"

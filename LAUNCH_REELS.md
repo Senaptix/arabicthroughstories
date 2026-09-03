@@ -26,7 +26,7 @@ Three things carry the pitch, in this order:
    language goes in. Everything the book does exists to keep the Arabic
    *understandable* while it stays real: full vowelling, English underneath,
    new words glossed where they appear, audio for every page.
-2. **The heritage is the credibility.** Shaykh Abul Hasan's *Qasas an-Nabiyyin* has
+2. **The heritage is the credibility.** Shaykh Abul Hasan's *Qisas al-Nabiyyin* has
    been used to teach Arabic for generations. This is not a new method being
    tried on someone's children — it is a proven text with the obstacles
    removed.
@@ -39,7 +39,7 @@ raised outside the Arabic-speaking world, who do not have the language at
 home and do not have a teacher to hand.
 
 Be accurate about the original, because this audience knows it. **Shaykh Abul Hasan
-wrote *Qasas an-Nabiyyin* for non-native learners** — it is a graded reader,
+wrote *Qisas al-Nabiyyin* for non-native learners** — it is a graded reader,
 the vocabulary and structures build deliberately, and it has been used to
 teach Arabic as a second language to children and adults for decades, in
 Syria, in India, in British madrasas and summer schools. Anyone we are
@@ -384,7 +384,7 @@ source — do not convert it to 30, the duplicated frames judder on the slow
 push. Instagram, TikTok and YouTube all accept 24.
 
 **Captions are not optional.** Most of this plays on mute. Every word needs
-burned-in text — not platform auto-captions, which will mangle "Qasas",
+burned-in text — not platform auto-captions, which will mangle "Qisas",
 "an-Nabiyyin" and "alayhi salam".
 
 **Arabic on a phone.** Fully vowelled Arabic goes illegible fast at reel
