@@ -1,5 +1,5 @@
 /**
- * The SERIES: every story in Qisas al-Nabiyyin lil-Atfal, grouped into the
+ * The SERIES: every story in Qisas an-Nabiyyin lil-Atfal, grouped into the
  * four volumes Shaykh Abul Hasan published them in.
  *
  * GENERATED from the editor's own teaching slides — "03 Qasas Introduction
@@ -194,6 +194,6 @@ export function buyLabel(slug: string): string {
  */
 export const SERIES = {
   titleAr: "قصص النبيين للأطفال",
-  titleEn: "Qisas al-Nabiyyin lil-Atfal",
+  titleEn: "Qisas an-Nabiyyin lil-Atfal",
   author: "Shaykh Sayyid Abul Hasan Ali al-Hasani an-Nadwi",
 } as const;
