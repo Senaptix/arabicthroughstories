@@ -14,6 +14,8 @@
  * assert facts about one book rather than rules about all of them.
  */
 import assert from "node:assert/strict";
+import { readdirSync, readFileSync } from "node:fs";
+import { join, sep } from "node:path";
 import {
   getAllBooks,
   getBook,
@@ -288,5 +290,34 @@ if (books.some((b) => b.slug === "ibrahim")) {
 
   assert.ok(parseExercises("ibrahim").size > 0, "ibrahim has no exercises");
 }
+
+/* ------------------------------------------------------------------ *
+ * Faces stay off the funnel.
+ *
+ * The book, the companion and the homepage are faceless; the marketing
+ * reels are not (owner's decision, 2026-09-11). Faced assets live in
+ * public/marketing/ and may be referenced from app/watch/page.tsx ONLY.
+ * Anything else naming /marketing/ fails the build, so a faced clip cannot
+ * reach the homepage or a reading page through a copy-paste.
+ * ------------------------------------------------------------------ */
+
+const MARKETING_PAGE = join("app", "watch", "page.tsx");
+const THIS_FILE = join("lib", "parse.check.ts");
+const leaks: string[] = [];
+for (const root of ["app", "components", "lib", "content"]) {
+  for (const entry of readdirSync(root, { recursive: true })) {
+    const file = join(root, String(entry));
+    if (!/\.(tsx?|jsx?|md|ya?ml|json|css)$/.test(file)) continue;
+    if (file === MARKETING_PAGE || file === THIS_FILE) continue;
+    if (readFileSync(file, "utf8").includes("/marketing/")) {
+      leaks.push(file.split(sep).join("/"));
+    }
+  }
+}
+assert.deepEqual(
+  leaks,
+  [],
+  `faced marketing assets referenced outside ${MARKETING_PAGE}: ${leaks.join(", ")}`,
+);
 
 console.log(`parse checks passed for ${books.length} book(s)`);
