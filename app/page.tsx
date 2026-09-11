@@ -8,6 +8,7 @@ import Practice from "@/components/Practice";
 import ReadAlong from "@/components/ReadAlong";
 import TextPreview, { type PreviewPage } from "@/components/TextPreview";
 import SeriesIndex from "@/components/SeriesIndex";
+import HeroGallery from "@/components/HeroGallery";
 import { buyLabel, SERIES, isPublished } from "@/lib/catalogue";
 import {
   getAllBooks,
@@ -79,7 +80,7 @@ const SAMPLE_ART = [
  * source is the art director's approved export — Haneefah signed off pages
  * 3-22 except 13 and 22 on 2026-09-09 (book repo YUSUF_ART_APPROVALS.md):
  *
- *   upload/yusuf-pages-03-22-2026-09-08/page-{03,10,16}.png
+ *   upload/yusuf-pages-03-22-2026-09-08/page-{03,10,11,16,18}.png
  *
  * byte-identical across every later upload set, re-encoded to WebP at the
  * same 688x968. When Yusuf is printed, re-extract these from its PDF exactly
@@ -97,6 +98,28 @@ const YUSUF_ART = [
   },
   { page: 10, file: "yusuf/page-10.webp", caption: "The well" },
   { page: 16, file: "yusuf/page-16.webp", caption: "The Aziz's palace in Egypt" },
+];
+
+/**
+ * The hero: both parts, alternating. The main page of the sales funnel, so
+ * every page here is faceless and shows no Prophet (faced marketing art is
+ * confined to /watch by the build). Ibrahim's come from the print master as
+ * SAMPLE_ART's do; Yusuf's from the approved export named above YUSUF_ART.
+ * Pages 11 (the wolf and the ram) and 18 (the empty prison) have no people.
+ */
+const HERO_PAGES = [
+  { file: "page-03.webp", alt: "Part 1, page 3 — Azar's stall in the market" },
+  {
+    file: "yusuf/page-03.webp",
+    alt: "Part 2, page 3 — eleven stars, the sun and the moon",
+  },
+  {
+    file: "page-14.webp",
+    alt: "Part 1, page 14 — the people find their idols broken",
+  },
+  { file: "yusuf/page-11.webp", alt: "Part 2, page 11 — the wolf and the ram" },
+  { file: "page-18.webp", alt: "Part 1, page 18 — the fire" },
+  { file: "yusuf/page-18.webp", alt: "Part 2, page 18 — the prison" },
 ];
 
 /** Look a word's gloss up in the checked vocabulary index. Throws rather than
@@ -360,31 +383,11 @@ export default function Home() {
           </p>
         </div>
 
-        {/* Hero art. The book's own pages, tilted like loose sheets — no stock
-            imagery ever appears on this site (WEBSITE_DESIGN.md). */}
-        <div
-          className="relative mx-auto w-full max-w-[420px] lg:max-w-none"
-          aria-hidden="true"
-        >
-          <div className="relative aspect-[4/3.4]">
-            <FloatingPage
-              file="page-14.webp"
-              className="absolute top-[6%] left-0 w-[52%] -rotate-6"
-              priority
-            />
-            {/* Part 2's dream sits in the dark-blue slot page 18 held, so the
-                hero shows the work, not one book. Faceless and approved. */}
-            <FloatingPage
-              file="yusuf/page-03.webp"
-              className="absolute top-0 right-[2%] w-[46%] rotate-3"
-            />
-            <FloatingPage
-              file="page-03.webp"
-              className="absolute bottom-0 left-[24%] w-[54%] rotate-1"
-              priority
-            />
-          </div>
-        </div>
+        {/* Hero art. The book's own pages, both parts alternating — no stock
+            imagery ever appears on this site (WEBSITE_DESIGN.md). A swipe row
+            below lg; on desktop the loose-sheet fan, whose front card slides
+            on to the next page. See components/HeroGallery.tsx. */}
+        <HeroGallery pages={HERO_PAGES} />
       </section>
 
       {/* ---------------------------------------------------------------- *
@@ -1290,24 +1293,3 @@ function ArtRow({
   );
 }
 
-function FloatingPage({
-  file,
-  className,
-  priority,
-}: {
-  file: string;
-  className: string;
-  priority?: boolean;
-}) {
-  return (
-    <Image
-      src={`/art/${file}`}
-      alt=""
-      width={688}
-      height={968}
-      priority={priority}
-      sizes="(max-width: 1024px) 45vw, 260px"
-      className={`border-ink/10 rounded-xl border shadow-[0_18px_40px_-24px_rgba(26,42,74,0.45)] ${className}`}
-    />
-  );
-}

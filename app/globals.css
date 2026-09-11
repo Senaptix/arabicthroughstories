@@ -172,3 +172,16 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+/* Hero back sheets swap pictures as the deck advances (HeroGallery.tsx). */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-fade {
+    animation: hero-fade 600ms ease both;
+  }
+}
+
+@keyframes hero-fade {
+  from {
+    opacity: 0;
+  }
+}
