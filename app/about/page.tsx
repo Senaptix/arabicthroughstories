@@ -327,9 +327,11 @@ The ustadh supplied everything the book left out
             We gloss each word on the page where it first appears. Nobody
             turns to a glossary at the back.
           </Feature>
-          <Feature title="Read aloud by a native reader">
-            A native reader reads every page, and the line lights up as he
-            reads it. Pronunciation comes from a voice, the way it always has.
+          <Feature title="Every page read aloud">
+            Every page is read aloud, and the line lights up as it is read.
+            Part 2 is read by Maulana Marjan Ahmed; Part 1 uses an AI voice
+            he checked against the text. Pronunciation comes from a voice, the
+            way it always has.
           </Feature>
           <Feature title="Word families">
             You meet a root on one page and recognise it on another. That is

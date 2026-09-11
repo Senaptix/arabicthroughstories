@@ -8,7 +8,7 @@ import Practice from "@/components/Practice";
 import ReadAlong from "@/components/ReadAlong";
 import TextPreview, { type PreviewPage } from "@/components/TextPreview";
 import SeriesIndex from "@/components/SeriesIndex";
-import { buyLabel, SERIES } from "@/lib/catalogue";
+import { buyLabel, SERIES, isPublished } from "@/lib/catalogue";
 import {
   getAllBooks,
   getBook,
@@ -73,6 +73,32 @@ const SAMPLE_ART = [
   { page: 21, file: "page-21.webp", caption: "The sun, rising" },
 ];
 
+/**
+ * Book 2 samples. There is NO print master for Yusuf yet, so the rule above
+ * ("take art from the PDF and nowhere else") cannot be met. Until it can, the
+ * source is the art director's approved export — Haneefah signed off pages
+ * 3-22 except 13 and 22 on 2026-09-09 (book repo YUSUF_ART_APPROVALS.md):
+ *
+ *   upload/yusuf-pages-03-22-2026-09-08/page-{03,10,16}.png
+ *
+ * byte-identical across every later upload set, re-encoded to WebP at the
+ * same 688x968. When Yusuf is printed, re-extract these from its PDF exactly
+ * as Ibrahim's were, so the site cannot drift from the printed book.
+ *
+ * All three are chosen with no people in them, so the face rule and the
+ * no-Prophet rule have nothing to adjudicate: the dream as Yusuf saw it, and
+ * the places it led him. Yusuf (as) is never drawn.
+ */
+const YUSUF_ART = [
+  {
+    page: 3,
+    file: "yusuf/page-03.webp",
+    caption: "Eleven stars, the sun and the moon",
+  },
+  { page: 10, file: "yusuf/page-10.webp", caption: "The well" },
+  { page: 16, file: "yusuf/page-16.webp", caption: "The Aziz's palace in Egypt" },
+];
+
 /** Look a word's gloss up in the checked vocabulary index. Throws rather than
  *  rendering a word with no meaning beside it. */
 function gloss(vocab: VocabEntry[], ar: string): VocabEntry {
@@ -127,6 +153,12 @@ export default function Home() {
    * `next` is the first book after this one in series order that is not the
    * book this page is selling.
    */
+  // Part 2's release wording keys off the catalogue, so flipping Yusuf to
+  // "on-sale" in lib/catalogue.ts updates every line of this page — the
+  // marketing copy never has to be revisited for the launch.
+  const partTwoOut = isPublished("yusuf");
+  const partTwoWhen = partTwoOut ? "out now" : "out very soon";
+
   const next = getAllBooks().find((b) => b.slug !== SLUG);
   const nextPreview: PreviewPage[] = next
     ? (() => {
@@ -340,8 +372,10 @@ export default function Home() {
               className="absolute top-[6%] left-0 w-[52%] -rotate-6"
               priority
             />
+            {/* Part 2's dream sits in the dark-blue slot page 18 held, so the
+                hero shows the work, not one book. Faceless and approved. */}
             <FloatingPage
-              file="page-18.webp"
+              file="yusuf/page-03.webp"
               className="absolute top-0 right-[2%] w-[46%] rotate-3"
             />
             <FloatingPage
@@ -386,8 +420,8 @@ export default function Home() {
             know the set as Books 1 to 5, the fifth being the Seerah — so we
             keep his numbering and call each story a <strong>Part</strong> of
             its volume, never &ldquo;Book one&rdquo;. Volume 1, Part 1 is
-            printed and on sale; Part 2, Yusuf, has its Arabic on the site now
-            while the recordings and pictures are made.
+            printed and on sale; Part 2, Yusuf, is {partTwoWhen}, and its Arabic
+            is on the site to read already.
           </p>
         </div>
 
@@ -705,27 +739,17 @@ export default function Home() {
           </p>
         </div>
 
-        <ul className="reveal mt-10 grid grid-cols-1 gap-6 sm:grid-cols-3">
-          {SAMPLE_ART.map((item) => (
-            <li key={item.page}>
-              <Image
-                src={`/art/${item.file}`}
-                alt={`Page ${item.page} — ${item.caption}`}
-                width={688}
-                height={968}
-                sizes="(max-width: 640px) 90vw, 320px"
-                className="border-ink/10 w-full rounded-2xl border"
-              />
-              <p
-                className="text-ink/55 mt-3"
-                style={{ fontSize: "14px", lineHeight: 1.4 }}
-              >
-                <span className="text-brand-blue">Page {item.page}</span> ·{" "}
-                {item.caption}
-              </p>
-            </li>
-          ))}
-        </ul>
+        <ArtRow items={SAMPLE_ART} />
+
+        <p
+          className="reveal text-ink/70 mt-14 max-w-[52ch]"
+          style={{ fontSize: "clamp(16px, 2.5vw, 18px)", lineHeight: 1.65 }}
+        >
+          And from Part 2, the story of Yusuf (as) — {partTwoWhen}. He is
+          never shown either: here, the dream as he saw it, and the places it
+          led him.
+        </p>
+        <ArtRow items={YUSUF_ART} />
       </section>
 
       {/* ---------------------------------------------------------------- *
@@ -1019,7 +1043,7 @@ export default function Home() {
               className="text-ink/75 mt-4 space-y-2"
               style={{ fontSize: "16px", lineHeight: 1.6 }}
             >
-              <li>Every story page read aloud by a native reader</li>
+              <li>Every story page read aloud — an AI voice, checked by a human</li>
               <li>The line lights up as it is read</li>
               <li>All {vocab.length} words, searchable</li>
               <li>{families.length} word families to explore</li>
@@ -1066,7 +1090,7 @@ export default function Home() {
               className="text-brand-blue font-semibold"
               style={{ fontSize: "13px", letterSpacing: "0.1em" }}
             >
-              THE TEXT IS UP — AUDIO AND PICTURES TO COME
+              {partTwoOut ? "OUT NOW" : "OUT VERY SOON — THE ARABIC IS UP NOW"}
             </p>
             <p
               className="text-ink/75 mt-4 max-w-[62ch]"
@@ -1082,9 +1106,9 @@ export default function Home() {
               style={{ fontSize: "17px", lineHeight: 1.65 }}
             >
               All {nextStoryPages} pages of his Arabic are on the site now,
-              fully vowelled. Read the opening below — no account needed. The
-              recordings, the word lists and the pictures are still being made,
-              and the printed book follows them.
+              fully vowelled — read the opening below, no account needed. The
+              printed book, with its pictures, recordings and word lists, is{" "}
+              {partTwoWhen}.
             </p>
 
             {/* The preview itself, not a link to one. Someone who has just
@@ -1233,6 +1257,36 @@ function BlockLabel({ children }: { children: React.ReactNode }) {
     >
       {children}
     </p>
+  );
+}
+
+function ArtRow({
+  items,
+}: {
+  items: { page: number; file: string; caption: string }[];
+}) {
+  return (
+    <ul className="reveal mt-10 grid grid-cols-1 gap-6 sm:grid-cols-3">
+      {items.map((item) => (
+        <li key={item.file}>
+          <Image
+            src={`/art/${item.file}`}
+            alt={`Page ${item.page} — ${item.caption}`}
+            width={688}
+            height={968}
+            sizes="(max-width: 640px) 90vw, 320px"
+            className="border-ink/10 w-full rounded-2xl border"
+          />
+          <p
+            className="text-ink/55 mt-3"
+            style={{ fontSize: "14px", lineHeight: 1.4 }}
+          >
+            <span className="text-brand-blue">Page {item.page}</span> ·{" "}
+            {item.caption}
+          </p>
+        </li>
+      ))}
+    </ul>
   );
 }
 

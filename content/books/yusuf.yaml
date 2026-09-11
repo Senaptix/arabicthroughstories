@@ -20,11 +20,12 @@ age_range: "7 and up"
 # entirely while this is blank rather than pointing nowhere.
 buy_url: ""
 
-# Marjan's own reading — Book 1's narrator, so the series keeps one voice.
-# No TTS remains in this book. audio_status stays none until the whole book
-# is recorded, matching Ibrahim's own field. Every page now has a human
-# recording (page 58 was the last one left); audio_status is a separate,
-# deliberate go-live flip, not something a page count changes on its own.
+# Every page read by Maulana Marjan Ahmed — a human narrator who learned
+# Arabic, NOT a native speaker; never describe him as native. Part 1 is an
+# AI voice he checked against the text, so the two parts do not share a
+# voice. No TTS remains in this book. Every page now has a human recording
+# (page 58 was the last one left); audio_status is a separate, deliberate
+# go-live flip, not something a page count changes on its own.
 audio_status: none
 
 non_story_pages: [1, 2]

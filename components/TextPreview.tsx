@@ -104,8 +104,8 @@ export default function TextPreview({
             That is the free preview.
           </span>{" "}
           The remaining {totalStoryPages - pages.length} pages of Arabic are
-          already on the site. The recordings, the pictures and the word lists
-          are still being made, and the printed book follows them.{" "}
+          already on the site. The printed book, with its pictures, recordings
+          and word lists, is out very soon.{" "}
           <a
             href={`/books/${slug}`}
             className="text-brand-blue font-medium underline-offset-4 hover:underline"

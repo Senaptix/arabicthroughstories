@@ -11,7 +11,11 @@ age_range: "7 and up"
 # hero CTA, the look-inside CTA and the nav button; they render nothing while
 # it is blank, which is how the site shipped before the listing existed.
 buy_url: "https://amzn.eu/d/00MdbO1C"
-audio_status: none
+# All 50 pages recorded in an AI voice, checked by Maulana Marjan against
+# the text. "draft", not "final": the series is to be re-recorded by a
+# human (AudioNote says so). Only app/page.tsx reads this field; "none"
+# made the homepage claim the recordings were still being made.
+audio_status: draft
 # Cover, contents, and the two word-family appendix pages carry no story
 # text and so have no per-page glossary or audio clip.
 non_story_pages: [1, 2, 53, 54]

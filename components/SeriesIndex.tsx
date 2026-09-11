@@ -40,7 +40,7 @@ const STATUS: Record<
   "text-online": {
     label: "Arabic online",
     tone: "bg-sand text-ink/80",
-    note: "Read the text now — recordings and pictures being made",
+    note: "Read the text now — the book is out very soon",
   },
   planned: { label: "To come", tone: "bg-ink/8 text-ink/55", note: "" },
 };
