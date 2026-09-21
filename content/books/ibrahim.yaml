@@ -11,6 +11,18 @@ age_range: "7 and up"
 # hero CTA, the look-inside CTA and the nav button; they render nothing while
 # it is blank, which is how the site shipped before the listing existed.
 buy_url: "https://amzn.eu/d/00MdbO1C"
+# One link per Amazon store that carries the paperback, so the buy button
+# can offer the reader's own country. The paperback ASIN is the same in every
+# store; each URL was opened and checked on 21 Sep 2026. amazon.in does not
+# carry it. Kindle is reachable from each page's "other formats".
+buy_links:
+  - { store: "United Kingdom", url: "https://www.amazon.co.uk/dp/B0HG7DQDMC" }
+  - { store: "United States", url: "https://www.amazon.com/dp/B0HG7DQDMC" }
+  - { store: "Canada", url: "https://www.amazon.ca/dp/B0HG7DQDMC" }
+  - { store: "Australia", url: "https://www.amazon.com.au/dp/B0HG7DQDMC" }
+  - { store: "Ireland", url: "https://www.amazon.ie/dp/B0HG7DQDMC" }
+  - { store: "Germany", url: "https://www.amazon.de/dp/B0HG7DQDMC" }
+  - { store: "Netherlands", url: "https://www.amazon.nl/dp/B0HG7DQDMC" }
 # All 50 pages recorded in an AI voice, checked by Maulana Marjan against
 # the text. "draft", not "final": the series is to be re-recorded by a
 # human (AudioNote says so). Only app/page.tsx reads this field; "none"

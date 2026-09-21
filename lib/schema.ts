@@ -128,6 +128,14 @@ export const BookSchema = z.object({
   buy_url: z
     .union([z.string().url(), z.literal("")])
     .default(""),
+  /**
+   * The same listing in each country's Amazon store. When present the buy
+   * buttons open a store picker; when empty they link straight to buy_url.
+   * buy_url stays the switch for whether the book is on sale at all.
+   */
+  buy_links: z
+    .array(z.object({ store: z.string().min(1), url: z.string().url() }))
+    .default([]),
   audio_status: z.enum(["none", "draft", "final"]),
   /** Pages that carry no story text (cover, contents, appendix). */
   non_story_pages: z.array(z.number().int().positive()).default([]),

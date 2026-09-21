@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { buyLabel, CATALOGUE } from "@/lib/catalogue";
 import { getBook } from "@/lib/parse";
+import BuyMenu, { type StoreLink } from "@/components/BuyMenu";
 
 /**
  * The site's navigation: inline links on a wide screen, a disclosure menu on
@@ -42,11 +43,15 @@ import { getBook } from "@/lib/parse";
  * disappears entirely rather than pointing nowhere. Same rule the hero CTA
  * has always followed.
  */
-function buyUrlFor(bookSlug?: string): { url: string; label: string } | null {
-  const urlOf = (slug: string): { url: string; label: string } | null => {
+type Buy = { url: string; label: string; links: StoreLink[] };
+
+function buyUrlFor(bookSlug?: string): Buy | null {
+  const urlOf = (slug: string): Buy | null => {
     try {
       const b = getBook(slug);
-      return b.buy_url ? { url: b.buy_url, label: buyLabel(slug) } : null;
+      return b.buy_url
+        ? { url: b.buy_url, label: buyLabel(slug), links: b.buy_links }
+        : null;
     } catch {
       return null;
     }
@@ -123,15 +128,18 @@ export default function SiteNav({ bookSlug, hideInside, signedIn }: Props) {
           The label shortens below sm for the same reason the companion label
           does: three controls plus the lockup is tight on a 360px phone. */}
       {buy && (
-        <a
-          href={buy.url}
-          target="_blank"
-          rel="noopener noreferrer"
+        <BuyMenu
+          label={
+            <>
+              <span className="sm:hidden">Buy</span>
+              <span className="hidden sm:inline">{buy.label}</span>
+            </>
+          }
+          url={buy.url}
+          links={buy.links}
+          align="right"
           className="bg-brand-blue text-paper inline-flex min-h-[44px] shrink-0 items-center rounded-xl px-3 text-[14px] font-medium whitespace-nowrap sm:px-4 transition-transform duration-150 ease-out hover:-translate-y-0.5"
-        >
-          <span className="sm:hidden">Buy</span>
-          <span className="hidden sm:inline">{buy.label}</span>
-        </a>
+        />
       )}
 
       {/* The way in for a parent. Named "Sign in" rather than "Book
@@ -192,14 +200,33 @@ export default function SiteNav({ bookSlug, hideInside, signedIn }: Props) {
         <nav className="border-ink/10 bg-paper absolute right-0 z-20 mt-2 w-[240px] rounded-2xl border p-2 shadow-[0_18px_40px_-24px_rgba(26,42,74,0.45)]">
           {buy && (
             <>
-              <a
-                href={buy.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-brand-blue text-paper flex min-h-[48px] items-center justify-center rounded-xl px-3 text-[15px] font-medium"
-              >
-                {buy.label} on Amazon
-              </a>
+              {buy.links.length === 0 ? (
+                <a
+                  href={buy.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-brand-blue text-paper flex min-h-[48px] items-center justify-center rounded-xl px-3 text-[15px] font-medium"
+                >
+                  {buy.label} on Amazon
+                </a>
+              ) : (
+                <>
+                  <p className="text-ink/60 px-3 pt-1 pb-1 text-[13px]">
+                    {buy.label} on Amazon
+                  </p>
+                  {buy.links.map((l) => (
+                    <a
+                      key={l.url}
+                      href={l.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-brand-blue hover:bg-sand/30 flex min-h-[44px] items-center rounded-xl px-3 text-[15px] font-medium"
+                    >
+                      {l.store}
+                    </a>
+                  ))}
+                </>
+              )}
               <div className="border-ink/10 my-2 border-t" />
             </>
           )}

@@ -4,6 +4,7 @@ import BrandLockup from "@/components/BrandLockup";
 import SiteNav from "@/components/SiteNav";
 import BookReader, { type ReaderPage } from "@/components/BookReader";
 import Eyebrow from "@/components/Eyebrow";
+import BuyMenu from "@/components/BuyMenu";
 import Practice from "@/components/Practice";
 import ReadAlong from "@/components/ReadAlong";
 import TextPreview, { type PreviewPage } from "@/components/TextPreview";
@@ -333,13 +334,12 @@ export default function Home() {
           <div className="mt-9 flex flex-wrap items-center gap-3">
             {book.buy_url ? (
               <>
-                <a
-                  href={book.buy_url}
-                  className="bg-brand-blue text-paper inline-flex min-h-[48px] items-center rounded-2xl px-6 font-medium transition-transform duration-150 ease-out hover:-translate-y-0.5"
-                  style={{ fontSize: "16px" }}
-                >
-                  {buyLabel(book.slug)}
-                </a>
+                <BuyMenu
+                  label={buyLabel(book.slug)}
+                  url={book.buy_url}
+                  links={book.buy_links}
+                  className="bg-brand-blue text-paper inline-flex min-h-[48px] items-center rounded-2xl px-6 text-[16px] font-medium transition-transform duration-150 ease-out hover:-translate-y-0.5"
+                />
                 <a
                   href="#inside"
                   className="border-ink/15 text-ink hover:border-ink/35 inline-flex min-h-[48px] items-center rounded-2xl border px-6 font-medium transition-colors duration-150 ease-out"
@@ -474,13 +474,12 @@ export default function Home() {
 
             {book.buy_url && (
               <div className="mt-10 flex justify-center">
-                <a
-                  href={book.buy_url}
-                  className="bg-brand-blue text-paper inline-flex min-h-[48px] items-center rounded-2xl px-7 font-medium transition-transform duration-150 ease-out hover:-translate-y-0.5"
-                  style={{ fontSize: "16px" }}
-                >
-                  {buyLabel(book.slug)}
-                </a>
+                <BuyMenu
+                  label={buyLabel(book.slug)}
+                  url={book.buy_url}
+                  links={book.buy_links}
+                  className="bg-brand-blue text-paper inline-flex min-h-[48px] items-center rounded-2xl px-7 text-[16px] font-medium transition-transform duration-150 ease-out hover:-translate-y-0.5"
+                />
               </div>
             )}
           </div>
