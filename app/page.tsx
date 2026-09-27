@@ -391,6 +391,64 @@ export default function Home() {
       </section>
 
       {/* ---------------------------------------------------------------- *
+       * The 30-second reel — see the page, hear the story, learn from it.
+       *
+       * Faceless like the rest of this page: the book's own page 4 and
+       * figure-free story art only, no Prophet in any form. It lives in
+       * public/video/, never the faced-reels folder that only /watch may use.
+       *
+       * Poster + click to play, never autoplay: WEBSITE_DESIGN.md forbids
+       * animating Arabic text unasked and asks us to respect reduced motion,
+       * and preload="none" keeps the 3.6 MB file off the first paint.
+       * Source: book repo videos/qasaskids-reel-15s (HyperFrames), 720x1280.
+       * ---------------------------------------------------------------- */}
+      <section
+        id="reel"
+        className="mx-auto grid w-full max-w-[1100px] scroll-mt-8 items-center gap-10 px-6 py-12 sm:px-8 lg:grid-cols-[1fr_360px] lg:gap-16 lg:py-16"
+      >
+        <div className="reveal">
+          <Eyebrow>In 30 seconds</Eyebrow>
+          <h2
+            className="text-ink mt-4 max-w-[22ch] font-semibold text-balance"
+            style={{
+              fontSize: "clamp(28px, 5vw, 42px)",
+              lineHeight: 1.15,
+              letterSpacing: "-0.015em",
+            }}
+          >
+            See the page. Hear the story. Understand the words.
+          </h2>
+          <p
+            className="text-ink/70 mt-4 max-w-[48ch]"
+            style={{ fontSize: "17px", lineHeight: 1.65 }}
+          >
+            Every page of the book is read aloud on this site, with the line
+            being spoken highlighted as it goes and the new words set out
+            beside it. Press play to watch page 4 being read.
+          </p>
+          <a
+            href="#inside"
+            className="text-brand-blue mt-6 inline-block font-medium underline underline-offset-4"
+            style={{ fontSize: "17px" }}
+          >
+            Look inside the book →
+          </a>
+        </div>
+
+        <video
+          src="/video/qasaskids-reel.mp4"
+          poster="/video/qasaskids-reel-poster.webp"
+          controls
+          playsInline
+          preload="none"
+          aria-label="QasasKids in 30 seconds: page 4 of Who Broke the Idols? read aloud on qasaskids.com"
+          className="border-ink/10 mx-auto aspect-[9/16] w-full max-w-[360px] rounded-3xl border bg-black shadow-[0_24px_60px_rgb(26_42_74_/_0.22)]"
+        >
+          Your browser cannot play this video.
+        </video>
+      </section>
+
+      {/* ---------------------------------------------------------------- *
        * The stories — the whole work, and where each one has got to.
        *
        * This sits directly under the hero because the hero now introduces the
