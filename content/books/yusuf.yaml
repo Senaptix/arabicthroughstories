@@ -9,12 +9,14 @@ series: qisas-an-nabiyyin
 series_order: 2
 
 # Cover, contents, 57 story pages, then the back matter: the word-family
-# appendix on 60-61 and the word list on 62-68, built in Canva on
-# 12 September 2026. The back matter carries no story text, so it is declared
+# appendix on 60 and the word list on 61-67, built in Canva on
+# 12 September 2026. The appendix was two pages (60-61) until 14 September,
+# when its last two roots were moved up and the near-empty page 61 deleted.
+# The back matter carries no story text, so it is declared
 # in non_story_pages below — parse.check.ts demands text for every page
 # between 3 and page_count that is not listed there, which is the guard
 # working as intended.
-page_count: 68
+page_count: 67
 age_range: "7 and up"
 
 # The Amazon listing. LEAVE EMPTY until it is live — the buy button is hidden
@@ -31,7 +33,7 @@ audio_status: none
 
 # Cover and contents at the front; word families and the word list at the
 # back. None of these carry story text, so none get a read-along.
-non_story_pages: [1, 2, 60, 61, 62, 63, 64, 65, 66, 67, 68]
+non_story_pages: [1, 2, 60, 61, 62, 63, 64, 65, 66, 67]
 
 # Pages read by Marjan rather than TTS. AudioNote checks this per page — a
 # human recording gets no synthetic-voice caveat, a TTS one still does.
