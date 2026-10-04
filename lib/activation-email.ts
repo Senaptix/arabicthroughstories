@@ -22,7 +22,12 @@ function smtpSettings() {
   };
 }
 
-export async function sendActivationCodeEmail(email: string, code: string) {
+export async function sendActivationCodeEmail(
+  email: string,
+  code: string,
+  // Stall sales by default; the Paddle webhook passes "online".
+  boughtWhere: "in person" | "online" = "in person",
+) {
   const transporter = nodemailer.createTransport(smtpSettings());
   await transporter.sendMail({
     from: `Qasas Kids <${FROM_ADDRESS}>`,
@@ -30,7 +35,7 @@ export async function sendActivationCodeEmail(email: string, code: string) {
     replyTo: FROM_ADDRESS,
     subject: "Your Qasas Kids activation code",
     text: [
-      "Thank you for buying Qasas Kids in person.",
+      `Thank you for buying Qasas Kids ${boughtWhere}.`,
       "",
       `Your activation code is: ${code}`,
       "",
@@ -40,7 +45,7 @@ export async function sendActivationCodeEmail(email: string, code: string) {
     ].join("\n"),
     html: `
       <div style="font-family:Arial,sans-serif;max-width:560px;margin:auto;color:#1a2a4a;line-height:1.6">
-        <p>Thank you for buying Qasas Kids in person.</p>
+        <p>Thank you for buying Qasas Kids ${boughtWhere}.</p>
         <p style="margin:28px 0 8px">Your activation code is:</p>
         <p style="font-size:30px;font-weight:700;letter-spacing:0.08em;color:#004aad;margin:0 0 28px">${code}</p>
         <p>Go to <a href="https://qasaskids.com">qasaskids.com</a>, create a parent account, and enter this code where it asks for your order number.</p>

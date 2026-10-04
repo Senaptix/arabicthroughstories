@@ -21,5 +21,6 @@ export const config = {
     "/auth/:path*",
     "/api/progress/:path*",
     "/books/:path*",
+    "/buy/:path*",
   ],
 };
