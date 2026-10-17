@@ -1271,15 +1271,35 @@ export default function Home() {
                 header — a first-time visitor should meet the book before
                 the reasoning behind it — but a parent who has scrolled this
                 far is exactly the one who wants it. */}
-            <p>
+            <div className="flex flex-wrap gap-x-3 gap-y-1 sm:justify-end text-[14px] leading-6">
               <Link
                 href="/about"
                 className="text-brand-blue underline-offset-4 hover:underline"
-                style={{ fontSize: "14px", lineHeight: 1.6 }}
               >
                 Why we made this book
               </Link>
-            </p>
+              <span className="text-ink/25" aria-hidden="true">·</span>
+              <Link
+                href="/terms"
+                className="text-ink/65 hover:text-ink underline-offset-4 hover:underline"
+              >
+                Terms
+              </Link>
+              <span className="text-ink/25" aria-hidden="true">·</span>
+              <Link
+                href="/refunds"
+                className="text-ink/65 hover:text-ink underline-offset-4 hover:underline"
+              >
+                Refunds
+              </Link>
+              <span className="text-ink/25" aria-hidden="true">·</span>
+              <Link
+                href="/privacy"
+                className="text-ink/65 hover:text-ink underline-offset-4 hover:underline"
+              >
+                Privacy
+              </Link>
+            </div>
             <p
               className="text-ink/60 mt-2"
               style={{ fontSize: "14px", lineHeight: 1.6 }}
