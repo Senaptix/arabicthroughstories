@@ -13,11 +13,11 @@ import GateNotice from "@/components/GateNotice";
 import PageProgress from "@/components/PageProgress";
 import { canViewPage } from "@/lib/access";
 import { getParentId } from "@/lib/account";
+import { getPageImageUrl } from "@/lib/book-pages";
+import Image from "next/image";
 import {
-  getAllBooks,
   getBook,
   getPageContent,
-  getPageNumbers,
   getReadAlong,
   parseExercises,
 } from "@/lib/parse";
@@ -48,14 +48,7 @@ function parsePageSlug(slug: string): number | null {
   return Number.isInteger(n) && n > 0 ? n : null;
 }
 
-export function generateStaticParams(): Params[] {
-  return getAllBooks().flatMap((book) =>
-    getPageNumbers(book).map((n) => ({
-      book: book.slug,
-      pageSlug: `p${n}`,
-    })),
-  );
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
@@ -112,6 +105,27 @@ export default async function PageCard({
   const next = page < book.page_count ? page + 1 : null;
   const hasPractice = (parseExercises(slug).get(page)?.length ?? 0) > 0;
 
+  const pageImageUrl = await getPageImageUrl({
+    bookSlug: slug,
+    page,
+    canView,
+  });
+
+  const canViewNext = canView && next !== null ? await canViewPage(slug, next) : false;
+  const nextImageUrl =
+    canViewNext && next !== null
+      ? await getPageImageUrl({
+          bookSlug: slug,
+          page: next,
+          canView: canViewNext,
+        })
+      : null;
+
+  const altText =
+    text.length > 0
+      ? `Page ${page} — ${text.join(" ")}`
+      : `Page ${page} — ${book.title_en}`;
+
   return (
     <>
       {/* The book carries ONE code, to the book — not one per page
@@ -125,6 +139,8 @@ export default async function PageCard({
       <HomeBar bookSlug={book.slug} signedIn={signedIn} />
 
       <main className="mx-auto w-full max-w-[640px] px-6 py-8 sm:px-8">
+        {nextImageUrl && <link rel="prefetch" href={nextImageUrl} as="image" />}
+
         {/* Meta bar — page number left, book right */}
         <div className="mb-8 flex items-baseline justify-between gap-4">
           <span className="text-[14px] font-medium text-[var(--brand-blue)]">
@@ -144,6 +160,19 @@ export default async function PageCard({
             their progress. */}
         {canView && isStoryPage && (
           <PageProgress bookSlug={book.slug} page={page} />
+        )}
+
+        {pageImageUrl && (
+          <div className="mb-8 overflow-hidden rounded-2xl border border-[var(--ink)]/10 shadow-sm">
+            <Image
+              src={pageImageUrl}
+              alt={altText}
+              width={688}
+              height={968}
+              unoptimized
+              className="h-auto w-full"
+            />
+          </div>
         )}
 
         {/* With audio, the text and the player are one thing: the line being
