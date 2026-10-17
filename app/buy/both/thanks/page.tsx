@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 // Paddle's webhook, not this page, grants access. It usually lands within
 // seconds, but this page must not claim the books are open: they may not be yet.
 export default async function BothThanksPage() {
-  if (!checkoutEnabled() || !priceIdFor("both")) notFound();
+  if (!checkoutEnabled() || (!priceIdFor("both", "annual") && !priceIdFor("both", "monthly"))) notFound();
   const signedIn = !!(await getParentId());
 
   return (

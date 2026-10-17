@@ -25,7 +25,7 @@ export default async function GateNotice({
   // they need the box that takes an order number, which now exists.
   const signedIn = membershipState !== "signed-out";
 
-  const canBuy = checkoutEnabled() && Boolean(priceIdFor(bookSlug));
+  const canBuy = checkoutEnabled() && Boolean(priceIdFor(bookSlug, "annual") || priceIdFor(bookSlug, "monthly"));
 
   /*
    * A book that is not on sale yet has no door through this gate: there is no
@@ -100,14 +100,14 @@ export default async function GateNotice({
               className="bg-brand-blue text-paper inline-flex min-h-[48px] items-center rounded-xl px-5 font-medium"
               style={{ fontSize: "16px" }}
             >
-              Buy the Digital Edition — £7.99
+              Buy the Digital Edition
             </Link>
             <Link
               href="/buy/both"
               className="border-ink/15 text-ink hover:border-ink/35 inline-flex min-h-[48px] items-center rounded-xl border px-5 font-medium transition-colors"
               style={{ fontSize: "16px" }}
             >
-              Both parts — £12.99
+              Both parts
             </Link>
             <Link
               href={signedIn ? "/account#add-a-book" : "/activate"}

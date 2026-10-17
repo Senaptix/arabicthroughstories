@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 export default async function ThanksPage({ params }: { params: Promise<{ book: string }> }) {
   const { book: slug } = await params;
   if (slug === "both") notFound();
-  if (!checkoutEnabled() || !priceIdFor(slug)) notFound();
+  if (!checkoutEnabled() || (!priceIdFor(slug, "annual") && !priceIdFor(slug, "monthly"))) notFound();
   const book = getBook(slug);
   const signedIn = !!(await getParentId());
 

@@ -22,6 +22,7 @@ import {
   looksLikeActivationCode,
   redemptionRateKey,
 } from "@/lib/activation-codes";
+import { createCustomerPortalSession } from "@/lib/paddle";
 
 export type ActionState = { message?: string; success?: string };
 
@@ -468,3 +469,33 @@ export async function switchProfile(formData: FormData) {
   revalidatePath("/account");
   redirect("/account");
 }
+
+export async function manageSubscription() {
+  const parentId = await getParentId();
+  if (!parentId) redirect("/account/sign-in");
+
+  const supabase = await createClient();
+  const { data: sub } = await supabase
+    .from("paddle_subscriptions")
+    .select("subscription_id, customer_id")
+    .eq("parent_id", parentId)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (!sub?.customer_id) {
+    redirect("/account");
+  }
+
+  const portalUrl = await createCustomerPortalSession(
+    sub.customer_id,
+    sub.subscription_id ? [sub.subscription_id] : undefined,
+  );
+
+  if (!portalUrl) {
+    redirect("/account");
+  }
+
+  redirect(portalUrl);
+}
+

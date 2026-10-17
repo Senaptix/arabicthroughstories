@@ -3,7 +3,7 @@
 import Script from "next/script";
 import { useState } from "react";
 
-type PaddleGlobal = {
+export type PaddleGlobal = {
   Environment: { set(env: string): void };
   Initialize(opts: { token: string }): void;
   Checkout: {
@@ -14,6 +14,18 @@ type PaddleGlobal = {
       settings?: { displayMode?: string; successUrl?: string; theme?: string };
     }): void;
   };
+  PricePreview(opts: {
+    items: { priceId: string; quantity: number }[];
+  }): Promise<{
+    data?: {
+      details?: {
+        lineItems?: {
+          price?: { id?: string };
+          formattedTotals?: { total?: string; subtotal?: string };
+        }[];
+      };
+    };
+  }>;
 };
 
 declare global {

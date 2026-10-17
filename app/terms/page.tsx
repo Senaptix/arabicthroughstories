@@ -49,7 +49,10 @@ export default function TermsPage() {
           <section>
             <h2 className="text-ink text-[20px] font-semibold">The digital product and access</h2>
             <p className="mt-3">
-              Purchasing a digital edition grants 12 months of online companion access to one book (or both books if purchasing the bundle).
+              Purchasing an annual digital edition grants 12 months of online companion access to one book (or both books if purchasing the bundle).
+            </p>
+            <p className="mt-3">
+              Monthly subscriptions renew monthly until cancelled. You can cancel any time from your account, and access continues to the end of the paid month.
             </p>
             <p className="mt-3">
               Access is provided through your web browser on qasaskids.com. Content is read online only; nothing is downloaded, and offline files or software downloads are not provided.

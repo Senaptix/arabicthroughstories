@@ -6,7 +6,7 @@ import ProfileCreator from "@/components/account/ProfileCreator";
 import ProfileRenamer from "@/components/account/ProfileRenamer";
 import ReceiptNotice from "@/components/account/ReceiptNotice";
 import BookClaimer from "@/components/account/BookClaimer";
-import { signOut, switchProfile } from "./actions";
+import { manageSubscription, signOut, switchProfile } from "./actions";
 import { getActiveProfile, getParentId, getProfiles } from "@/lib/account";
 import { getEntitlements } from "@/lib/access";
 import { isPublished } from "@/lib/catalogue";
@@ -32,24 +32,37 @@ export default async function AccountPage({
   const entitlements = await getEntitlements();
   const query = await searchParams;
   const supabase = await createClient();
-  const [bookResult, pageResult] = active
-    ? await Promise.all([
-        supabase.from("book_progress").select("book_slug, last_page, last_seen_at").eq("child_id", active.id),
-        supabase.from("page_progress").select("book_slug, page_number, read_completed_at, practice_completed_at").eq("child_id", active.id),
-      ])
-    : [{ data: [] }, { data: [] }];
+  const [bookResult, pageResult, subResult] = await Promise.all([
+    active
+      ? supabase.from("book_progress").select("book_slug, last_page, last_seen_at").eq("child_id", active.id)
+      : Promise.resolve({ data: [] }),
+    active
+      ? supabase.from("page_progress").select("book_slug, page_number, read_completed_at, practice_completed_at").eq("child_id", active.id)
+      : Promise.resolve({ data: [] }),
+    supabase.from("paddle_subscriptions").select("subscription_id").eq("parent_id", parentId).limit(1),
+  ]);
 
   const progress = bookResult.data ?? [];
   const pages = pageResult.data ?? [];
+  const hasSubscription = Boolean(subResult.data && subResult.data.length > 0);
 
   return (
     <>
       <header className="border-b border-ink/10 bg-paper/95">
         <div className="mx-auto flex min-h-[72px] max-w-[880px] items-center justify-between gap-4 px-6">
           <BrandLockup size="compact" />
-          <form action={signOut}>
-            <button className="min-h-[44px] text-[14px] text-brand-blue underline-offset-4 hover:underline">Sign out</button>
-          </form>
+          <div className="flex items-center gap-4">
+            {hasSubscription && (
+              <form action={manageSubscription}>
+                <button type="submit" className="min-h-[44px] text-[14px] text-brand-blue underline-offset-4 hover:underline">
+                  Manage subscription
+                </button>
+              </form>
+            )}
+            <form action={signOut}>
+              <button className="min-h-[44px] text-[14px] text-brand-blue underline-offset-4 hover:underline">Sign out</button>
+            </form>
+          </div>
         </div>
       </header>
 
@@ -189,6 +202,24 @@ export default async function AccountPage({
         )}
 
         {profiles.length < 5 && <div className="mt-12"><ProfileCreator /></div>}
+
+        {hasSubscription && (
+          <section className="mt-12 border-t border-ink/10 pt-8" aria-labelledby="subscription-heading">
+            <h2 id="subscription-heading" className="text-[20px] font-medium">Subscription</h2>
+            <p className="mt-2 text-[14px] leading-6 text-ink/65">
+              Update payment details or cancel your monthly subscription at any time.
+            </p>
+            <form action={manageSubscription} className="mt-4">
+              <button
+                type="submit"
+                className="inline-flex min-h-[44px] items-center rounded-xl border border-brand-blue px-4 text-[14px] font-medium text-brand-blue hover:bg-brand-blue/5"
+              >
+                Manage subscription
+              </button>
+            </form>
+          </section>
+        )}
+
         <p className="mt-10 text-[13px] leading-5 text-ink/45">Purchase access is managed separately and has not been enabled by this account setup.</p>
       </main>
     </>

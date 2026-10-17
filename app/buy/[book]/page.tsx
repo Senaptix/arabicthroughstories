@@ -1,7 +1,6 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import AccountShell from "@/components/account/AccountShell";
-import PaddleCheckoutButton from "@/components/PaddleCheckoutButton";
+import BuyOptions from "@/components/BuyOptions";
 import { getEntitlement } from "@/lib/access";
 import { getBook } from "@/lib/parse";
 import { checkoutEnabled, paddleClientToken, paddleEnvironment, priceIdFor } from "@/lib/paddle";
@@ -15,8 +14,9 @@ export const dynamic = "force-dynamic";
 export default async function BuyPage({ params }: { params: Promise<{ book: string }> }) {
   const { book: slug } = await params;
   if (slug === "both") notFound();
-  const priceId = priceIdFor(slug);
-  if (!checkoutEnabled() || !priceId) notFound();
+  const annualPriceId = priceIdFor(slug, "annual");
+  const monthlyPriceId = priceIdFor(slug, "monthly");
+  if (!checkoutEnabled() || (!annualPriceId && !monthlyPriceId)) notFound();
 
   const book = getBook(slug);
   const supabase = await createClient();
@@ -25,44 +25,30 @@ export default async function BuyPage({ params }: { params: Promise<{ book: stri
   const email = typeof data?.claims?.email === "string" ? data.claims.email : undefined;
   const current = parentId ? await getEntitlement(slug) : null;
 
-  const common = {
-    token: paddleClientToken(),
-    environment: paddleEnvironment(),
-    priceId,
-    successUrl: `${process.env.NEXT_PUBLIC_SITE_URL ?? ""}/buy/${slug}/thanks`,
-  };
-
   return (
     <AccountShell
       eyebrow="Digital edition"
       title={book.title_en}
-      intro="Every page of the book on qasaskids.com for 12 months: read aloud, with practice exercises and progress saved for each child."
+      intro="Every page of the book on qasaskids.com: read aloud, with practice exercises and progress saved for each child."
     >
-      {parentId ? (
-        <div className="space-y-4">
-          {current && !current.expired && (
-            <p className="rounded-xl bg-sage/15 px-4 py-3 text-[14px] leading-6">
-              You already have this book for {current.daysLeft} more days. Buying again extends it to
-              12 months from today, not 12 months on top.
-            </p>
-          )}
-          <p className="text-[15px] leading-6">
-            Signed in as {email}. The book opens on this account as soon as payment completes.
-          </p>
-          <PaddleCheckoutButton {...common} email={email} parentId={parentId} label="Buy the digital edition" />
-        </div>
-      ) : (
-        <div className="space-y-4 text-[15px] leading-6">
-          <p>
-            <Link href={`/account/sign-in?next=/buy/${slug}`} className="font-medium text-brand-blue underline">
-              Sign in
-            </Link>{" "}
-            first and the book opens on your account straight after payment.
-          </p>
-          <p>Or buy without an account: we email you a code to enter when you create one.</p>
-          <PaddleCheckoutButton {...common} label="Buy without signing in" />
-        </div>
+      {parentId && current && !current.expired && (
+        <p className="mb-6 rounded-xl bg-sage/15 px-4 py-3 text-[14px] leading-6">
+          You already have this book for {current.daysLeft} more days. Buying again extends it to
+          12 months from today, not 12 months on top.
+        </p>
       )}
+
+      <BuyOptions
+        token={paddleClientToken()}
+        environment={paddleEnvironment()}
+        slug={slug}
+        annualPriceId={annualPriceId}
+        monthlyPriceId={monthlyPriceId}
+        parentId={parentId}
+        email={email}
+        successUrl={`${process.env.NEXT_PUBLIC_SITE_URL ?? ""}/buy/${slug}/thanks`}
+      />
+
       <p className="mt-6 text-[13px] leading-5 opacity-70">
         Payment is handled by Paddle, our reseller, which also handles VAT.
       </p>

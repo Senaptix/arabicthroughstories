@@ -24,7 +24,12 @@ type TransactionCompleted = {
   data: {
     id: string;
     customer_id: string | null;
-    custom_data: { parent_id?: string } | null;
+    subscription_id?: string | null;
+    billing_period?: {
+      starts_at?: string;
+      ends_at?: string;
+    } | null;
+    custom_data?: { parent_id?: string } | null;
     items: { price: { id: string } }[];
   };
 };
@@ -51,14 +56,38 @@ export async function POST(request: Request) {
   const db = createClient(url, publishableKey, { auth: { persistSession: false } });
 
   const dbAdapter: PaddlePurchaseDb = {
+    lookupSubscription: async (subscriptionId) => {
+      const { data, error } = await db.rpc("get_paddle_subscription_parent", {
+        p_subscription: subscriptionId,
+        p_issuer_secret: issuer,
+      });
+      if (error) {
+        console.error("Paddle: get_paddle_subscription_parent failed", subscriptionId, error.message);
+        return null;
+      }
+      return (data as string) ?? null;
+    },
+    storeSubscription: async ({ subscriptionId, parentId, customerId }) => {
+      const { error } = await db.rpc("store_paddle_subscription", {
+        p_subscription: subscriptionId,
+        p_parent: parentId,
+        p_customer: customerId ?? "",
+        p_issuer_secret: issuer,
+      });
+      if (error) {
+        console.error("Paddle: store_paddle_subscription failed", subscriptionId, error.message);
+      }
+    },
     generateCode: generateActivationCode,
-    recordPurchase: async ({ transactionId, book, parentId, email, code }) => {
+    recordPurchase: async ({ transactionId, book, parentId, email, code, kind, expiresAt }) => {
       const { data, error } = await db.rpc("record_paddle_purchase", {
         p_transaction: transactionId,
         p_book: book,
         p_parent: parentId,
         p_email: email,
         p_code: code,
+        p_kind: kind,
+        p_expires_at: expiresAt,
         p_issuer_secret: issuer,
       });
       if (error) {
@@ -94,6 +123,9 @@ export async function POST(request: Request) {
     switch (result.status) {
       case "ok":
         return new Response("ok");
+      case "unmatched":
+        console.warn("Paddle: unmatched monthly transaction", event.data.id);
+        return new Response("unmatched", { status: 200 });
       case "unknown_price":
         return new Response("unknown price", { status: 200 }); // retrying cannot fix config
       case "email_failed":

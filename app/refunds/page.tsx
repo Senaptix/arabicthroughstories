@@ -41,8 +41,11 @@ export default function RefundsPage() {
           <section>
             <h2 className="text-ink text-[20px] font-semibold">Digital access and format</h2>
             <p className="mt-3">
-              Purchases grant 12 months&rsquo; online access to one book&rsquo;s Digital Edition (or both books in the bundle).
+              Annual purchases grant 12 months&rsquo; online access to one book&rsquo;s Digital Edition (or both books in the bundle).
               The Digital Edition is read online only; nothing is downloaded.
+            </p>
+            <p className="mt-3">
+              Monthly subscriptions renew monthly until cancelled. You can cancel any time from your account, and access continues to the end of the paid month.
             </p>
           </section>
 

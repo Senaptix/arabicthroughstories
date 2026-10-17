@@ -28,37 +28,94 @@ export function paddleClientToken(): string {
 
 export const BUNDLE_BOOKS = ["ibrahim", "yusuf"] as const;
 
-/** PADDLE_PRICE_IBRAHIM, PADDLE_PRICE_YUSUF, PADDLE_PRICE_BUNDLE... One Paddle price per book or bundle. */
-export function priceIdFor(slug: string): string | null {
+export type PurchaseKind = "annual" | "monthly";
+
+export type PriceInfo = {
+  books: string[];
+  kind: PurchaseKind;
+};
+
+/**
+ * PADDLE_PRICE_IBRAHIM, PADDLE_PRICE_YUSUF, PADDLE_PRICE_BUNDLE...
+ * PADDLE_PRICE_IBRAHIM_MONTHLY, PADDLE_PRICE_YUSUF_MONTHLY, PADDLE_PRICE_BUNDLE_MONTHLY...
+ * Any of these may be empty; an empty one simply isn't offered.
+ */
+export function priceIdFor(slug: string, kind: PurchaseKind = "annual"): string | null {
   if (!/^[a-z0-9-]+$/.test(slug)) return null;
-  if (slug === "both" || slug === "bundle") {
+  const isBundle = slug === "both" || slug === "bundle";
+  if (kind === "monthly") {
+    if (isBundle) {
+      return (
+        process.env.PADDLE_PRICE_BUNDLE_MONTHLY?.trim() ||
+        process.env.PADDLE_PRICE_BOTH_MONTHLY?.trim() ||
+        null
+      );
+    }
+    return process.env[`PADDLE_PRICE_${slug.toUpperCase().replaceAll("-", "_")}_MONTHLY`]?.trim() || null;
+  }
+  if (isBundle) {
     return process.env.PADDLE_PRICE_BUNDLE?.trim() || process.env.PADDLE_PRICE_BOTH?.trim() || null;
   }
   return process.env[`PADDLE_PRICE_${slug.toUpperCase().replaceAll("-", "_")}`]?.trim() || null;
 }
 
 /**
- * The books a Paddle price sells. The price, not custom_data, decides the book.
- * A bundle price (PADDLE_PRICE_BUNDLE) sells both Ibrahim and Yusuf.
+ * Builds the lookup table: priceId -> { books: string[], kind: "annual" | "monthly" }.
+ * Books are decided by PRICE ID only, never custom_data.
  */
-export function booksForPrice(priceId: string): string[] {
-  if (!priceId) return [];
-  const bundlePrice = process.env.PADDLE_PRICE_BUNDLE?.trim();
-  const bothPrice = process.env.PADDLE_PRICE_BOTH?.trim();
-  if ((bundlePrice && priceId === bundlePrice) || (bothPrice && priceId === bothPrice)) {
-    return [...BUNDLE_BOOKS];
-  }
+export function priceTable(): Map<string, PriceInfo> {
+  const table = new Map<string, PriceInfo>();
+
+  const register = (priceId: string | undefined, books: string[], kind: PurchaseKind) => {
+    const id = priceId?.trim();
+    if (id) {
+      table.set(id, { books, kind });
+    }
+  };
+
+  register(process.env.PADDLE_PRICE_IBRAHIM, ["ibrahim"], "annual");
+  register(process.env.PADDLE_PRICE_YUSUF, ["yusuf"], "annual");
+  register(process.env.PADDLE_PRICE_BUNDLE || process.env.PADDLE_PRICE_BOTH, [...BUNDLE_BOOKS], "annual");
+
+  register(process.env.PADDLE_PRICE_IBRAHIM_MONTHLY, ["ibrahim"], "monthly");
+  register(process.env.PADDLE_PRICE_YUSUF_MONTHLY, ["yusuf"], "monthly");
+  register(process.env.PADDLE_PRICE_BUNDLE_MONTHLY || process.env.PADDLE_PRICE_BOTH_MONTHLY, [...BUNDLE_BOOKS], "monthly");
+
   for (const [key, value] of Object.entries(process.env)) {
+    if (!key.startsWith("PADDLE_PRICE_") || !value?.trim()) continue;
     if (
-      key.startsWith("PADDLE_PRICE_") &&
-      key !== "PADDLE_PRICE_BUNDLE" &&
-      key !== "PADDLE_PRICE_BOTH" &&
-      value?.trim() === priceId
+      key === "PADDLE_PRICE_IBRAHIM" ||
+      key === "PADDLE_PRICE_YUSUF" ||
+      key === "PADDLE_PRICE_BUNDLE" ||
+      key === "PADDLE_PRICE_BOTH" ||
+      key === "PADDLE_PRICE_IBRAHIM_MONTHLY" ||
+      key === "PADDLE_PRICE_YUSUF_MONTHLY" ||
+      key === "PADDLE_PRICE_BUNDLE_MONTHLY" ||
+      key === "PADDLE_PRICE_BOTH_MONTHLY"
     ) {
-      return [key.slice("PADDLE_PRICE_".length).toLowerCase().replaceAll("_", "-")];
+      continue;
+    }
+
+    if (key.endsWith("_MONTHLY")) {
+      const slug = key.slice("PADDLE_PRICE_".length, -"_MONTHLY".length).toLowerCase().replaceAll("_", "-");
+      register(value, [slug], "monthly");
+    } else {
+      const slug = key.slice("PADDLE_PRICE_".length).toLowerCase().replaceAll("_", "-");
+      register(value, [slug], "annual");
     }
   }
-  return [];
+
+  return table;
+}
+
+export function lookupPrice(priceId: string): PriceInfo | null {
+  if (!priceId) return null;
+  return priceTable().get(priceId.trim()) ?? null;
+}
+
+/** The books a Paddle price sells. Derived from lookupPrice. */
+export function booksForPrice(priceId: string): string[] {
+  return lookupPrice(priceId)?.books ?? [];
 }
 
 /** The book a Paddle price sells (single-book prices). */
@@ -106,6 +163,38 @@ export async function fetchCustomerEmail(customerId: string): Promise<string | n
   return body.data?.email ?? null;
 }
 
+export async function createCustomerPortalSession(
+  customerId: string,
+  subscriptionIds?: string[],
+): Promise<string | null> {
+  const key = process.env.PADDLE_API_KEY;
+  if (!key || !customerId) return null;
+  const base = paddleEnvironment() === "production" ? "https://api.paddle.com" : "https://sandbox-api.paddle.com";
+  const payload = subscriptionIds && subscriptionIds.length > 0 ? { subscription_ids: subscriptionIds } : {};
+  const res = await fetch(`${base}/customers/${encodeURIComponent(customerId)}/portal-sessions`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${key}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    const errText = await res.text();
+    console.error("Paddle: createCustomerPortalSession failed", res.status, errText);
+    return null;
+  }
+  const body = (await res.json()) as {
+    data?: {
+      urls?: {
+        general?: { overview?: string };
+      };
+    };
+  };
+  return body.data?.urls?.general?.overview ?? null;
+}
+
 export type PurchaseRecordStatus =
   | "granted"
   | "code_issued"
@@ -113,7 +202,8 @@ export type PurchaseRecordStatus =
   | "collision"
   | "no_email"
   | "invalid_code"
-  | "not_authorised";
+  | "not_authorised"
+  | "unmatched";
 
 export type PurchaseRecordResult = {
   status: PurchaseRecordStatus;
@@ -122,12 +212,20 @@ export type PurchaseRecordResult = {
 };
 
 export type PaddlePurchaseDb = {
+  lookupSubscription?: (subscriptionId: string) => Promise<string | null>;
+  storeSubscription?: (params: {
+    subscriptionId: string;
+    parentId: string;
+    customerId: string | null;
+  }) => Promise<void>;
   recordPurchase: (params: {
     transactionId: string;
     book: string;
     parentId: string | null;
     email: string | null;
     code: string;
+    kind: PurchaseKind;
+    expiresAt: string | null;
   }) => Promise<PurchaseRecordResult>;
   markCodeEmailed?: (code: string) => Promise<boolean>;
   sendActivationEmail?: (email: string, code: string, book: string) => Promise<void>;
@@ -135,7 +233,7 @@ export type PaddlePurchaseDb = {
 };
 
 export type FulfillResult = {
-  status: "ok" | "unknown_price" | "email_failed" | "db_error" | "not_recorded";
+  status: "ok" | "unknown_price" | "email_failed" | "db_error" | "not_recorded" | "unmatched";
   books: string[];
   records: { book: string; status: PurchaseRecordStatus; code: string | null; isNew: boolean }[];
 };
@@ -153,35 +251,89 @@ export async function fulfillPaddleTransaction(
   txn: {
     id: string;
     customer_id?: string | null;
+    subscription_id?: string | null;
+    billing_period?: {
+      starts_at?: string;
+      ends_at?: string;
+    } | null;
     custom_data?: { parent_id?: string } | null;
     items: { price: { id: string } }[];
   },
   db: PaddlePurchaseDb,
   emailLookup?: (customerId: string) => Promise<string | null>,
 ): Promise<FulfillResult> {
-  const books = Array.from(new Set(txn.items.flatMap((i) => booksForPrice(i.price.id))));
-  if (books.length === 0) {
-    return { status: "unknown_price", books: [], records: [] };
+  const bookMap = new Map<string, PurchaseKind>();
+  for (const item of txn.items) {
+    const info = lookupPrice(item.price.id);
+    if (!info) continue;
+    for (const b of info.books) {
+      bookMap.set(b, info.kind);
+    }
   }
 
-  const parent = txn.custom_data?.parent_id;
-  const parentId = parent && UUID.test(parent) ? parent : null;
-  const email = txn.customer_id && emailLookup ? await emailLookup(txn.customer_id) : null;
+  if (bookMap.size === 0) {
+    return { status: "unknown_price", books: [], records: [] };
+  }
+  const books = Array.from(bookMap.keys());
 
+  // Parent resolution: stored subscription mapping -> fallback to custom_data.parent_id
+  let parentId: string | null = null;
+  if (txn.subscription_id && db.lookupSubscription) {
+    parentId = await db.lookupSubscription(txn.subscription_id);
+  }
+  if (!parentId) {
+    const customParent = txn.custom_data?.parent_id;
+    if (customParent && UUID.test(customParent)) {
+      parentId = customParent;
+    }
+  }
+
+  // If monthly subscription has a parent, record the mapping
+  if (parentId && txn.subscription_id && db.storeSubscription) {
+    await db.storeSubscription({
+      subscriptionId: txn.subscription_id,
+      parentId,
+      customerId: txn.customer_id ?? null,
+    });
+  }
+
+  const monthlyExpiresAt = txn.billing_period?.ends_at
+    ? new Date(new Date(txn.billing_period.ends_at).getTime() + 3 * 86_400_000).toISOString()
+    : new Date(Date.now() + 33 * 86_400_000).toISOString();
+
+  const email = txn.customer_id && emailLookup ? await emailLookup(txn.customer_id) : null;
   const records: { book: string; status: PurchaseRecordStatus; code: string | null; isNew: boolean }[] = [];
 
   for (const book of books) {
+    const kind = bookMap.get(book) ?? "annual";
+    const expiresAt = kind === "monthly" ? monthlyExpiresAt : null;
+
     let result: PurchaseRecordResult | undefined;
-    for (let attempt = 0; attempt < 5; attempt += 1) {
-      const code = db.generateCode ? db.generateCode() : `QK-TEST-CODE`;
+    if (kind === "monthly" && !parentId) {
+      // Monthly requires sign-in: no guest checkout and no QK- codes.
       result = await db.recordPurchase({
         transactionId: txn.id,
         book,
-        parentId,
+        parentId: null,
         email,
-        code,
+        code: "",
+        kind,
+        expiresAt,
       });
-      if (result.status !== "collision") break;
+    } else {
+      for (let attempt = 0; attempt < 5; attempt += 1) {
+        const code = db.generateCode ? db.generateCode() : `QK-TEST-CODE`;
+        result = await db.recordPurchase({
+          transactionId: txn.id,
+          book,
+          parentId,
+          email,
+          code,
+          kind,
+          expiresAt,
+        });
+        if (result.status !== "collision") break;
+      }
     }
 
     if (!result) {
@@ -193,6 +345,7 @@ export async function fulfillPaddleTransaction(
 
     switch (result.status) {
       case "granted":
+      case "unmatched":
         break;
       case "code_issued":
       case "duplicate": {
@@ -213,6 +366,10 @@ export async function fulfillPaddleTransaction(
       default:
         return { status: "not_recorded", books, records };
     }
+  }
+
+  if (records.some((r) => r.status === "unmatched")) {
+    return { status: "unmatched", books, records };
   }
 
   return { status: "ok", books, records };
