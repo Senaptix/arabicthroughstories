@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { buyLabel, CATALOGUE } from "@/lib/catalogue";
 import { getBook } from "@/lib/parse";
-import BuyMenu, { type StoreLink } from "@/components/BuyMenu";
+import BuyMenu, { onlineOptionsFor, type StoreLink } from "@/components/BuyMenu";
 
 /**
  * The site's navigation: inline links on a wide screen, a disclosure menu on
@@ -43,14 +43,14 @@ import BuyMenu, { type StoreLink } from "@/components/BuyMenu";
  * disappears entirely rather than pointing nowhere. Same rule the hero CTA
  * has always followed.
  */
-type Buy = { url: string; label: string; links: StoreLink[] };
+type Buy = { slug: string; url: string; label: string; links: StoreLink[] };
 
 function buyUrlFor(bookSlug?: string): Buy | null {
   const urlOf = (slug: string): Buy | null => {
     try {
       const b = getBook(slug);
       return b.buy_url
-        ? { url: b.buy_url, label: buyLabel(slug), links: b.buy_links }
+        ? { slug, url: b.buy_url, label: buyLabel(slug), links: b.buy_links }
         : null;
     } catch {
       return null;
@@ -137,6 +137,7 @@ export default function SiteNav({ bookSlug, hideInside, signedIn }: Props) {
           }
           url={buy.url}
           links={buy.links}
+          slug={buy.slug}
           align="right"
           className="bg-brand-blue text-paper inline-flex min-h-[44px] shrink-0 items-center rounded-xl px-3 text-[14px] font-medium whitespace-nowrap sm:px-4 transition-transform duration-150 ease-out hover:-translate-y-0.5"
         />
@@ -200,6 +201,23 @@ export default function SiteNav({ bookSlug, hideInside, signedIn }: Props) {
         <nav className="border-ink/10 bg-paper absolute right-0 z-20 mt-2 w-[240px] rounded-2xl border p-2 shadow-[0_18px_40px_-24px_rgba(26,42,74,0.45)]">
           {buy && (
             <>
+              {onlineOptionsFor(buy.slug).length > 0 && (
+                <>
+                  <p className="text-ink/60 px-3 pt-1 pb-1 text-[13px]">
+                    Read online now
+                  </p>
+                  {onlineOptionsFor(buy.slug).map((o) => (
+                    <a
+                      key={o.href}
+                      href={o.href}
+                      className="text-brand-blue hover:bg-sand/30 flex min-h-[44px] items-center rounded-xl px-3 text-[15px] font-medium"
+                    >
+                      {o.label}
+                    </a>
+                  ))}
+                  <div className="border-ink/10 my-2 border-t" />
+                </>
+              )}
               {buy.links.length === 0 ? (
                 <a
                   href={buy.url}

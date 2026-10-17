@@ -337,6 +337,7 @@ export default function Home() {
                 <BuyMenu
                   label={buyLabel(book.slug)}
                   url={book.buy_url}
+                  slug={book.slug}
                   links={book.buy_links}
                   className="bg-brand-blue text-paper inline-flex min-h-[48px] items-center rounded-2xl px-6 text-[16px] font-medium transition-transform duration-150 ease-out hover:-translate-y-0.5"
                 />
@@ -535,6 +536,7 @@ export default function Home() {
                 <BuyMenu
                   label={buyLabel(book.slug)}
                   url={book.buy_url}
+                  slug={book.slug}
                   links={book.buy_links}
                   className="bg-brand-blue text-paper inline-flex min-h-[48px] items-center rounded-2xl px-7 text-[16px] font-medium transition-transform duration-150 ease-out hover:-translate-y-0.5"
                 />

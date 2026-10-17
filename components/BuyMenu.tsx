@@ -1,6 +1,22 @@
 import type { ReactNode } from "react";
+import { checkoutEnabled, priceIdFor } from "@/lib/paddle";
 
 export type StoreLink = { store: string; url: string };
+
+export type OnlineOption = { label: string; href: string };
+
+/**
+ * Online (Paddle) options for a book, or [] while checkout is off. Labels and
+ * links only: no prices, no price ids. Server components only (reads PADDLE_*).
+ */
+export function onlineOptionsFor(slug?: string): OnlineOption[] {
+  if (!slug || !checkoutEnabled() || !priceIdFor(slug)) return [];
+  const out: OnlineOption[] = [
+    { label: "Digital Edition (this part)", href: `/buy/${slug}` },
+  ];
+  if (priceIdFor("both")) out.push({ label: "Both parts", href: "/buy/both" });
+  return out;
+}
 
 type Props = {
   label: ReactNode;
@@ -11,6 +27,8 @@ type Props = {
   className: string;
   /** Which edge the store list opens from. */
   align?: "left" | "right";
+  /** Book slug; when checkout is on, adds a "Read online now" group first. */
+  slug?: string;
 };
 
 /**
@@ -28,8 +46,12 @@ export default function BuyMenu({
   links,
   className,
   align = "left",
+  slug,
 }: Props) {
-  if (links.length === 0) {
+  const online = onlineOptionsFor(slug);
+  const stores: StoreLink[] =
+    links.length > 0 || online.length === 0 ? links : [{ store: "Amazon", url }];
+  if (stores.length === 0) {
     return (
       <a href={url} target="_blank" rel="noopener noreferrer" className={className}>
         {label}
@@ -59,10 +81,27 @@ export default function BuyMenu({
           align === "right" ? "right-0" : "left-0"
         }`}
       >
+        {online.length > 0 && (
+          <>
+            <p className="text-ink/60 px-3 pt-1 pb-2 text-[13px]">
+              Read online now
+            </p>
+            {online.map((o) => (
+              <a
+                key={o.href}
+                href={o.href}
+                className="text-brand-blue hover:bg-sand/30 flex min-h-[44px] items-center rounded-xl px-3 text-[15px] font-medium"
+              >
+                {o.label}
+              </a>
+            ))}
+            <div className="border-ink/10 my-2 border-t" />
+          </>
+        )}
         <p className="text-ink/60 px-3 pt-1 pb-2 text-[13px]">
-          Choose your Amazon store
+          {online.length > 0 ? "Paperback on Amazon" : "Choose your Amazon store"}
         </p>
-        {links.map((l) => (
+        {stores.map((l) => (
           <a
             key={l.url}
             href={l.url}
