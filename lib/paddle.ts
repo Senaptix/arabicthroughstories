@@ -26,20 +26,45 @@ export function paddleClientToken(): string {
   return process.env.PADDLE_CLIENT_TOKEN ?? "";
 }
 
-/** PADDLE_PRICE_IBRAHIM, PADDLE_PRICE_YUSUF, ... One Paddle price per book. */
+export const BUNDLE_BOOKS = ["ibrahim", "yusuf"] as const;
+
+/** PADDLE_PRICE_IBRAHIM, PADDLE_PRICE_YUSUF, PADDLE_PRICE_BUNDLE... One Paddle price per book or bundle. */
 export function priceIdFor(slug: string): string | null {
   if (!/^[a-z0-9-]+$/.test(slug)) return null;
+  if (slug === "both" || slug === "bundle") {
+    return process.env.PADDLE_PRICE_BUNDLE?.trim() || process.env.PADDLE_PRICE_BOTH?.trim() || null;
+  }
   return process.env[`PADDLE_PRICE_${slug.toUpperCase().replaceAll("-", "_")}`]?.trim() || null;
 }
 
-/** The book a Paddle price sells. The price, not custom_data, decides the book. */
-export function bookForPrice(priceId: string): string | null {
+/**
+ * The books a Paddle price sells. The price, not custom_data, decides the book.
+ * A bundle price (PADDLE_PRICE_BUNDLE) sells both Ibrahim and Yusuf.
+ */
+export function booksForPrice(priceId: string): string[] {
+  if (!priceId) return [];
+  const bundlePrice = process.env.PADDLE_PRICE_BUNDLE?.trim();
+  const bothPrice = process.env.PADDLE_PRICE_BOTH?.trim();
+  if ((bundlePrice && priceId === bundlePrice) || (bothPrice && priceId === bothPrice)) {
+    return [...BUNDLE_BOOKS];
+  }
   for (const [key, value] of Object.entries(process.env)) {
-    if (key.startsWith("PADDLE_PRICE_") && value?.trim() === priceId) {
-      return key.slice("PADDLE_PRICE_".length).toLowerCase().replaceAll("_", "-");
+    if (
+      key.startsWith("PADDLE_PRICE_") &&
+      key !== "PADDLE_PRICE_BUNDLE" &&
+      key !== "PADDLE_PRICE_BOTH" &&
+      value?.trim() === priceId
+    ) {
+      return [key.slice("PADDLE_PRICE_".length).toLowerCase().replaceAll("_", "-")];
     }
   }
-  return null;
+  return [];
+}
+
+/** The book a Paddle price sells (single-book prices). */
+export function bookForPrice(priceId: string): string | null {
+  const books = booksForPrice(priceId);
+  return books.length === 1 ? books[0] : null;
 }
 
 /**
@@ -79,4 +104,116 @@ export async function fetchCustomerEmail(customerId: string): Promise<string | n
   if (!res.ok) return null;
   const body = (await res.json()) as { data?: { email?: string } };
   return body.data?.email ?? null;
+}
+
+export type PurchaseRecordStatus =
+  | "granted"
+  | "code_issued"
+  | "duplicate"
+  | "collision"
+  | "no_email"
+  | "invalid_code"
+  | "not_authorised";
+
+export type PurchaseRecordResult = {
+  status: PurchaseRecordStatus;
+  code: string | null;
+  emailed: boolean;
+};
+
+export type PaddlePurchaseDb = {
+  recordPurchase: (params: {
+    transactionId: string;
+    book: string;
+    parentId: string | null;
+    email: string | null;
+    code: string;
+  }) => Promise<PurchaseRecordResult>;
+  markCodeEmailed?: (code: string) => Promise<boolean>;
+  sendActivationEmail?: (email: string, code: string, book: string) => Promise<void>;
+  generateCode?: () => string;
+};
+
+export type FulfillResult = {
+  status: "ok" | "unknown_price" | "email_failed" | "db_error" | "not_recorded";
+  books: string[];
+  records: { book: string; status: PurchaseRecordStatus; code: string | null; isNew: boolean }[];
+};
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/**
+ * Fulfills a completed Paddle transaction.
+ *
+ * Books are determined solely by the items' price IDs, never by custom_data.
+ * For a bundle price, both Ibrahim and Yusuf are granted.
+ * Idempotent on (transaction.id, book): replaying grants nothing new.
+ */
+export async function fulfillPaddleTransaction(
+  txn: {
+    id: string;
+    customer_id?: string | null;
+    custom_data?: { parent_id?: string } | null;
+    items: { price: { id: string } }[];
+  },
+  db: PaddlePurchaseDb,
+  emailLookup?: (customerId: string) => Promise<string | null>,
+): Promise<FulfillResult> {
+  const books = Array.from(new Set(txn.items.flatMap((i) => booksForPrice(i.price.id))));
+  if (books.length === 0) {
+    return { status: "unknown_price", books: [], records: [] };
+  }
+
+  const parent = txn.custom_data?.parent_id;
+  const parentId = parent && UUID.test(parent) ? parent : null;
+  const email = txn.customer_id && emailLookup ? await emailLookup(txn.customer_id) : null;
+
+  const records: { book: string; status: PurchaseRecordStatus; code: string | null; isNew: boolean }[] = [];
+
+  for (const book of books) {
+    let result: PurchaseRecordResult | undefined;
+    for (let attempt = 0; attempt < 5; attempt += 1) {
+      const code = db.generateCode ? db.generateCode() : `QK-TEST-CODE`;
+      result = await db.recordPurchase({
+        transactionId: txn.id,
+        book,
+        parentId,
+        email,
+        code,
+      });
+      if (result.status !== "collision") break;
+    }
+
+    if (!result) {
+      return { status: "not_recorded", books, records };
+    }
+
+    const isNew = result.status === "granted" || result.status === "code_issued";
+    records.push({ book, status: result.status, code: result.code, isNew });
+
+    switch (result.status) {
+      case "granted":
+        break;
+      case "code_issued":
+      case "duplicate": {
+        if (!result.code || result.emailed) break;
+        if (!email) return { status: "not_recorded", books, records };
+        if (db.sendActivationEmail) {
+          try {
+            await db.sendActivationEmail(email, result.code, book);
+          } catch {
+            return { status: "email_failed", books, records };
+          }
+        }
+        if (db.markCodeEmailed) {
+          await db.markCodeEmailed(result.code);
+        }
+        break;
+      }
+      default:
+        return { status: "not_recorded", books, records };
+    }
+  }
+
+  return { status: "ok", books, records };
 }

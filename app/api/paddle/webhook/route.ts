@@ -1,14 +1,20 @@
 import { createClient } from "@supabase/supabase-js";
 import { activationIssuerSecret, generateActivationCode } from "@/lib/activation-codes";
 import { sendActivationCodeEmail } from "@/lib/activation-email";
-import { bookForPrice, fetchCustomerEmail, verifyPaddleSignature } from "@/lib/paddle";
+import { getBook } from "@/lib/parse";
+import {
+  fetchCustomerEmail,
+  fulfillPaddleTransaction,
+  type PaddlePurchaseDb,
+  verifyPaddleSignature,
+} from "@/lib/paddle";
 import { supabaseEnv } from "@/lib/supabase/env";
 
 /**
  * Paddle notification destination. Subscribe it to `transaction.completed` only.
  *
  * Answer 2xx only once the buyer has what they paid for. Anything else makes
- * Paddle retry, and record_paddle_purchase is idempotent on the transaction id,
+ * Paddle retry, and record_paddle_purchase is idempotent on (transaction id, book),
  * so a retry finishes the job (e.g. resends a code whose email failed) rather
  * than granting twice.
  */
@@ -23,8 +29,6 @@ type TransactionCompleted = {
   };
 };
 
-const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-
 export async function POST(request: Request) {
   const raw = await request.text();
   const secret = process.env.PADDLE_WEBHOOK_SECRET ?? "";
@@ -34,19 +38,6 @@ export async function POST(request: Request) {
 
   const event = JSON.parse(raw) as TransactionCompleted;
   if (event.event_type !== "transaction.completed") return new Response("ignored");
-
-  const txn = event.data;
-  // ponytail: one book per checkout, because the buy page sells one price. A
-  // basket of several books needs a loop here and one row per (txn, book).
-  const book = txn.items.map((i) => bookForPrice(i.price.id)).find(Boolean);
-  if (!book) {
-    console.error("Paddle: no book for prices", txn.id, txn.items.map((i) => i.price.id));
-    return new Response("unknown price", { status: 200 }); // retrying cannot fix config
-  }
-
-  const parent = txn.custom_data?.parent_id;
-  const parentId = parent && UUID.test(parent) ? parent : null;
-  const email = txn.customer_id ? await fetchCustomerEmail(txn.customer_id) : null;
 
   let issuer: string;
   try {
@@ -59,41 +50,59 @@ export async function POST(request: Request) {
   const { url, publishableKey } = supabaseEnv();
   const db = createClient(url, publishableKey, { auth: { persistSession: false } });
 
-  let result: { status: string; code: string | null; emailed: boolean } | undefined;
-  for (let attempt = 0; attempt < 5; attempt += 1) {
-    const { data, error } = await db.rpc("record_paddle_purchase", {
-      p_transaction: txn.id,
-      p_book: book,
-      p_parent: parentId,
-      p_email: email,
-      p_code: generateActivationCode(),
-      p_issuer_secret: issuer,
-    });
-    if (error) {
-      console.error("Paddle: record_paddle_purchase failed", txn.id, error.message);
-      return new Response("db error", { status: 500 });
-    }
-    result = data?.[0];
-    if (result?.status !== "collision") break;
-  }
-
-  switch (result?.status) {
-    case "granted":
-      return new Response("ok");
-    case "code_issued":
-    case "duplicate":
-      if (!result.code || result.emailed) return new Response("ok");
-      if (!email) return new Response("no email yet", { status: 500 });
-      try {
-        await sendActivationCodeEmail(email, result.code, "online");
-      } catch (e) {
-        console.error("Paddle: code email failed", txn.id, e instanceof Error ? e.message : e);
-        return new Response("email failed", { status: 500 });
+  const dbAdapter: PaddlePurchaseDb = {
+    generateCode: generateActivationCode,
+    recordPurchase: async ({ transactionId, book, parentId, email, code }) => {
+      const { data, error } = await db.rpc("record_paddle_purchase", {
+        p_transaction: transactionId,
+        p_book: book,
+        p_parent: parentId,
+        p_email: email,
+        p_code: code,
+        p_issuer_secret: issuer,
+      });
+      if (error) {
+        console.error("Paddle: record_paddle_purchase failed", transactionId, book, error.message);
+        throw new Error(error.message);
       }
-      await db.rpc("mark_paddle_code_emailed", { p_code: result.code, p_issuer_secret: issuer });
-      return new Response("ok");
-    default:
-      console.error("Paddle: unexpected result", txn.id, result?.status);
-      return new Response("not recorded", { status: 500 });
+      return data?.[0] ?? { status: "not_authorised", code: null, emailed: false };
+    },
+    markCodeEmailed: async (code) => {
+      const { data, error } = await db.rpc("mark_paddle_code_emailed", {
+        p_code: code,
+        p_issuer_secret: issuer,
+      });
+      if (error) {
+        console.error("Paddle: mark_paddle_code_emailed failed", code, error.message);
+        return false;
+      }
+      return !!data;
+    },
+    sendActivationEmail: async (email, code, book) => {
+      let bookTitle: string | undefined;
+      try {
+        bookTitle = getBook(book).title_en;
+      } catch {
+        // Fallback if not found
+      }
+      await sendActivationCodeEmail(email, code, "online", bookTitle);
+    },
+  };
+
+  try {
+    const result = await fulfillPaddleTransaction(event.data, dbAdapter, fetchCustomerEmail);
+    switch (result.status) {
+      case "ok":
+        return new Response("ok");
+      case "unknown_price":
+        return new Response("unknown price", { status: 200 }); // retrying cannot fix config
+      case "email_failed":
+        return new Response("email failed", { status: 500 });
+      default:
+        return new Response("not recorded", { status: 500 });
+    }
+  } catch (e) {
+    console.error("Paddle: fulfillment failed", event.data.id, e instanceof Error ? e.message : e);
+    return new Response("db error", { status: 500 });
   }
 }

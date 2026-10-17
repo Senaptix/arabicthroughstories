@@ -12,6 +12,7 @@ export const dynamic = "force-dynamic";
 // seconds, but this page must not claim the book is open: it may not be yet.
 export default async function ThanksPage({ params }: { params: Promise<{ book: string }> }) {
   const { book: slug } = await params;
+  if (slug === "both") notFound();
   if (!checkoutEnabled() || !priceIdFor(slug)) notFound();
   const book = getBook(slug);
   const signedIn = !!(await getParentId());

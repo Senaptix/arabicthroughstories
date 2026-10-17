@@ -14,6 +14,7 @@ export const dynamic = "force-dynamic";
 
 export default async function BuyPage({ params }: { params: Promise<{ book: string }> }) {
   const { book: slug } = await params;
+  if (slug === "both") notFound();
   const priceId = priceIdFor(slug);
   if (!checkoutEnabled() || !priceId) notFound();
 

@@ -42,11 +42,11 @@ until we email them one, so the code *is* their proof of purchase, like a stall 
 
 | File | What |
 |---|---|
-| `supabase/migrations/202610040001_paddle_purchases.sql` | `paddle_transactions` table; `record_paddle_purchase`, `mark_paddle_code_emailed` (issuer-secret gated, callable by the anon webhook) |
-| `lib/paddle.ts` | env, price↔book mapping, signature check, customer email lookup |
+| `supabase/migrations/202610040001_paddle_purchases.sql`, `202610170002_paddle_bundle_purchases.sql` | `paddle_transactions` table; `record_paddle_purchase`, `mark_paddle_code_emailed` (issuer-secret gated, callable by the anon webhook, supports multi-book/bundle transactions) |
+| `lib/paddle.ts` | env, price↔book mapping (including bundle), signature check, customer email lookup, transaction fulfillment |
 | `lib/paddle.check.ts` | self-check, runs in `npm run check` (so before every build) |
 | `app/api/paddle/webhook/route.ts` | the notification destination |
-| `app/buy/[book]/page.tsx`, `thanks/page.tsx` | hidden buy and thank-you pages (`noindex`) |
+| `app/buy/[book]/page.tsx`, `thanks/page.tsx`, `app/buy/both/page.tsx`, `thanks/page.tsx` | hidden buy and thank-you pages (`noindex`) |
 | `components/PaddleCheckoutButton.tsx` | loads Paddle.js v2, opens the overlay |
 | `lib/activation-email.ts` | now says "online" or "in person" |
 | `proxy.ts` | `/buy` added (it reads the session) |
@@ -70,7 +70,8 @@ until we email them one, so the code *is* their proof of purchase, like a stall 
 3. **Database:** apply the migration to Supabase (SQL editor or `supabase db push`).
    It only adds things: one new table and two new functions.
 4. **Env** on the server (see `.env.example`): `PADDLE_ENV`, `PADDLE_CLIENT_TOKEN`,
-   `PADDLE_API_KEY`, `PADDLE_WEBHOOK_SECRET`, `PADDLE_PRICE_IBRAHIM`, `PADDLE_PRICE_YUSUF`.
+   `PADDLE_API_KEY`, `PADDLE_WEBHOOK_SECRET`, `PADDLE_PRICE_IBRAHIM`, `PADDLE_PRICE_YUSUF`,
+   `PADDLE_PRICE_BUNDLE`.
    Leave `PADDLE_CHECKOUT_ENABLED=false` until testing.
 5. **Test in sandbox** with Paddle's test card `4242 4242 4242 4242`, any future
    expiry, CVC `100`:
@@ -80,13 +81,17 @@ until we email them one, so the code *is* their proof of purchase, like a stall 
 6. **Go live:** switch to production keys and prices, set `PADDLE_ENV=production`, and
    only then add Buy-digital links next to the Amazon buttons.
 
+## Built
+
+- **Both-parts bundle (/buy/both).** A single price (`PADDLE_PRICE_BUNDLE`) grants both
+  Ibrahim and Yusuf (two entitlements, or two QK- codes for a guest), idempotent on
+  the transaction id.
+
 ## Not built (decide before launch)
 
 - **Refunds and chargebacks.** Paddle refunds the money, but access stays until the 12
   months end. To revoke, subscribe to `adjustment.created` and delete the entitlement or
   code, or do it by hand while numbers are small.
-- **Baskets of more than one book.** The buy page sells one price. A both-parts bundle
-  needs one Paddle price for the bundle, and the webhook needs a loop granting each book.
 - **Teacher and class licences.** Invoice those directly for now (`CLASSROOM_PLAN.md`).
 - **Price display.** Paddle shows each buyer the local price including VAT. Decide whether
   £7.99 includes UK VAT (you receive less) or VAT is added on top.
