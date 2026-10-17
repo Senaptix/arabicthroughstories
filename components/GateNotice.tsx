@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getMembershipState } from "@/lib/access";
 import { isPublished } from "@/lib/catalogue";
+import { checkoutEnabled, priceIdFor } from "@/lib/paddle";
 
 /**
  * What a visitor without a current entitlement sees in place of gated content.
@@ -24,6 +25,8 @@ export default async function GateNotice({
   // they need the box that takes an order number, which now exists.
   const signedIn = membershipState !== "signed-out";
 
+  const canBuy = checkoutEnabled() && Boolean(priceIdFor(bookSlug));
+
   /*
    * A book that is not on sale yet has no door through this gate: there is no
    * order number to enter, because there is nothing to order. Telling a
@@ -35,7 +38,7 @@ export default async function GateNotice({
    * been pasted in, so keying off buy_url would have shown Ibrahim's paying
    * buyers "this book is not published yet" instead of their activation route.
    */
-  const notYetOnSale = !isPublished(bookSlug);
+  const notYetOnSale = !isPublished(bookSlug) && !canBuy;
 
   if (notYetOnSale) {
     return (
@@ -90,17 +93,47 @@ export default async function GateNotice({
       </p>
 
       <div className="mt-6 flex flex-wrap items-center gap-3">
-        <Link
-          href={signedIn ? "/account#add-a-book" : "/activate"}
-          className="bg-brand-blue text-paper inline-flex min-h-[48px] items-center rounded-xl px-5 font-medium"
-          style={{ fontSize: "16px" }}
-        >
-          {hasLapsed
-            ? "Restore your access"
-            : signedIn
-              ? "Add your book"
-              : "Activate your book"}
-        </Link>
+        {canBuy ? (
+          <>
+            <Link
+              href={`/buy/${bookSlug}`}
+              className="bg-brand-blue text-paper inline-flex min-h-[48px] items-center rounded-xl px-5 font-medium"
+              style={{ fontSize: "16px" }}
+            >
+              Buy the Digital Edition — £7.99
+            </Link>
+            <Link
+              href="/buy/both"
+              className="border-ink/15 text-ink hover:border-ink/35 inline-flex min-h-[48px] items-center rounded-xl border px-5 font-medium transition-colors"
+              style={{ fontSize: "16px" }}
+            >
+              Both parts — £12.99
+            </Link>
+            <Link
+              href={signedIn ? "/account#add-a-book" : "/activate"}
+              className="border-ink/15 text-ink hover:border-ink/35 inline-flex min-h-[48px] items-center rounded-xl border px-5 font-medium transition-colors"
+              style={{ fontSize: "16px" }}
+            >
+              {hasLapsed
+                ? "Restore your access"
+                : signedIn
+                  ? "Add your book"
+                  : "Activate your book"}
+            </Link>
+          </>
+        ) : (
+          <Link
+            href={signedIn ? "/account#add-a-book" : "/activate"}
+            className="bg-brand-blue text-paper inline-flex min-h-[48px] items-center rounded-xl px-5 font-medium"
+            style={{ fontSize: "16px" }}
+          >
+            {hasLapsed
+              ? "Restore your access"
+              : signedIn
+                ? "Add your book"
+                : "Activate your book"}
+          </Link>
+        )}
         <Link
           href={`/books/${bookSlug}`}
           className="border-ink/15 text-ink hover:border-ink/35 inline-flex min-h-[48px] items-center rounded-xl border px-5 font-medium transition-colors"
