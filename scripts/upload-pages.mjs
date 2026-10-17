@@ -102,17 +102,6 @@ if (targetBook) {
   }
 }
 
-function toTargetFilename(originalName) {
-  const match = originalName.match(/(\d+)/);
-  if (match) {
-    const pageNum = parseInt(match[1], 10);
-    return `${String(pageNum).padStart(2, "0")}.webp`;
-  }
-  return originalName.toLowerCase().endsWith(".webp")
-    ? originalName
-    : `${originalName}.webp`;
-}
-
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey, {
   auth: {
     persistSession: false,
@@ -146,7 +135,8 @@ for (const { book, dir } of booksToProcess) {
 
   for (const file of files) {
     const filePath = path.join(dir, file);
-    const targetFilename = toTargetFilename(file);
+    // ponytail: split-pdf.py already names files (NN.webp, front-NN.webp); keep them as-is.
+    const targetFilename = file;
     const storagePath = `${book}/${targetFilename}`;
     const fileBuffer = fs.readFileSync(filePath);
 
