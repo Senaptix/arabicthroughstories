@@ -44,3 +44,8 @@ next-env.d.ts
 # Model weights, downloaded on demand by scripts/master-narration.py.
 # ~212MB, re-fetched automatically if missing — never in the repo.
 checkpoints/
+
+# Full book pages and source PDFs: never commit
+private-art/
+*.pdf
+__pycache__/

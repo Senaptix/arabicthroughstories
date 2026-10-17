@@ -133,3 +133,36 @@ known to be wrong.
   provisioning via `nproc` / `free -h` / `df -h`.
 - Preview deploys can go to Vercel free tier meanwhile — nothing is for sale
   yet, so the non-commercial restriction doesn't bite.
+
+---
+
+## Book page storage & upload (`scripts/upload-pages.mjs`)
+
+Full book pages live in the private Supabase Storage bucket `book-pages` (`public = false`, no public read policy, accessible only by the service role).
+
+Source illustrations are placed in `private-art/<book>/*.webp` (e.g. `private-art/ibrahim/01.webp` through `54.webp`).
+
+### Running the upload
+
+Set the Supabase URL and service role key in your environment, then run the script:
+
+```bash
+export SUPABASE_URL="https://<project-ref>.supabase.co"
+export SUPABASE_SERVICE_ROLE_KEY="<service-role-key>"
+
+# Upload all books found in private-art/:
+node scripts/upload-pages.mjs
+
+# Or upload a single book:
+node scripts/upload-pages.mjs ibrahim
+```
+
+On Windows (PowerShell):
+```powershell
+$env:SUPABASE_URL = "https://<project-ref>.supabase.co"
+$env:SUPABASE_SERVICE_ROLE_KEY = "<service-role-key>"
+node scripts/upload-pages.mjs [book]
+```
+
+The script uploads each page to `book-pages/<book>/<NN>.webp` with `upsert: true` and `contentType: image/webp`. It exits immediately if either environment variable is missing and never logs or prints the service role key.
+
