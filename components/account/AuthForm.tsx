@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
+import { PASSWORD_RULES } from "@/lib/password-rules";
 import {
   sendPasswordReset,
   resendConfirmation,
@@ -20,6 +21,7 @@ export default function AuthForm({
   mode: "sign-in" | "sign-up" | "forgot" | "reset" | "resend";
   next?: string;
 }) {
+  const [password, setPassword] = useState("");
   const action = mode === "sign-in"
     ? signIn
     : mode === "sign-up"
@@ -62,7 +64,7 @@ export default function AuthForm({
       {needsPassword && (
         <label className="block">
           <span className="mb-2 block text-[14px] font-medium">{mode === "reset" ? "New password" : "Password"}</span>
-          <input name="password" type="password" autoComplete={mode === "sign-in" ? "current-password" : "new-password"} minLength={mode === "sign-in" ? undefined : 10} required className="min-h-[50px] w-full rounded-xl border border-ink/20 bg-surface px-4 text-[16px]" />
+          <input name="password" type="password" autoComplete={mode === "sign-in" ? "current-password" : "new-password"} minLength={mode === "sign-in" ? undefined : 10} onChange={(e) => setPassword(e.target.value)} required className="min-h-[50px] w-full rounded-xl border border-ink/20 bg-surface px-4 text-[16px]" />
         </label>
       )}
       {mode === "reset" && (
@@ -72,7 +74,21 @@ export default function AuthForm({
         </label>
       )}
       {(mode === "sign-up" || mode === "reset") && (
-        <p className="text-[13px] leading-5 text-ink/55">Use at least 10 characters. Supabase will also apply the security rules configured for this project.</p>
+        <div className="text-[13px] leading-5 text-ink/70">
+          <p className="mb-1 font-medium">Your password needs:</p>
+          <ul className="space-y-0.5">
+            {PASSWORD_RULES.map((rule) => {
+              const ok = rule.test(password);
+              return (
+                <li key={rule.label} className={ok ? "font-medium text-ink" : undefined}>
+                  <span aria-hidden="true">{ok ? "✓" : "○"}</span> {rule.label}
+                  <span className="sr-only">{ok ? " (done)" : " (still needed)"}</span>
+                </li>
+              );
+            })}
+          </ul>
+          <p className="mt-1 text-ink/55">Avoid common passwords or ones used on other sites.</p>
+        </div>
       )}
       {state.message && <p role="alert" className="rounded-xl bg-terracotta/10 px-4 py-3 text-[14px] leading-6">{state.message}</p>}
       {state.success && <p role="status" className="rounded-xl bg-sage/15 px-4 py-3 text-[14px] leading-6">{state.success}</p>}

@@ -16,6 +16,7 @@ import {
 import { AVATAR_KEYS } from "@/lib/profile";
 import { createClient } from "@/lib/supabase/server";
 import { safeRedirectPath } from "@/lib/safe-redirect";
+import { weakPasswordMessage } from "@/lib/password-rules";
 import { siteOrigin } from "@/lib/site-origin";
 import {
   activationIssuerSecret,
@@ -45,7 +46,7 @@ const profileNameSchema = z
 
 const GENERIC_SIGN_UP_ERROR = "We could not create the account. Please try again.";
 
-function signUpErrorMessage(error: AuthError) {
+function signUpErrorMessage(error: AuthError, password: string) {
   switch (error.code) {
     case "email_exists":
     case "user_already_exists":
@@ -55,18 +56,10 @@ function signUpErrorMessage(error: AuthError) {
     case "email_address_invalid":
       return "That email address was not accepted. Check it carefully and try again.";
     case "weak_password":
-      if (isAuthWeakPasswordError(error)) {
-        if (error.reasons.includes("pwned")) {
-          return "Choose a different password. That one has appeared in a known data breach.";
-        }
-        if (error.reasons.includes("characters")) {
-          return "Your password needs at least one lowercase letter, one uppercase letter, one number and one symbol.";
-        }
-        if (error.reasons.includes("length")) {
-          return "Choose a longer password and try again.";
-        }
-      }
-      return "Choose a longer password with at least one lowercase letter, one uppercase letter, one number and one symbol.";
+      return weakPasswordMessage(
+        password,
+        isAuthWeakPasswordError(error) && error.reasons.includes("pwned"),
+      );
     default:
       return GENERIC_SIGN_UP_ERROR;
   }
@@ -176,7 +169,7 @@ export async function signUp(_state: ActionState, formData: FormData): Promise<A
       code: error.code ?? "unknown",
       status: error.status ?? null,
     });
-    const actionableMessage = signUpErrorMessage(error);
+    const actionableMessage = signUpErrorMessage(error, parsed.data.password);
     if (actionableMessage !== GENERIC_SIGN_UP_ERROR) {
       return { message: actionableMessage };
     }
