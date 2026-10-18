@@ -51,12 +51,16 @@ export function priceIdFor(slug: string, kind: PurchaseKind = "annual"): string 
         null
       );
     }
-    return process.env[`PADDLE_PRICE_${slug.toUpperCase().replaceAll("-", "_")}_MONTHLY`]?.trim() || null;
+    if (slug === "ibrahim") return process.env.PADDLE_PRICE_IBRAHIM_MONTHLY?.trim() || null;
+    if (slug === "yusuf") return process.env.PADDLE_PRICE_YUSUF_MONTHLY?.trim() || null;
+    return null;
   }
   if (isBundle) {
     return process.env.PADDLE_PRICE_BUNDLE?.trim() || process.env.PADDLE_PRICE_BOTH?.trim() || null;
   }
-  return process.env[`PADDLE_PRICE_${slug.toUpperCase().replaceAll("-", "_")}`]?.trim() || null;
+  if (slug === "ibrahim") return process.env.PADDLE_PRICE_IBRAHIM?.trim() || null;
+  if (slug === "yusuf") return process.env.PADDLE_PRICE_YUSUF?.trim() || null;
+  return null;
 }
 
 /**
@@ -80,30 +84,6 @@ export function priceTable(): Map<string, PriceInfo> {
   register(process.env.PADDLE_PRICE_IBRAHIM_MONTHLY, ["ibrahim"], "monthly");
   register(process.env.PADDLE_PRICE_YUSUF_MONTHLY, ["yusuf"], "monthly");
   register(process.env.PADDLE_PRICE_BUNDLE_MONTHLY || process.env.PADDLE_PRICE_BOTH_MONTHLY, [...BUNDLE_BOOKS], "monthly");
-
-  for (const [key, value] of Object.entries(process.env)) {
-    if (!key.startsWith("PADDLE_PRICE_") || !value?.trim()) continue;
-    if (
-      key === "PADDLE_PRICE_IBRAHIM" ||
-      key === "PADDLE_PRICE_YUSUF" ||
-      key === "PADDLE_PRICE_BUNDLE" ||
-      key === "PADDLE_PRICE_BOTH" ||
-      key === "PADDLE_PRICE_IBRAHIM_MONTHLY" ||
-      key === "PADDLE_PRICE_YUSUF_MONTHLY" ||
-      key === "PADDLE_PRICE_BUNDLE_MONTHLY" ||
-      key === "PADDLE_PRICE_BOTH_MONTHLY"
-    ) {
-      continue;
-    }
-
-    if (key.endsWith("_MONTHLY")) {
-      const slug = key.slice("PADDLE_PRICE_".length, -"_MONTHLY".length).toLowerCase().replaceAll("_", "-");
-      register(value, [slug], "monthly");
-    } else {
-      const slug = key.slice("PADDLE_PRICE_".length).toLowerCase().replaceAll("_", "-");
-      register(value, [slug], "annual");
-    }
-  }
 
   return table;
 }
@@ -322,7 +302,10 @@ export async function fulfillPaddleTransaction(
       });
     } else {
       for (let attempt = 0; attempt < 5; attempt += 1) {
-        const code = db.generateCode ? db.generateCode() : `QK-TEST-CODE`;
+        if (!db.generateCode) {
+          throw new Error("generateCode is required");
+        }
+        const code = db.generateCode();
         result = await db.recordPurchase({
           transactionId: txn.id,
           book,

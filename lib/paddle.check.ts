@@ -73,6 +73,21 @@ async function runFulfillmentChecks() {
   assert.equal(unknownRes.records.length, 0);
   assert.equal(dbCallCount, 0, "unknown price grants nothing and touches no DB");
 
+  // --- Missing generateCode throws ---
+  await assert.rejects(
+    fulfillPaddleTransaction(
+      {
+        id: "txn_no_generate_code",
+        items: [{ price: { id: "pri_ibrahim" } }],
+      },
+      {
+        recordPurchase: async () => ({ status: "granted", code: null, emailed: true }),
+      },
+    ),
+    /generateCode is required/,
+    "missing db.generateCode throws",
+  );
+
   // --- Fulfillment checks: Bundle grants both books & replay grants nothing new ---
   const inMemorySubscriptions = new Map<string, string>();
   const inMemoryTransactions = new Map<string, { status: PurchaseRecordStatus; code: string | null; emailed: boolean; kind?: string; expiresAt?: string | null }>();

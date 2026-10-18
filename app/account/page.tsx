@@ -13,6 +13,15 @@ import { isPublished } from "@/lib/catalogue";
 import { getAllBooks } from "@/lib/parse";
 import { createClient } from "@/lib/supabase/server";
 
+function formatUkDate(epochMs: number): string {
+  return new Intl.DateTimeFormat("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(epochMs));
+}
+
 export const metadata = { title: "Parent area" };
 
 export default async function AccountPage({
@@ -161,10 +170,27 @@ export default async function AccountPage({
                         will hit a gate until they hit it. */}
                     <p className="mt-2 text-[13px] font-medium">
                       {active ? (
-                        <span className="text-brand-blue">
-                          Full access
-                          {ent && ent.daysLeft <= 30 ? ` · ${ent.daysLeft} ${ent.daysLeft === 1 ? "day" : "days"} left` : ""}
-                        </span>
+                        hasSubscription ? (
+                          <span className="flex flex-wrap items-center gap-x-2 text-brand-blue">
+                            <span>
+                              Monthly — renews automatically. Current access until{" "}
+                              {ent ? formatUkDate(ent.expiresAt) : ""}
+                            </span>
+                            <span className="text-ink/25" aria-hidden="true">·</span>
+                            <form action={manageSubscription} className="inline">
+                              <button
+                                type="submit"
+                                className="text-brand-blue underline-offset-4 hover:underline"
+                              >
+                                Manage subscription
+                              </button>
+                            </form>
+                          </span>
+                        ) : (
+                          <span className="text-brand-blue">
+                            Access until {ent ? formatUkDate(ent.expiresAt) : ""}
+                          </span>
+                        )
                       ) : isPublished(book.slug) ? (
                         <span className="text-ink/50">
                           Free preview only ·{" "}
