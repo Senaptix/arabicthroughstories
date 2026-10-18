@@ -11,6 +11,7 @@ import {
   type PurchaseRecordStatus,
   verifyPaddleSignature,
 } from "./paddle";
+import { onlineOptionsFor } from "../components/BuyMenu";
 
 const secret = "pdl_ntfset_test_secret";
 const body = '{"event_type":"transaction.completed"}';
@@ -50,6 +51,46 @@ assert.deepEqual(booksForPrice("pri_ibrahim"), ["ibrahim"]);
 // Bundle price maps to both books
 assert.deepEqual(booksForPrice("pri_bundle"), ["ibrahim", "yusuf"], "bundle price maps to both books");
 assert.deepEqual(booksForPrice("pri_bundle_mo"), ["ibrahim", "yusuf"], "bundle monthly price maps to both books");
+
+// --- Online options checks ----------------------------------------
+process.env.PADDLE_CHECKOUT_ENABLED = "false";
+assert.deepEqual(onlineOptionsFor("ibrahim"), [], "checkout disabled returns []");
+assert.deepEqual(onlineOptionsFor("yusuf"), [], "checkout disabled returns []");
+
+process.env.PADDLE_CHECKOUT_ENABLED = "true";
+process.env.PADDLE_CLIENT_TOKEN = "live_token";
+
+assert.deepEqual(
+  onlineOptionsFor("ibrahim"),
+  [
+    { label: "Part 1: Who Broke the Idols?", href: "/buy/ibrahim" },
+    { label: "Part 2: Yusuf", href: "/buy/yusuf" },
+    { label: "Both parts", href: "/buy/both" },
+  ],
+  "ibrahim options list Part 1, Part 2, Both parts",
+);
+
+assert.deepEqual(
+  onlineOptionsFor("yusuf"),
+  [
+    { label: "Part 2: Yusuf", href: "/buy/yusuf" },
+    { label: "Part 1: Who Broke the Idols?", href: "/buy/ibrahim" },
+    { label: "Both parts", href: "/buy/both" },
+  ],
+  "yusuf options list Yusuf first",
+);
+
+const savedYusuf = process.env.PADDLE_PRICE_YUSUF;
+delete process.env.PADDLE_PRICE_YUSUF;
+assert.deepEqual(
+  onlineOptionsFor("ibrahim"),
+  [
+    { label: "Digital Edition (this part)", href: "/buy/ibrahim" },
+    { label: "Both parts", href: "/buy/both" },
+  ],
+  "when yusuf price unset, fallback to single part options",
+);
+process.env.PADDLE_PRICE_YUSUF = savedYusuf;
 
 // --- Fulfillment checks: Unknown price grants nothing -------------
 async function runFulfillmentChecks() {

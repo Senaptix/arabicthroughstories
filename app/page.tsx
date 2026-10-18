@@ -11,6 +11,7 @@ import TextPreview, { type PreviewPage } from "@/components/TextPreview";
 import SeriesIndex from "@/components/SeriesIndex";
 import HeroGallery from "@/components/HeroGallery";
 import { buyLabel, SERIES, isPublished } from "@/lib/catalogue";
+import { checkoutEnabled, priceIdFor } from "@/lib/paddle";
 import {
   getAllBooks,
   getBook,
@@ -388,7 +389,19 @@ export default function Home() {
             imagery ever appears on this site (WEBSITE_DESIGN.md). A swipe row
             below lg; on desktop the loose-sheet fan, whose front card slides
             on to the next page. See components/HeroGallery.tsx. */}
-        <HeroGallery pages={HERO_PAGES} />
+        <div>
+          <HeroGallery pages={HERO_PAGES} />
+          {checkoutEnabled() && priceIdFor("yusuf") && (
+            <p className="mt-3 text-center">
+              <Link
+                href="/buy/yusuf"
+                className="text-brand-blue inline-block text-[14px] font-medium underline underline-offset-4"
+              >
+                Read Part 2 online
+              </Link>
+            </p>
+          )}
+        </div>
       </section>
 
       {/* ---------------------------------------------------------------- *
@@ -485,6 +498,17 @@ export default function Home() {
             printed and on sale; Part 2, Yusuf, is {partTwoWhen}, and its Arabic
             is on the site to read already.
           </p>
+          {checkoutEnabled() && priceIdFor("yusuf") && (
+            <p className="mt-4">
+              <Link
+                href="/buy/yusuf"
+                className="text-brand-blue inline-block font-medium underline underline-offset-4"
+                style={{ fontSize: "17px" }}
+              >
+                Read Part 2 online
+              </Link>
+            </p>
+          )}
         </div>
 
         <div className="reveal mt-8">
@@ -1192,6 +1216,17 @@ export default function Home() {
               Part 2 opens the way Part 1 does. Buy the book, add the order to
               your account, and its companion opens for a year.
             </p>
+            {checkoutEnabled() && priceIdFor("yusuf") && (
+              <p className="mt-4">
+                <Link
+                  href="/buy/yusuf"
+                  className="text-brand-blue inline-block font-medium underline underline-offset-4"
+                  style={{ fontSize: "15px" }}
+                >
+                  Read Part 2 online
+                </Link>
+              </p>
+            )}
           </div>
         </div>
       </section>

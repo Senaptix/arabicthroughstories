@@ -10,7 +10,28 @@ export type OnlineOption = { label: string; href: string };
  * links only: no prices, no price ids. Server components only (reads PADDLE_*).
  */
 export function onlineOptionsFor(slug?: string): OnlineOption[] {
-  if (!slug || !checkoutEnabled() || !priceIdFor(slug)) return [];
+  if (!checkoutEnabled()) return [];
+
+  if (priceIdFor("yusuf")) {
+    const part1: OnlineOption = {
+      label: "Part 1: Who Broke the Idols?",
+      href: "/buy/ibrahim",
+    };
+    const part2: OnlineOption = {
+      label: "Part 2: Yusuf",
+      href: "/buy/yusuf",
+    };
+    const out: OnlineOption[] =
+      slug === "yusuf"
+        ? [part2, ...(priceIdFor("ibrahim") ? [part1] : [])]
+        : [...(priceIdFor("ibrahim") ? [part1] : []), part2];
+    if (priceIdFor("both")) {
+      out.push({ label: "Both parts", href: "/buy/both" });
+    }
+    return out;
+  }
+
+  if (!slug || !priceIdFor(slug)) return [];
   const out: OnlineOption[] = [
     { label: "Digital Edition (this part)", href: `/buy/${slug}` },
   ];
@@ -99,7 +120,11 @@ export default function BuyMenu({
           </>
         )}
         <p className="text-ink/60 px-3 pt-1 pb-2 text-[13px]">
-          {online.length > 0 ? "Paperback on Amazon" : "Choose your Amazon store"}
+          {online.length > 0
+            ? slug === "yusuf"
+              ? "Part 1 paperback on Amazon"
+              : "Paperback on Amazon"
+            : "Choose your Amazon store"}
         </p>
         {stores.map((l) => (
           <a
