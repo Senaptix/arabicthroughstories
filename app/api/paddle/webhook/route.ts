@@ -124,7 +124,7 @@ export async function POST(request: Request) {
       case "ok":
         return new Response("ok");
       case "unmatched":
-        console.warn("Paddle: unmatched monthly transaction", event.data.id);
+        console.warn("Paddle: unmatched transaction (no resolvable parent)", event.data.id);
         return new Response("unmatched", { status: 200 });
       case "unknown_price":
         return new Response("unknown price", { status: 200 }); // retrying cannot fix config

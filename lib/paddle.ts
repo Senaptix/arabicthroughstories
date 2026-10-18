@@ -288,40 +288,18 @@ export async function fulfillPaddleTransaction(
     const kind = bookMap.get(book) ?? "annual";
     const expiresAt = kind === "monthly" ? monthlyExpiresAt : null;
 
-    let result: PurchaseRecordResult | undefined;
-    if (kind === "monthly" && !parentId) {
-      // Monthly requires sign-in: no guest checkout and no QK- codes.
-      result = await db.recordPurchase({
-        transactionId: txn.id,
-        book,
-        parentId: null,
-        email,
-        code: "",
-        kind,
-        expiresAt,
-      });
-    } else {
-      for (let attempt = 0; attempt < 5; attempt += 1) {
-        if (!db.generateCode) {
-          throw new Error("generateCode is required");
-        }
-        const code = db.generateCode();
-        result = await db.recordPurchase({
-          transactionId: txn.id,
-          book,
-          parentId,
-          email,
-          code,
-          kind,
-          expiresAt,
-        });
-        if (result.status !== "collision") break;
-      }
-    }
-
-    if (!result) {
-      return { status: "not_recorded", books, records };
-    }
+    // Online purchases require an account: no guest checkout and no QK- codes.
+    // With no parent the blank code makes the DB record it 'unmatched'
+    // (annual and monthly alike) and nothing is granted.
+    const result = await db.recordPurchase({
+      transactionId: txn.id,
+      book,
+      parentId,
+      email,
+      code: "",
+      kind,
+      expiresAt,
+    });
 
     const isNew = result.status === "granted" || result.status === "code_issued";
     records.push({ book, status: result.status, code: result.code, isNew });

@@ -19,24 +19,24 @@ code gives, so `lib/access.ts` needs no change.
 ```
 /buy/<slug>  (hidden)
   signed in  -> Paddle overlay checkout, custom_data.parent_id = their account
-  signed out -> "Sign in first", or "Buy without signing in"
+  signed out -> "Create an account or sign in to buy" (sign-up / sign-in, ?next= back here)
                     |
 Paddle  --transaction.completed-->  /api/paddle/webhook
   verify Paddle-Signature (HMAC, 5-minute window)
   book  = from the PRICE id (never from custom_data)
   record_paddle_purchase (idempotent on txn id):
-     parent known -> entitlement, 12 months, immediately
-     guest        -> single-use QK- code for that book, emailed
-                     ("Thank you for buying Qasas Kids online")
-                     buyer signs up with it, the existing Part C path
-  non-2xx makes Paddle retry; a retry resends a failed email, never double-grants
+     parent known   -> entitlement, immediately
+     no parent      -> recorded 'unmatched' (annual and monthly), nothing granted,
+                       200 returned and logged for manual follow-up
+  non-2xx makes Paddle retry; a retry never double-grants
                     |
-/buy/<slug>/thanks
+/buy/<slug>/thanks  ("Your book is on your account")
 ```
 
-Why guests get a code instead of an account: signup requires an order number
-or a QK- code (`create_activation_from_signup`). A guest buyer has neither
-until we email them one, so the code *is* their proof of purchase, like a stall sale.
+Online purchases always require an account (sign-up is open; the order number /
+QK code is optional there). The guest QK- code branch still exists in
+`record_paddle_purchase` for safety, but the app no longer sends a code, so it
+is unreachable from the UI or webhook (migration `202610180001_open_signup.sql`).
 
 ## Files
 

@@ -77,6 +77,29 @@ export default function BuyOptions({
       });
   }, [paddleReady, annualPriceId, monthlyPriceId]);
 
+  const next = encodeURIComponent(`/buy/${slug}`);
+  const signedOut = (
+    <div className="space-y-4 text-[15px] leading-6">
+      <p className="rounded-xl border border-brand-blue/20 bg-sand/40 p-4 text-[14px]">
+        Create an account or sign in to buy
+      </p>
+      <div className="flex flex-wrap gap-3">
+        <Link
+          href={`/account/sign-up?next=${next}`}
+          className="inline-flex rounded-full bg-brand-blue px-6 py-3 text-[16px] font-medium text-white hover:bg-brand-blue/90"
+        >
+          Create an account
+        </Link>
+        <Link
+          href={`/account/sign-in?next=${next}`}
+          className="inline-flex rounded-full border border-brand-blue px-6 py-3 text-[16px] font-medium text-brand-blue"
+        >
+          Sign in
+        </Link>
+      </div>
+    </div>
+  );
+
   const activePriceId = selectedPlan === "monthly" ? monthlyPriceId : annualPriceId;
 
   return (
@@ -147,19 +170,7 @@ export default function BuyOptions({
               </button>
             </div>
           ) : (
-            <div className="space-y-4 text-[15px] leading-6">
-              <p className="rounded-xl border border-brand-blue/20 bg-sand/40 p-4 text-[14px]">
-                Monthly subscriptions require an account so your subscription can be managed and renewed automatically.
-              </p>
-              <div>
-                <Link
-                  href={`/account/sign-in?next=/buy/${slug}`}
-                  className="inline-flex rounded-full bg-brand-blue px-6 py-3 text-[16px] font-medium text-white hover:bg-brand-blue/90"
-                >
-                  Sign in to subscribe
-                </Link>
-              </div>
-            </div>
+            signedOut
           )
         ) : (
           parentId ? (
@@ -188,32 +199,7 @@ export default function BuyOptions({
               </button>
             </div>
           ) : (
-            <div className="space-y-4 text-[15px] leading-6">
-              <p>
-                <Link href={`/account/sign-in?next=/buy/${slug}`} className="font-medium text-brand-blue underline">
-                  Sign in
-                </Link>{" "}
-                first and the book opens on your account straight after payment.
-              </p>
-              <p>
-                {isBundle
-                  ? "Or buy without an account: we email you two activation codes to enter when you create one."
-                  : "Or buy without an account: we email you a code to enter when you create one."}
-              </p>
-              <button
-                type="button"
-                disabled={!paddleReady || !activePriceId}
-                onClick={() =>
-                  window.Paddle?.Checkout.open({
-                    items: [{ priceId: activePriceId!, quantity: 1 }],
-                    settings: { displayMode: "overlay", successUrl, theme: "light" },
-                  })
-                }
-                className="rounded-full bg-brand-blue px-6 py-3 text-[16px] font-medium text-white disabled:opacity-50"
-              >
-                {annualPrice ? `Buy without signing in — ${annualPrice}` : "Buy without signing in"}
-              </button>
-            </div>
+            signedOut
           )
         )}
       </div>

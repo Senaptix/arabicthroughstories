@@ -114,21 +114,6 @@ async function runFulfillmentChecks() {
   assert.equal(unknownRes.records.length, 0);
   assert.equal(dbCallCount, 0, "unknown price grants nothing and touches no DB");
 
-  // --- Missing generateCode throws ---
-  await assert.rejects(
-    fulfillPaddleTransaction(
-      {
-        id: "txn_no_generate_code",
-        items: [{ price: { id: "pri_ibrahim" } }],
-      },
-      {
-        recordPurchase: async () => ({ status: "granted", code: null, emailed: true }),
-      },
-    ),
-    /generateCode is required/,
-    "missing db.generateCode throws",
-  );
-
   // --- Fulfillment checks: Bundle grants both books & replay grants nothing new ---
   const inMemorySubscriptions = new Map<string, string>();
   const inMemoryTransactions = new Map<string, { status: PurchaseRecordStatus; code: string | null; emailed: boolean; kind?: string; expiresAt?: string | null }>();
@@ -151,7 +136,7 @@ async function runFulfillmentChecks() {
         inMemoryTransactions.set(key, rec);
         return rec;
       }
-      if (kind === "monthly") {
+      if (!code) {
         const rec = { status: "unmatched" as const, code: null, emailed: false, kind, expiresAt };
         inMemoryTransactions.set(key, rec);
         return rec;
@@ -191,7 +176,7 @@ async function runFulfillmentChecks() {
   assert.equal(parentRes2.records.every((r) => r.status === "duplicate"), true);
   assert.equal(parentRes2.records.filter((r) => r.isNew).length, 0, "replaying the same txn grants nothing new");
 
-  // Guest bundle purchase grants two QK- codes
+  // Guest bundle purchase (no parent): grants nothing, issues no codes, is 'unmatched'
   const emailedCodes: string[] = [];
   mockDb.sendActivationEmail = async (_email, code) => {
     emailedCodes.push(code);
@@ -203,32 +188,12 @@ async function runFulfillmentChecks() {
     items: [{ price: { id: "pri_bundle" } }],
   };
 
-  const guestRes1 = await fulfillPaddleTransaction(
-    guestTxn,
-    mockDb,
-    async () => "buyer@example.com",
-  );
-  assert.equal(guestRes1.status, "ok");
+  const guestRes1 = await fulfillPaddleTransaction(guestTxn, mockDb, async () => "buyer@example.com");
+  assert.equal(guestRes1.status, "unmatched");
   assert.deepEqual(guestRes1.books, ["ibrahim", "yusuf"]);
   assert.equal(guestRes1.records.length, 2);
-  assert.equal(guestRes1.records.filter((r) => r.status === "code_issued").length, 2, "grants two QK- codes for a guest");
-  assert.ok(guestRes1.records[0].code?.startsWith("QK-"));
-  assert.ok(guestRes1.records[1].code?.startsWith("QK-"));
-  assert.notEqual(guestRes1.records[0].code, guestRes1.records[1].code, "each book gets a distinct code");
-  assert.equal(emailedCodes.length, 2, "both codes emailed");
-
-  // Replaying the guest transaction grants nothing new
-  const guestRes2 = await fulfillPaddleTransaction(
-    guestTxn,
-    mockDb,
-    async () => "buyer@example.com",
-  );
-  assert.equal(guestRes2.status, "ok");
-  assert.equal(guestRes2.records.every((r) => r.status === "duplicate"), true);
-  assert.equal(guestRes2.records.filter((r) => r.isNew).length, 0, "replaying guest txn grants nothing new");
-  assert.equal(emailedCodes.length, 2, "no extra emails sent on replay");
-  assert.equal(guestRes2.records[0].code, guestRes1.records[0].code, "replay returns the original codes");
-  assert.equal(guestRes2.records[1].code, guestRes1.records[1].code, "replay returns the original codes");
+  assert.equal(guestRes1.records.every((r) => r.status === "unmatched" && r.code === null && !r.isNew), true, "annual guest purchase is unmatched, no codes");
+  assert.equal(emailedCodes.length, 0, "no activation emails for unmatched purchases");
 
   // Book is decided by PRICE id only, never by custom_data
   const forgedTxn = {

@@ -31,7 +31,6 @@ const passwordSchema = z.string().min(10).max(128);
 const orderNumberSchema = z
   .string()
   .trim()
-  .min(1, "Enter your Amazon order number or activation code.")
   .max(100, "Use 100 characters or fewer for the order number.")
   .refine(
     (value) => !/[\u0000-\u001f\u007f]/.test(value),
@@ -112,7 +111,7 @@ export async function signUp(_state: ActionState, formData: FormData): Promise<A
     .safeParse({
       email: formData.get("email"),
       password: formData.get("password"),
-      orderNumber: formData.get("orderNumber"),
+      orderNumber: formData.get("orderNumber") ?? "",
     });
   if (!parsed.success) {
     const orderIssue = parsed.error.issues.find(
@@ -123,6 +122,7 @@ export async function signUp(_state: ActionState, formData: FormData): Promise<A
   }
 
   const supabase = await createClient();
+  // The code / order number is optional: blank creates an account with no entitlement.
   if (looksLikeActivationCode(parsed.data.orderNumber)) {
     let issuerSecret: string;
     try {
@@ -159,7 +159,8 @@ export async function signUp(_state: ActionState, formData: FormData): Promise<A
     }
   }
 
-  const redirectTo = `${await siteOrigin()}/auth/callback?next=${encodeURIComponent("/account")}`;
+  const next = await safeNext(formData.get("next"));
+  const redirectTo = `${await siteOrigin()}/auth/callback?next=${encodeURIComponent(next)}`;
   const { error } = await supabase.auth.signUp({
     email: parsed.data.email,
     password: parsed.data.password,
@@ -184,7 +185,11 @@ export async function signUp(_state: ActionState, formData: FormData): Promise<A
     }
     return { message: GENERIC_SIGN_UP_ERROR };
   }
-  redirect("/account/sign-in?check-email=1");
+  redirect(
+    next === "/account"
+      ? "/account/sign-in?check-email=1"
+      : `/account/sign-in?check-email=1&next=${encodeURIComponent(next)}`,
+  );
 }
 
 export async function sendPasswordReset(

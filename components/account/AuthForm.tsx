@@ -44,13 +44,12 @@ export default function AuthForm({
       )}
       {mode === "sign-up" && (
         <label className="block">
-          <span className="mb-2 block text-[14px] font-medium">Amazon order number or activation code</span>
+          <span className="mb-2 block text-[14px] font-medium">Amazon order number or QK code (optional)</span>
           <input
             name="orderNumber"
             type="text"
             autoComplete="off"
             maxLength={100}
-            required
             placeholder="123-1234567-1234567 or QK-7X9K-4PL2"
             className="min-h-[50px] w-full rounded-xl border border-ink/20 bg-surface px-4 text-[16px]"
           />
@@ -81,8 +80,8 @@ export default function AuthForm({
         {pending ? "Please wait…" : mode === "sign-in" ? "Sign in" : mode === "sign-up" ? "Create parent account" : mode === "forgot" ? "Send reset link" : mode === "resend" ? "Resend confirmation" : "Save new password"}
       </button>
       <div className="flex flex-wrap justify-between gap-3 text-[14px] text-brand-blue">
-        {mode === "sign-in" && <><Link href="/account/forgot-password">Forgot password?</Link><Link href="/account/sign-up">Create an account</Link></>}
-        {mode === "sign-up" && <Link href="/account/sign-in">Already have an account?</Link>}
+        {mode === "sign-in" && <><Link href="/account/forgot-password">Forgot password?</Link><Link href={next ? `/account/sign-up?next=${encodeURIComponent(next)}` : "/account/sign-up"}>Create an account</Link></>}
+        {mode === "sign-up" && <Link href={next ? `/account/sign-in?next=${encodeURIComponent(next)}` : "/account/sign-in"}>Already have an account?</Link>}
         {(mode === "forgot" || mode === "reset" || mode === "resend") && <Link href="/account/sign-in">Back to sign in</Link>}
       </div>
     </form>
