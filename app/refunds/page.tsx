@@ -44,7 +44,7 @@ export default function RefundsPage() {
               We want parents to be completely confident trying Qasas Kids. If you purchase digital access and decide within 14 days that it is not right for your child, you can ask for a full refund.
             </p>
             <p className="mt-3">
-              This 14-day full refund promise has been confirmed by the owner and applies to both 12-month access purchases and the first month of a monthly subscription.
+              This applies to both 12-month access purchases and the first month of a monthly subscription.
             </p>
           </section>
 
@@ -70,7 +70,7 @@ export default function RefundsPage() {
               </li>
             </ul>
             <p className="mt-3">
-              Once issued, Paddle returns the payment to your original payment method, which typically appears on your bank statement within 5 to 10 working days. When a refund is completed, digital access for the refunded book(s) is deactivated on your parent account.
+              Once issued, Paddle returns the payment to your original payment method, which typically appears on your bank statement within 5 to 10 working days. When a refund is completed, we will end access to the refunded book(s) on your parent account.
             </p>
           </section>
 
@@ -94,7 +94,7 @@ export default function RefundsPage() {
           <section>
             <h2 className="text-ink text-[20px] font-semibold">School and class licences</h2>
             <p className="mt-3">
-              Class and school licences are handled separately under institutional agreements: [TODO: terms for school or class licences].
+              For schools and classes, please contact us at accounts@qasaskids.com.
             </p>
           </section>
 

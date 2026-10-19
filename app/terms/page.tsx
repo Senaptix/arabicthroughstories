@@ -63,7 +63,7 @@ export default function TermsPage() {
               The Digital Edition is read online only via your web browser on qasaskids.com. Nothing is downloaded to your device, and we do not provide offline files or standalone applications.
             </p>
             <p className="mt-3">
-              The audio narration on the service is currently an AI-generated voice, checked and verified against the Arabic text by a qualified teacher. Audio recordings may be updated or re-recorded by a human narrator in future revisions.
+              The audio narration on the service is currently an AI-generated voice, checked against the Arabic text by a teacher. Audio recordings may be updated or re-recorded by a human narrator in future revisions.
             </p>
           </section>
 
@@ -104,19 +104,15 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-ink text-[20px] font-semibold">Right to cancel and immediate digital supply</h2>
+            <h2 className="text-ink text-[20px] font-semibold">Right to cancel</h2>
             <p className="mt-3">
               Under the UK Consumer Contracts Regulations, consumers normally have a statutory right to cancel an online order within 14 days without reason.
             </p>
             <p className="mt-3">
-              Because our digital content is supplied immediately upon purchase, by completing your purchase you acknowledge and agree that your statutory 14-day right of cancellation is waived once digital access begins [TODO solicitor check: wording for statutory cancellation waiver on immediate digital access].
-            </p>
-            <p className="mt-3">
-              However, separate from the statutory rule, we provide a full 14-day refund promise on all purchases. Please see our{" "}
+              We honour that right in full: you can cancel within 14 days of purchase and we will refund you in full. See our{" "}
               <Link href="/refunds" className="text-brand-blue underline underline-offset-4">
                 Refunds page
-              </Link>{" "}
-              for complete details.
+              </Link>.
             </p>
           </section>
 

@@ -125,7 +125,7 @@ export default function PrivacyPage() {
               </li>
             </ul>
             <p className="mt-3">
-              Where any data processing involves international transfers outside the UK, appropriate safeguards are applied [TODO confirm: international transfers and safeguards].
+              Our main providers host data in the UK. Paddle and Supabase are international companies; where they process personal data outside the UK, they do so under UK-approved safeguards in their data processing agreements.
             </p>
           </section>
 
@@ -136,13 +136,13 @@ export default function PrivacyPage() {
             </p>
             <ul className="mt-3 list-disc space-y-2 pl-6">
               <li>
-                <strong>Account and child profile data:</strong> [TODO confirm: account and child data retained until deleted or 12 months after access ended with no sign-in].
+                <strong>Account and child profile data:</strong> kept until you delete your account (you can ask us to delete it at any time).
               </li>
               <li>
                 <strong>Purchase records:</strong> Retained for 6 years to satisfy UK statutory accounting and tax obligations.
               </li>
               <li>
-                <strong>Server logs:</strong> Retained for 30 days for operational security and debugging.
+                <strong>Server logs:</strong> kept for up to 30 days.
               </li>
             </ul>
           </section>

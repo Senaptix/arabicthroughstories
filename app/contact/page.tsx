@@ -42,7 +42,7 @@ export default function ContactPage() {
               </a>
             </p>
             <p className="mt-3">
-              We respond to inquiries [TODO: response time, e.g. within 2 business days].
+              We aim to reply within 2 working days.
             </p>
           </section>
 
