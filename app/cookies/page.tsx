@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import BrandLockup from "@/components/BrandLockup";
+import SiteFooter from "@/components/SiteFooter";
 import Eyebrow from "@/components/Eyebrow";
 import HomeBar from "@/components/HomeBar";
 
@@ -116,32 +116,7 @@ export default function CookiesPage() {
         </div>
       </main>
 
-      <footer className="mx-auto w-full max-w-[720px] px-6 py-12 sm:px-8">
-        <div className="border-ink/10 flex flex-col gap-4 border-t pt-8 sm:flex-row sm:items-center sm:justify-between text-[14px] text-ink/60">
-          <BrandLockup size="footer" />
-          <div className="flex flex-wrap gap-x-3 gap-y-1">
-            <Link href="/" className="hover:text-ink underline-offset-4 hover:underline">
-              Home
-            </Link>
-            <span className="text-ink/25" aria-hidden="true">·</span>
-            <Link href="/about" className="hover:text-ink underline-offset-4 hover:underline">
-              About
-            </Link>
-            <span className="text-ink/25" aria-hidden="true">·</span>
-            <Link href="/terms" className="hover:text-ink underline-offset-4 hover:underline">
-              Terms
-            </Link>
-            <span className="text-ink/25" aria-hidden="true">·</span>
-            <Link href="/refunds" className="hover:text-ink underline-offset-4 hover:underline">
-              Refunds
-            </Link>
-            <span className="text-ink/25" aria-hidden="true">·</span>
-            <Link href="/privacy" className="hover:text-ink underline-offset-4 hover:underline">
-              Privacy
-            </Link>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter maxWidth="max-w-[720px]" />
     </>
   );
 }

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Eyebrow from "@/components/Eyebrow";
 import HomeBar from "@/components/HomeBar";
+import SiteFooter from "@/components/SiteFooter";
 import AudioNote from "@/components/AudioNote";
 import PagePlayer from "@/components/PagePlayer";
 import ReadAlong from "@/components/ReadAlong";
@@ -338,6 +339,7 @@ export default async function PageCard({
           </nav>
         </div>
       </main>
+      <SiteFooter maxWidth="max-w-[640px]" />
     </>
   );
 }

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import BrandLockup from "@/components/BrandLockup";
+import SiteFooter from "@/components/SiteFooter";
 import AvatarBadge from "@/components/account/AvatarBadge";
 import ProfileCreator from "@/components/account/ProfileCreator";
 import ProfileRenamer from "@/components/account/ProfileRenamer";
@@ -248,6 +249,7 @@ export default async function AccountPage({
 
         <p className="mt-10 text-[13px] leading-5 text-ink/45">Purchase access is managed separately and has not been enabled by this account setup.</p>
       </main>
+      <SiteFooter maxWidth="max-w-[800px]" />
     </>
   );
 }

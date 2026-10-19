@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import BrandLockup from "@/components/BrandLockup";
+import SiteFooter from "@/components/SiteFooter";
 import SiteNav from "@/components/SiteNav";
 import BookReader, { type ReaderPage } from "@/components/BookReader";
 import Eyebrow from "@/components/Eyebrow";
@@ -1300,59 +1301,21 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="mx-auto w-full max-w-[1100px] px-6 py-12 sm:px-8">
-        <div className="border-ink/10 flex flex-col gap-5 border-t pt-8 sm:flex-row sm:items-center sm:justify-between">
-          <BrandLockup size="footer" />
-          <div className="sm:text-right">
-            {/* The long-form case for the book. Deliberately not in the
-                header — a first-time visitor should meet the book before
-                the reasoning behind it — but a parent who has scrolled this
-                far is exactly the one who wants it. */}
-            <div className="flex flex-wrap gap-x-3 gap-y-1 sm:justify-end text-[14px] leading-6">
-              <Link
-                href="/about"
-                className="text-brand-blue underline-offset-4 hover:underline"
-              >
-                Why we made this book
-              </Link>
-              <span className="text-ink/25" aria-hidden="true">·</span>
-              <Link
-                href="/terms"
-                className="text-ink/65 hover:text-ink underline-offset-4 hover:underline"
-              >
-                Terms
-              </Link>
-              <span className="text-ink/25" aria-hidden="true">·</span>
-              <Link
-                href="/refunds"
-                className="text-ink/65 hover:text-ink underline-offset-4 hover:underline"
-              >
-                Refunds
-              </Link>
-              <span className="text-ink/25" aria-hidden="true">·</span>
-              <Link
-                href="/privacy"
-                className="text-ink/65 hover:text-ink underline-offset-4 hover:underline"
-              >
-                Privacy
-              </Link>
-            </div>
-            <p
-              className="text-ink/60 mt-2"
-              style={{ fontSize: "14px", lineHeight: 1.6 }}
-            >
-              {book.title_en} — book {book.series_order} of the{" "}
-              <i>Qisas an-Nabiyyin</i> readers.
-            </p>
-            <p
-              className="text-ink/45 mt-1"
-              style={{ fontSize: "14px", lineHeight: 1.6 }}
-            >
-              Ages {book.age_range} · Arabic and English
-            </p>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter>
+        <p
+          className="text-ink/60 mt-2"
+          style={{ fontSize: "14px", lineHeight: 1.6 }}
+        >
+          {book.title_en} — book {book.series_order} of the{" "}
+          <i>Qisas an-Nabiyyin</i> readers.
+        </p>
+        <p
+          className="text-ink/45 mt-1"
+          style={{ fontSize: "14px", lineHeight: 1.6 }}
+        >
+          Ages {book.age_range} · Arabic and English
+        </p>
+      </SiteFooter>
     </div>
   );
 }

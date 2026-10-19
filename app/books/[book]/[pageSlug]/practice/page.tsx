@@ -5,6 +5,7 @@ import { canViewPage } from "@/lib/access";
 import type { Metadata } from "next";
 import Eyebrow from "@/components/Eyebrow";
 import HomeBar from "@/components/HomeBar";
+import SiteFooter from "@/components/SiteFooter";
 import Practice from "@/components/Practice";
 import {
   getAllBooks,
@@ -143,6 +144,7 @@ export default async function PracticePage({
           </Link>
         </div>
       </main>
+      <SiteFooter maxWidth="max-w-[640px]" />
     </>
   );
 }

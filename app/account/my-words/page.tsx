@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import HomeBar from "@/components/HomeBar";
+import SiteFooter from "@/components/SiteFooter";
 import VocabCards from "@/components/VocabCards";
 import { getActiveProfile, getParentId } from "@/lib/account";
 import { getAllBooks, parseVocabulary } from "@/lib/parse";
@@ -58,6 +59,7 @@ export default async function MyWordsPage({
           </div>
         )}
       </main>
+      <SiteFooter maxWidth="max-w-[800px]" />
     </>
   );
 }

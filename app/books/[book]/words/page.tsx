@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import HomeBar from "@/components/HomeBar";
+import SiteFooter from "@/components/SiteFooter";
 import RootFamily from "@/components/RootFamily";
 import { getAllBooks, getBook, parseRootFamilies } from "@/lib/parse";
 
@@ -114,6 +115,7 @@ export default async function WordsPage({
           </Link>
         </div>
       </main>
+      <SiteFooter maxWidth="max-w-[640px]" />
     </>
   );
 }

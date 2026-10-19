@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import Eyebrow from "@/components/Eyebrow";
 import HomeBar from "@/components/HomeBar";
+import SiteFooter from "@/components/SiteFooter";
 
 export const metadata: Metadata = {
   title: "Activate your book",
@@ -139,6 +140,7 @@ export default function Activate() {
           </p>
         </div>
       </main>
+      <SiteFooter maxWidth="max-w-[720px]" />
     </>
   );
 }

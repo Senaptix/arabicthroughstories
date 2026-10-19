@@ -1,4 +1,5 @@
 import HomeBar from "@/components/HomeBar";
+import SiteFooter from "@/components/SiteFooter";
 
 /**
  * A mistyped or retired page number lands here. It gets the same way home
@@ -23,6 +24,7 @@ export default function NotFound() {
           Check the page number, or start from the beginning of the book.
         </p>
       </main>
+      <SiteFooter maxWidth="max-w-[640px]" />
     </>
   );
 }

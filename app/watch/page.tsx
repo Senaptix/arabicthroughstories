@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Eyebrow from "@/components/Eyebrow";
 import HomeBar from "@/components/HomeBar";
+import SiteFooter from "@/components/SiteFooter";
 
 /**
  * The reels — the one page on this site where people may have faces.
@@ -136,6 +137,7 @@ export default function WatchPage() {
           </Link>
         </div>
       </main>
+      <SiteFooter maxWidth="max-w-[1100px]" />
     </>
   );
 }

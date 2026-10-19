@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import HomeBar from "@/components/HomeBar";
+import SiteFooter from "@/components/SiteFooter";
 import PageIndex from "@/components/PageIndex";
 import Link from "next/link";
 import { isPublished } from "@/lib/catalogue";
@@ -99,6 +100,11 @@ export default async function BookOverview({
             Ages {book.age_range} · {book.page_count} pages · {vocab.length}{" "}
             words taught · fully vowelled
           </p>
+          {book.audio_status !== "final" && (
+            <p className="mt-2 text-[14px] text-[var(--ink)]/60">
+              Audio is currently an AI voice
+            </p>
+          )}
 
           {/* An unpublished book says so on its own page. Keyed on the
               catalogue's `published` flag, not buy_url — Ibrahim is published
@@ -177,6 +183,7 @@ export default async function BookOverview({
           </Link>
         </section>
       </main>
+      <SiteFooter maxWidth="max-w-[640px]" />
     </>
   );
 }

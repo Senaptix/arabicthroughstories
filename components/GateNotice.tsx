@@ -66,6 +66,15 @@ export default async function GateNotice({
             Read the free pages
           </Link>
         </div>
+        <div className="mt-5 flex flex-wrap gap-x-3 gap-y-1 text-[13px] text-ink/55">
+          <Link href="/terms" className="hover:text-ink underline-offset-4 hover:underline">
+            Terms
+          </Link>
+          <span className="text-ink/25" aria-hidden="true">·</span>
+          <Link href="/refunds" className="hover:text-ink underline-offset-4 hover:underline">
+            Refunds
+          </Link>
+        </div>
       </section>
     );
   }
@@ -140,6 +149,16 @@ export default async function GateNotice({
           style={{ fontSize: "16px" }}
         >
           Read the free preview
+        </Link>
+      </div>
+
+      <div className="mt-5 flex flex-wrap gap-x-3 gap-y-1 text-[13px] text-ink/55">
+        <Link href="/terms" className="hover:text-ink underline-offset-4 hover:underline">
+          Terms
+        </Link>
+        <span className="text-ink/25" aria-hidden="true">·</span>
+        <Link href="/refunds" className="hover:text-ink underline-offset-4 hover:underline">
+          Refunds
         </Link>
       </div>
     </section>

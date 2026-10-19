@@ -102,6 +102,36 @@ export default function BuyOptions({
 
   const activePriceId = selectedPlan === "monthly" ? monthlyPriceId : annualPriceId;
 
+  const buyDisclosure = (
+    <div className="space-y-2 rounded-xl bg-sand/30 p-4 text-[13px] leading-relaxed text-ink/75">
+      <p>
+        <strong>What you get:</strong>{" "}
+        {selectedPlan === "monthly"
+          ? "Monthly subscription renewing until cancelled."
+          : "12 months' online access to the digital edition."}
+      </p>
+      <p>Audio is currently an AI voice and may be replaced by a human narrator.</p>
+      <p>
+        <strong>14-day full refund:</strong> if it is not right for your child, ask within 14 days and we refund you in full.
+      </p>
+      <p className="text-ink/60">
+        See our{" "}
+        <Link href="/terms" className="text-brand-blue underline underline-offset-4">
+          Terms
+        </Link>
+        ,{" "}
+        <Link href="/refunds" className="text-brand-blue underline underline-offset-4">
+          Refunds
+        </Link>{" "}
+        and{" "}
+        <Link href="/privacy" className="text-brand-blue underline underline-offset-4">
+          Privacy
+        </Link>
+        .
+      </p>
+    </div>
+  );
+
   return (
     <>
       <Script
@@ -153,6 +183,7 @@ export default function BuyOptions({
               <p className="text-[15px] leading-6">
                 Signed in as {email}. Access renews monthly until cancelled and opens on this account immediately.
               </p>
+              {buyDisclosure}
               <button
                 type="button"
                 disabled={!paddleReady || !activePriceId}
@@ -178,6 +209,7 @@ export default function BuyOptions({
               <p className="text-[15px] leading-6">
                 Signed in as {email}. The book opens on this account as soon as payment completes.
               </p>
+              {buyDisclosure}
               <button
                 type="button"
                 disabled={!paddleReady || !activePriceId}
