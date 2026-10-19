@@ -13,6 +13,7 @@ import SeriesIndex from "@/components/SeriesIndex";
 import HeroGallery from "@/components/HeroGallery";
 import { buyLabel, SERIES, isPublished } from "@/lib/catalogue";
 import { checkoutEnabled, priceIdFor } from "@/lib/paddle";
+import { BUNDLE_PRICE_LINE, SINGLE_BOOK_PRICE_LINE } from "@/lib/pricing";
 import {
   getAllBooks,
   getBook,
@@ -361,6 +362,10 @@ export default function Home() {
               </a>
             )}
           </div>
+
+          <p className="mt-3 text-[14px] text-ink/70">
+            {SINGLE_BOOK_PRICE_LINE} · {BUNDLE_PRICE_LINE}
+          </p>
 
           {/* The account, said out loud on the sales page. It used to exist
               only as an unlabelled book glyph in the header, and parents

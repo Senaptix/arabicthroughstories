@@ -11,6 +11,7 @@ import {
   type PurchaseRecordStatus,
   verifyPaddleSignature,
 } from "./paddle";
+import { PRICING, formatPrice } from "./pricing";
 import { onlineOptionsFor } from "../components/BuyMenu";
 
 const secret = "pdl_ntfset_test_secret";
@@ -51,6 +52,24 @@ assert.deepEqual(booksForPrice("pri_ibrahim"), ["ibrahim"]);
 // Bundle price maps to both books
 assert.deepEqual(booksForPrice("pri_bundle"), ["ibrahim", "yusuf"], "bundle price maps to both books");
 assert.deepEqual(booksForPrice("pri_bundle_mo"), ["ibrahim", "yusuf"], "bundle monthly price maps to both books");
+
+// --- Display pricing checks ---------------------------------------
+assert.equal(PRICING.single.annual, 10);
+assert.equal(PRICING.single.monthly, 1);
+assert.equal(PRICING.bundle.annual, 17);
+assert.equal(PRICING.bundle.monthly, 1.75);
+assert.equal(formatPrice(PRICING.single.annual), "£10");
+assert.equal(formatPrice(PRICING.single.monthly), "£1");
+assert.equal(formatPrice(PRICING.bundle.annual), "£17");
+assert.equal(formatPrice(PRICING.bundle.monthly), "£1.75");
+assert.ok(
+  PRICING.bundle.annual < PRICING.single.annual * 2,
+  "bundle annual costs less than two single books",
+);
+assert.ok(
+  PRICING.bundle.monthly < PRICING.single.monthly * 2,
+  "bundle monthly costs less than two single books",
+);
 
 // --- Online options checks ----------------------------------------
 process.env.PADDLE_CHECKOUT_ENABLED = "false";

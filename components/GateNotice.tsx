@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getMembershipState } from "@/lib/access";
 import { isPublished } from "@/lib/catalogue";
 import { checkoutEnabled, priceIdFor } from "@/lib/paddle";
+import { BUNDLE_PRICE_LINE, SINGLE_BOOK_PRICE_LINE } from "@/lib/pricing";
 
 /**
  * What a visitor without a current entitlement sees in place of gated content.
@@ -99,6 +100,10 @@ export default async function GateNotice({
           : signedIn
             ? "The audio, the vowelled Arabic and the practice for this page come with the book. Add your Amazon order number or activation code to your account and access starts immediately."
             : "The audio, the vowelled Arabic and the practice for this page come with the book. Enter the Amazon order number when you create the parent account and access starts immediately."}
+      </p>
+
+      <p className="mt-4 text-[14px] text-ink/75">
+        {SINGLE_BOOK_PRICE_LINE} · {BUNDLE_PRICE_LINE}
       </p>
 
       <div className="mt-6 flex flex-wrap items-center gap-3">

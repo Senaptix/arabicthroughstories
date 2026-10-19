@@ -5,6 +5,7 @@ import Script from "next/script";
 import { useEffect, useState } from "react";
 
 import type { PaddleGlobal } from "./PaddleCheckoutButton";
+import { formatPrice, PRICING } from "@/lib/pricing";
 
 export default function BuyOptions({
   token,
@@ -132,6 +133,10 @@ export default function BuyOptions({
     </div>
   );
 
+  const pricingConfig = isBundle ? PRICING.bundle : PRICING.single;
+  const serverAnnualPrice = formatPrice(pricingConfig.annual);
+  const serverMonthlyPrice = formatPrice(pricingConfig.monthly);
+
   return (
     <>
       <Script
@@ -142,38 +147,47 @@ export default function BuyOptions({
 
       <div className="space-y-6">
         {hasAnnual && hasMonthly && (
-          <div className="grid grid-cols-2 gap-3">
-            <button
-              type="button"
-              onClick={() => setSelectedPlan("monthly")}
-              className={`rounded-2xl border p-4 text-left transition-all ${
-                selectedPlan === "monthly"
-                  ? "border-brand-blue bg-brand-blue/5 shadow-sm"
-                  : "border-ink/15 hover:border-ink/30"
-              }`}
-            >
-              <div className="text-[14px] font-semibold text-ink">Monthly</div>
-              <div className="mt-1 text-[18px] font-semibold text-brand-blue">
-                {monthlyPrice ? `${monthlyPrice}/mo` : "—"}
-              </div>
-              <div className="mt-1 text-[12px] text-ink/60">Renews monthly, cancel anytime</div>
-            </button>
+          <div className="space-y-3">
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() => setSelectedPlan("monthly")}
+                className={`rounded-2xl border p-4 text-left transition-all ${
+                  selectedPlan === "monthly"
+                    ? "border-brand-blue bg-brand-blue/5 shadow-sm"
+                    : "border-ink/15 hover:border-ink/30"
+                }`}
+              >
+                <div className="text-[14px] font-semibold text-ink">
+                  Monthly: {serverMonthlyPrice} a month, cancel any time
+                </div>
+                <div className="mt-1 text-[18px] font-semibold text-brand-blue">
+                  {monthlyPrice ? `${monthlyPrice}/mo` : `${serverMonthlyPrice}/mo`}
+                </div>
+                <div className="mt-1 text-[12px] text-ink/60">Renews monthly, cancel anytime</div>
+              </button>
 
-            <button
-              type="button"
-              onClick={() => setSelectedPlan("annual")}
-              className={`rounded-2xl border p-4 text-left transition-all ${
-                selectedPlan === "annual"
-                  ? "border-brand-blue bg-brand-blue/5 shadow-sm"
-                  : "border-ink/15 hover:border-ink/30"
-              }`}
-            >
-              <div className="text-[14px] font-semibold text-ink">12 months, pay once</div>
-              <div className="mt-1 text-[18px] font-semibold text-brand-blue">
-                {annualPrice ?? "—"}
-              </div>
-              <div className="mt-1 text-[12px] text-ink/60">12 months full access</div>
-            </button>
+              <button
+                type="button"
+                onClick={() => setSelectedPlan("annual")}
+                className={`rounded-2xl border p-4 text-left transition-all ${
+                  selectedPlan === "annual"
+                    ? "border-brand-blue bg-brand-blue/5 shadow-sm"
+                    : "border-ink/15 hover:border-ink/30"
+                }`}
+              >
+                <div className="text-[14px] font-semibold text-ink">
+                  12 months, pay once: {serverAnnualPrice}
+                </div>
+                <div className="mt-1 text-[18px] font-semibold text-brand-blue">
+                  {annualPrice ?? serverAnnualPrice}
+                </div>
+                <div className="mt-1 text-[12px] text-ink/60">12 months full access</div>
+              </button>
+            </div>
+            <p className="text-[13px] leading-5 text-ink/65">
+              Prices include any tax due. Your local currency and the final amount are shown at checkout.
+            </p>
           </div>
         )}
 
@@ -197,7 +211,7 @@ export default function BuyOptions({
                 }
                 className="rounded-full bg-brand-blue px-6 py-3 text-[16px] font-medium text-white disabled:opacity-50"
               >
-                {monthlyPrice ? `Subscribe — ${monthlyPrice}/mo` : "Subscribe monthly"}
+                {monthlyPrice ? `Subscribe — ${monthlyPrice}/mo` : `Subscribe — ${serverMonthlyPrice}/mo`}
               </button>
             </div>
           ) : (
@@ -225,9 +239,7 @@ export default function BuyOptions({
               >
                 {annualPrice
                   ? `${isBundle ? "Buy both parts" : "Buy the digital edition"} — ${annualPrice}`
-                  : isBundle
-                    ? "Buy both parts"
-                    : "Buy the digital edition"}
+                  : `${isBundle ? "Buy both parts" : "Buy the digital edition"} — ${serverAnnualPrice}`}
               </button>
             </div>
           ) : (

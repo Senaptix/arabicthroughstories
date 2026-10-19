@@ -5,6 +5,7 @@ import SiteFooter from "@/components/SiteFooter";
 import PageIndex from "@/components/PageIndex";
 import Link from "next/link";
 import { isPublished } from "@/lib/catalogue";
+import { BUNDLE_PRICE_LINE, SINGLE_BOOK_PRICE_LINE } from "@/lib/pricing";
 import {
   getAllBooks,
   getBook,
@@ -105,6 +106,9 @@ export default async function BookOverview({
               Audio is currently an AI voice
             </p>
           )}
+          <p className="mt-2 text-[14px] text-[var(--ink)]/75">
+            {SINGLE_BOOK_PRICE_LINE} · {BUNDLE_PRICE_LINE}
+          </p>
 
           {/* An unpublished book says so on its own page. Keyed on the
               catalogue's `published` flag, not buy_url — Ibrahim is published
