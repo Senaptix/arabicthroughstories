@@ -184,6 +184,17 @@ export async function cancelPaddleSubscription(subscriptionId: string): Promise<
   if (!key || !subscriptionId) return false;
   const base = paddleEnvironment() === "production" ? "https://api.paddle.com" : "https://sandbox-api.paddle.com";
   try {
+    // Ask first: cancelling a subscription that is already cancelled errors, and
+    // that must not block a parent from deleting their account.
+    const current = await fetch(`${base}/subscriptions/${encodeURIComponent(subscriptionId)}`, {
+      headers: { Authorization: `Bearer ${key}` },
+      cache: "no-store",
+    });
+    if (current.ok) {
+      const body = (await current.json().catch(() => null)) as { data?: { status?: string } } | null;
+      if (body?.data?.status === "canceled") return true;
+    }
+
     const res = await fetch(`${base}/subscriptions/${encodeURIComponent(subscriptionId)}/cancel`, {
       method: "POST",
       headers: {
