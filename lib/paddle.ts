@@ -175,6 +175,48 @@ export async function createCustomerPortalSession(
   return body.data?.urls?.general?.overview ?? null;
 }
 
+/**
+ * Cancel an active Paddle subscription immediately via the Paddle API.
+ * Returns true if the subscription was successfully canceled or was already canceled.
+ */
+export async function cancelPaddleSubscription(subscriptionId: string): Promise<boolean> {
+  const key = process.env.PADDLE_API_KEY;
+  if (!key || !subscriptionId) return false;
+  const base = paddleEnvironment() === "production" ? "https://api.paddle.com" : "https://sandbox-api.paddle.com";
+  try {
+    const res = await fetch(`${base}/subscriptions/${encodeURIComponent(subscriptionId)}/cancel`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${key}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ effective_from: "immediately" }),
+      cache: "no-store",
+    });
+    if (res.ok) return true;
+
+    // Paddle returns 400 or 409 if subscription is already canceled
+    const body = (await res.json().catch(() => null)) as {
+      error?: { code?: string; message?: string };
+    } | null;
+    const code = body?.error?.code?.toLowerCase();
+    const msg = body?.error?.message?.toLowerCase();
+    if (
+      code === "subscription_cancelled_already" ||
+      code === "subscription_canceled_already" ||
+      msg?.includes("already cancel")
+    ) {
+      return true;
+    }
+
+    console.error("Paddle cancel subscription failed:", res.status, body);
+    return false;
+  } catch (err) {
+    console.error("Paddle cancel subscription error:", err);
+    return false;
+  }
+}
+
 export type PurchaseRecordStatus =
   | "granted"
   | "code_issued"

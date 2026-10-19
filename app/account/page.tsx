@@ -7,6 +7,7 @@ import ProfileCreator from "@/components/account/ProfileCreator";
 import ProfileRenamer from "@/components/account/ProfileRenamer";
 import ReceiptNotice from "@/components/account/ReceiptNotice";
 import BookClaimer from "@/components/account/BookClaimer";
+import DownloadDataButton from "@/components/account/DownloadDataButton";
 import { manageSubscription, signOut, switchProfile } from "./actions";
 import { getActiveProfile, getParentId, getProfiles } from "@/lib/account";
 import { getEntitlements } from "@/lib/access";
@@ -246,6 +247,22 @@ export default async function AccountPage({
             </form>
           </section>
         )}
+
+        <section className="mt-12 border-t border-ink/10 pt-8" aria-labelledby="data-account-heading">
+          <h2 id="data-account-heading" className="text-[20px] font-medium">Your data &amp; account</h2>
+          <p className="mt-2 text-[14px] leading-6 text-ink/65">
+            Download a copy of your personal data and reading records, or permanently delete your account.
+          </p>
+          <div className="mt-5 flex flex-wrap items-center gap-4">
+            <DownloadDataButton />
+            <Link
+              href="/account/delete"
+              className="inline-flex min-h-[44px] items-center rounded-xl border border-crimson/30 px-4 text-[14px] font-medium text-crimson hover:border-crimson hover:bg-crimson/5"
+            >
+              Delete my account
+            </Link>
+          </div>
+        </section>
 
         <p className="mt-10 text-[13px] leading-5 text-ink/45">Purchase access is managed separately and has not been enabled by this account setup.</p>
       </main>

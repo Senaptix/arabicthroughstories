@@ -23,7 +23,10 @@ import {
   looksLikeActivationCode,
   redemptionRateKey,
 } from "@/lib/activation-codes";
-import { createCustomerPortalSession } from "@/lib/paddle";
+import { cancelPaddleSubscription, createCustomerPortalSession } from "@/lib/paddle";
+import { getServiceRoleClient } from "@/lib/supabase/service-role";
+import { buildAccountExport } from "@/lib/account-data";
+import { getAllBooks, parseVocabulary } from "@/lib/parse";
 
 export type ActionState = { message?: string; success?: string };
 
@@ -495,5 +498,215 @@ export async function manageSubscription() {
   }
 
   redirect(portalUrl);
+}
+
+export type DownloadDataResult =
+  | { ok: true; filename: string; json: string }
+  | { ok: false; error: string };
+
+/**
+ * "Download my data" server action.
+ * Returns a JSON file payload containing the signed-in parent's email,
+ * child profiles, reading progress, saved words, entitlements, activations,
+ * and purchase records. Only their own rows; no other user's data.
+ */
+export async function downloadMyData(): Promise<DownloadDataResult> {
+  const parentId = await getParentId();
+  if (!parentId) {
+    return { ok: false, error: "You must be signed in to download your data." };
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user || !user.email) {
+    return { ok: false, error: "Could not identify your account." };
+  }
+
+  // 1. Fetch child profiles for this parent
+  const { data: profiles, error: profilesError } = await supabase
+    .from("child_profiles")
+    .select("id, display_name, avatar_key, created_at")
+    .eq("parent_id", parentId);
+
+  if (profilesError) {
+    return { ok: false, error: "Could not load child profiles." };
+  }
+
+  const childIds = (profiles ?? []).map((p) => p.id);
+
+  // 2. Fetch book and page progress for this parent's children
+  let bookProgress: Array<{
+    child_id: string;
+    book_slug: string;
+    last_page: number;
+    started_at: string;
+    last_seen_at: string;
+  }> = [];
+  let pageProgress: Array<{
+    child_id: string;
+    book_slug: string;
+    page_number: number;
+    viewed_at: string;
+    read_completed_at: string | null;
+    practice_completed_at: string | null;
+    best_correct: number | null;
+    graded_total: number | null;
+    updated_at: string;
+  }> = [];
+
+  if (childIds.length > 0) {
+    const [bpRes, ppRes] = await Promise.all([
+      supabase
+        .from("book_progress")
+        .select("child_id, book_slug, last_page, started_at, last_seen_at")
+        .in("child_id", childIds),
+      supabase
+        .from("page_progress")
+        .select(
+          "child_id, book_slug, page_number, viewed_at, read_completed_at, practice_completed_at, best_correct, graded_total, updated_at",
+        )
+        .in("child_id", childIds),
+    ]);
+    bookProgress = bpRes.data ?? [];
+    pageProgress = ppRes.data ?? [];
+  }
+
+  // 3. Fetch entitlements for this parent
+  const { data: entitlements, error: entError } = await supabase
+    .from("entitlements")
+    .select("book_slug, source, starts_at, expires_at")
+    .eq("parent_id", parentId);
+
+  if (entError) {
+    return { ok: false, error: "Could not load entitlements." };
+  }
+
+  // 4. Fetch activations for this parent
+  const { data: activations, error: actError } = await supabase
+    .from("activations")
+    .select("id, order_number, status, note, book_slugs, created_at, reviewed_at")
+    .eq("parent_id", parentId);
+
+  if (actError) {
+    return { ok: false, error: "Could not load activations." };
+  }
+
+  // 5. Fetch purchase records for this parent using service role client
+  // (paddle_transactions has RLS restricting SELECT for authenticated users)
+  const serviceRole = getServiceRoleClient();
+  const { data: purchases, error: purError } = await serviceRole
+    .from("paddle_transactions")
+    .select("transaction_id, book_slug, kind, status, created_at")
+    .eq("parent_id", parentId);
+
+  if (purError) {
+    return { ok: false, error: "Could not load purchase records." };
+  }
+
+  // 6. Parse vocabulary for saved words calculation
+  const books = getAllBooks();
+  const vocabByBook: Record<string, ReturnType<typeof parseVocabulary>> = {};
+  for (const book of books) {
+    try {
+      vocabByBook[book.slug] = parseVocabulary(book.slug);
+    } catch {
+      vocabByBook[book.slug] = [];
+    }
+  }
+
+  const exportData = buildAccountExport({
+    email: user.email,
+    profiles: profiles ?? [],
+    bookProgress,
+    pageProgress,
+    vocabByBook,
+    entitlements: entitlements ?? [],
+    activations: activations ?? [],
+    purchases: purchases ?? [],
+  });
+
+  const dateStr = new Date().toISOString().split("T")[0];
+  return {
+    ok: true,
+    filename: `qasas-kids-data-${dateStr}.json`,
+    json: JSON.stringify(exportData, null, 2),
+  };
+}
+
+/**
+ * "Delete my account" server action.
+ * 1. Cancels active Paddle subscriptions via Paddle API (stopping if cancellation fails).
+ * 2. Anonymises paddle_transactions rows (nulls customer_email & parent_id) via security definer RPC.
+ * 3. Deletes auth user via service role client (cascading deletes wipe profiles, progress, entitlements & activations).
+ * 4. Signs user out and redirects to plain confirmation.
+ */
+export async function deleteAccount(
+  _state: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const parentId = await getParentId();
+  if (!parentId) redirect("/account/sign-in");
+
+  const confirm = formData.get("confirm");
+  if (confirm !== "DELETE") {
+    return { message: "Type DELETE in capital letters to confirm account deletion." };
+  }
+
+  const supabase = await createClient();
+
+  // 1. Cancel any active Paddle subscription via Paddle API
+  const { data: subs, error: subError } = await supabase
+    .from("paddle_subscriptions")
+    .select("subscription_id")
+    .eq("parent_id", parentId);
+
+  if (subError) {
+    return { message: "Could not check your active subscriptions. Please try again." };
+  }
+
+  if (subs && subs.length > 0) {
+    for (const sub of subs) {
+      if (sub.subscription_id) {
+        const cancelled = await cancelPaddleSubscription(sub.subscription_id);
+        if (!cancelled) {
+          return {
+            message:
+              "We could not cancel your active subscription with Paddle. Please use Manage subscription to cancel your subscription first before deleting your account.",
+          };
+        }
+      }
+    }
+  }
+
+  // 2. Anonymise purchase records for tax before user is deleted
+  const serviceRole = getServiceRoleClient();
+  const { error: rpcError } = await serviceRole.rpc(
+    "anonymise_paddle_transactions_for_parent",
+    { p_parent: parentId },
+  );
+
+  if (rpcError) {
+    console.error("Failed to anonymise paddle transactions", rpcError);
+    return { message: "We could not delete your account. Please try again." };
+  }
+
+  // 3. Delete the auth user using service role so cascading deletes remove
+  // profiles, progress, entitlements and activations
+  const { error: deleteError } = await serviceRole.auth.admin.deleteUser(parentId);
+  if (deleteError) {
+    console.error("Failed to delete auth user", deleteError);
+    return { message: "We could not delete your account. Please try again." };
+  }
+
+  // 4. Sign user out and clear active child cookie
+  await supabase.auth.signOut();
+  const cookieStore = await cookies();
+  cookieStore.delete(ACTIVE_CHILD_COOKIE);
+
+  redirect("/account/delete?confirmed=1");
 }
 
