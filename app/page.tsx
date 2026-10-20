@@ -363,9 +363,11 @@ export default function Home() {
             )}
           </div>
 
-          <p className="mt-3 text-[14px] text-ink/70">
-            {SINGLE_BOOK_PRICE_LINE} · {BUNDLE_PRICE_LINE}
-          </p>
+          {checkoutEnabled() && (
+            <p className="mt-3 text-[14px] text-ink/70">
+              {SINGLE_BOOK_PRICE_LINE} · {BUNDLE_PRICE_LINE}
+            </p>
+          )}
 
           {/* The account, said out loud on the sales page. It used to exist
               only as an unlabelled book glyph in the header, and parents

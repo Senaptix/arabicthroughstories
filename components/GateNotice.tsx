@@ -102,9 +102,11 @@ export default async function GateNotice({
             : "The audio, the vowelled Arabic and the practice for this page come with the book. Enter the Amazon order number when you create the parent account and access starts immediately."}
       </p>
 
-      <p className="mt-4 text-[14px] text-ink/75">
-        {SINGLE_BOOK_PRICE_LINE} · {BUNDLE_PRICE_LINE}
-      </p>
+      {canBuy && (
+        <p className="mt-4 text-[14px] text-ink/75">
+          {SINGLE_BOOK_PRICE_LINE} · {BUNDLE_PRICE_LINE}
+        </p>
+      )}
 
       <div className="mt-6 flex flex-wrap items-center gap-3">
         {canBuy ? (
