@@ -50,6 +50,7 @@ type Props = {
   align?: "left" | "right";
   /** Book slug; when checkout is on, adds a "Read online now" group first. */
   slug?: string;
+  paperbacks?: { label: string; url: string; links: StoreLink[] }[];
 };
 
 /**
@@ -68,11 +69,12 @@ export default function BuyMenu({
   className,
   align = "left",
   slug,
+  paperbacks,
 }: Props) {
   const online = onlineOptionsFor(slug);
   const stores: StoreLink[] =
     links.length > 0 || online.length === 0 ? links : [{ store: "Amazon", url }];
-  if (stores.length === 0) {
+  if (stores.length === 0 && !paperbacks?.length) {
     return (
       <a href={url} target="_blank" rel="noopener noreferrer" className={className}>
         {label}
@@ -98,7 +100,7 @@ export default function BuyMenu({
         </svg>
       </summary>
       <div
-        className={`border-ink/10 bg-paper absolute z-30 mt-2 w-[270px] rounded-2xl border p-2 shadow-[0_18px_40px_-24px_rgba(26,42,74,0.45)] ${
+        className={`border-ink/10 bg-paper absolute z-30 mt-2 w-[270px] max-h-[70vh] overflow-y-auto rounded-2xl border p-2 shadow-[0_18px_40px_-24px_rgba(26,42,74,0.45)] ${
           align === "right" ? "right-0" : "left-0"
         }`}
       >
@@ -119,6 +121,25 @@ export default function BuyMenu({
             <div className="border-ink/10 my-2 border-t" />
           </>
         )}
+        {paperbacks?.length ? (
+          <>
+            <p className="text-ink/60 px-3 pt-1 pb-2 text-[13px]">Paperback on Amazon</p>
+            {paperbacks.map((book) => (
+              <details key={book.url} className="border-ink/10 border-t">
+                <summary className="text-brand-blue cursor-pointer px-3 py-3 text-[14px] font-medium">
+                  {book.label}
+                </summary>
+                {(book.links.length ? book.links : [{ store: "Amazon", url: book.url }]).map((store) => (
+                  <a key={store.url} href={store.url} target="_blank" rel="noopener noreferrer"
+                    className="text-ink hover:bg-sand/30 flex min-h-[44px] items-center rounded-xl px-5 text-[15px]">
+                    {store.store}
+                  </a>
+                ))}
+              </details>
+            ))}
+          </>
+        ) : (
+          <>
         <p className="text-ink/60 px-3 pt-1 pb-2 text-[13px]">
           {online.length > 0
             ? "Paperback on Amazon"
@@ -138,6 +159,8 @@ export default function BuyMenu({
             </span>
           </a>
         ))}
+          </>
+        )}
       </div>
     </details>
   );

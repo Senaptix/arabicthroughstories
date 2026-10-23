@@ -88,6 +88,15 @@ type Props = {
 
 export default function SiteNav({ bookSlug, hideInside, signedIn }: Props) {
   const buy = buyUrlFor(bookSlug);
+  const paperbacks = CATALOGUE
+    .filter((entry) => entry.status === "on-sale" && entry.slug)
+    .map((entry) => ({ entry, book: getBook(entry.slug!) }))
+    .filter(({ book }) => book.buy_url)
+    .map(({ entry, book }) => ({
+      label: `Volume ${entry.volume}, Part ${entry.part}: ${entry.titleEn ?? book.title_en}`,
+      url: book.buy_url,
+      links: book.buy_links,
+    }));
 
   const links = [
     { href: "/#stories", label: "The stories" },
@@ -129,12 +138,8 @@ export default function SiteNav({ bookSlug, hideInside, signedIn }: Props) {
           does: three controls plus the lockup is tight on a 360px phone. */}
       {buy && (
         <BuyMenu
-          label={
-            <>
-              <span className="sm:hidden">Buy</span>
-              <span className="hidden sm:inline">{buy.label}</span>
-            </>
-          }
+          label="Buy"
+          paperbacks={paperbacks}
           url={buy.url}
           links={buy.links}
           slug={buy.slug}
@@ -218,33 +223,17 @@ export default function SiteNav({ bookSlug, hideInside, signedIn }: Props) {
                   <div className="border-ink/10 my-2 border-t" />
                 </>
               )}
-              {buy.links.length === 0 ? (
-                <a
-                  href={buy.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-brand-blue text-paper flex min-h-[48px] items-center justify-center rounded-xl px-3 text-[15px] font-medium"
-                >
-                  {`${buy.label} on Amazon`}
-                </a>
-              ) : (
-                <>
-                  <p className="text-ink/60 px-3 pt-1 pb-1 text-[13px]">
-                    {`${buy.label} on Amazon`}
-                  </p>
-                  {buy.links.map((l) => (
-                    <a
-                      key={l.url}
-                      href={l.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-brand-blue hover:bg-sand/30 flex min-h-[44px] items-center rounded-xl px-3 text-[15px] font-medium"
-                    >
-                      {l.store}
+              {paperbacks.map((book) => (
+                <details key={book.url}>
+                  <summary className="text-brand-blue cursor-pointer px-3 py-3 text-[14px] font-medium">{book.label}</summary>
+                  {book.links.map((store) => (
+                    <a key={store.url} href={store.url} target="_blank" rel="noopener noreferrer"
+                      className="text-brand-blue hover:bg-sand/30 flex min-h-[44px] items-center rounded-xl px-5 text-[15px]">
+                      {store.store}
                     </a>
                   ))}
-                </>
-              )}
+                </details>
+              ))}
               <div className="border-ink/10 my-2 border-t" />
             </>
           )}
