@@ -1224,6 +1224,20 @@ export default function Home() {
               Part 2 opens the way Part 1 does. Buy the book, add the order to
               your account, and its companion opens for a year.
             </p>
+            {next?.buy_url && (
+              <div className="mt-5 flex flex-wrap items-center gap-3">
+                <BuyMenu
+                  label="Get Part 2 on Amazon"
+                  url={next.buy_url}
+                  links={next.buy_links}
+                  slug={next.slug}
+                  className="bg-brand-blue text-paper inline-flex min-h-[48px] items-center rounded-xl px-5 font-medium"
+                />
+                <Link href={`/books/${next.slug}`} className="text-brand-blue inline-flex min-h-[48px] items-center font-medium underline underline-offset-4">
+                  Open the Part 2 reading companion
+                </Link>
+              </div>
+            )}
             {checkoutEnabled() && priceIdFor("yusuf") && (
               <p className="mt-4">
                 <Link

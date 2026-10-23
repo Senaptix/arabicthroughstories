@@ -121,9 +121,7 @@ export default function BuyMenu({
         )}
         <p className="text-ink/60 px-3 pt-1 pb-2 text-[13px]">
           {online.length > 0
-            ? slug === "yusuf"
-              ? "Part 1 paperback on Amazon"
-              : "Paperback on Amazon"
+            ? "Paperback on Amazon"
             : "Choose your Amazon store"}
         </p>
         {stores.map((l) => (

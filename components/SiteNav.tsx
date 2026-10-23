@@ -2,7 +2,6 @@ import Link from "next/link";
 import { buyLabel, CATALOGUE } from "@/lib/catalogue";
 import { getBook } from "@/lib/parse";
 import BuyMenu, { onlineOptionsFor, type StoreLink } from "@/components/BuyMenu";
-import { checkoutEnabled, priceIdFor } from "@/lib/paddle";
 
 /**
  * The site's navigation: inline links on a wide screen, a disclosure menu on
@@ -57,15 +56,6 @@ function buyUrlFor(bookSlug?: string): Buy | null {
       return null;
     }
   };
-  if (bookSlug === "yusuf" && checkoutEnabled() && priceIdFor("yusuf")) {
-    const part1 = urlOf("ibrahim");
-    return {
-      slug: "yusuf",
-      label: buyLabel("yusuf"),
-      url: part1?.url ?? "/buy/yusuf",
-      links: part1?.links ?? [],
-    };
-  }
   if (bookSlug) {
     const own = urlOf(bookSlug);
     if (own) return own;
@@ -235,16 +225,12 @@ export default function SiteNav({ bookSlug, hideInside, signedIn }: Props) {
                   rel="noopener noreferrer"
                   className="bg-brand-blue text-paper flex min-h-[48px] items-center justify-center rounded-xl px-3 text-[15px] font-medium"
                 >
-                  {buy.slug === "yusuf"
-                    ? `${buyLabel("ibrahim")} on Amazon`
-                    : `${buy.label} on Amazon`}
+                  {`${buy.label} on Amazon`}
                 </a>
               ) : (
                 <>
                   <p className="text-ink/60 px-3 pt-1 pb-1 text-[13px]">
-                    {buy.slug === "yusuf"
-                      ? `${buyLabel("ibrahim")} on Amazon`
-                      : `${buy.label} on Amazon`}
+                    {`${buy.label} on Amazon`}
                   </p>
                   {buy.links.map((l) => (
                     <a

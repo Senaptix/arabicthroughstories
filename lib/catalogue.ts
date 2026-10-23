@@ -85,7 +85,7 @@ export const CATALOGUE: readonly CatalogueEntry[] = [
     titleEn: "The Best of Stories",
     titleAr: "أحسن القصص",
     slug: "yusuf",
-    status: "text-online",
+    status: "on-sale",
   },
   {
     volume: 2,
