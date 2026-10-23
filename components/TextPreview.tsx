@@ -105,7 +105,7 @@ export default function TextPreview({
           </span>{" "}
           The remaining {totalStoryPages - pages.length} pages of Arabic are
           already on the site. The printed book, with its pictures, recordings
-          and word lists, is out very soon.{" "}
+          and word lists, is available on Amazon soon.{" "}
           <a
             href={`/books/${slug}`}
             className="text-brand-blue font-medium underline-offset-4 hover:underline"

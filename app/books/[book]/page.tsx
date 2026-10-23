@@ -122,10 +122,10 @@ export default async function BookOverview({
               style={{ fontSize: "15px", lineHeight: 1.6 }}
             >
               <span className="text-brand-blue font-semibold">
-                Out very soon.
+                Available on Amazon soon.
               </span>{" "}
-              The printed book, with its pictures and recordings, is almost
-              ready. The Arabic below is here to read now.
+              The printed book, with its pictures and recordings, is with
+              Amazon for approval. The Arabic below is here to read now.
             </p>
           )}
         </header>

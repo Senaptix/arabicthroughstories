@@ -184,7 +184,7 @@ export default function Home() {
   // "on-sale" in lib/catalogue.ts updates every line of this page — the
   // marketing copy never has to be revisited for the launch.
   const partTwoOut = isPublished("yusuf");
-  const partTwoWhen = partTwoOut ? "out now" : "out very soon";
+  const partTwoWhen = partTwoOut ? "out now" : "available on Amazon soon";
 
   const next = getAllBooks().find((b) => b.slug !== SLUG);
   const nextPreview: PreviewPage[] = next
@@ -1184,7 +1184,7 @@ export default function Home() {
               className="text-brand-blue font-semibold"
               style={{ fontSize: "13px", letterSpacing: "0.1em" }}
             >
-              {partTwoOut ? "OUT NOW" : "OUT VERY SOON — THE ARABIC IS UP NOW"}
+              {partTwoOut ? "OUT NOW" : "ON AMAZON SOON — THE ARABIC IS UP NOW"}
             </p>
             <p
               className="text-ink/75 mt-4 max-w-[62ch]"
