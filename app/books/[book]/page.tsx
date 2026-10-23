@@ -144,7 +144,9 @@ export default async function BookOverview({
             can also be heard —{" "}
             {recorded.size === 0
               ? "recording has not started"
-              : `${recorded.size} so far, and the rest are being recorded`}
+              : storyPages.every((page) => recorded.has(page))
+                ? `all ${storyPages.length} story pages have audio`
+                : `${recorded.size} so far, and the rest are being recorded`}
             .
           </p>
           <PageIndex
