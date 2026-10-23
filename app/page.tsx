@@ -311,7 +311,7 @@ export default function Home() {
             Every vowel marked, the English on the same page, every page read
             aloud.{" "}
             <strong className="text-ink font-semibold">
-              Volume 1, Part 1 is out now.
+              {partTwoOut ? "Volume 1, Parts 1 and 2 are out now." : "Volume 1, Part 1 is out now."}
             </strong>
           </p>
 
@@ -323,7 +323,7 @@ export default function Home() {
             <span aria-hidden="true" className="text-ink/25">
               ·
             </span>
-            <span>{book.page_count} pages</span>
+            <span>{partTwoOut && next ? `Part 1: ${book.page_count} pages · Part 2: ${next.page_count} pages` : `${book.page_count} pages`}</span>
             <span aria-hidden="true" className="text-ink/25">
               ·
             </span>
@@ -344,6 +344,15 @@ export default function Home() {
                   links={book.buy_links}
                   className="bg-brand-blue text-paper inline-flex min-h-[48px] items-center rounded-2xl px-6 text-[16px] font-medium transition-transform duration-150 ease-out hover:-translate-y-0.5"
                 />
+                {partTwoOut && next?.buy_url && (
+                  <BuyMenu
+                    label={buyLabel(next.slug)}
+                    url={next.buy_url}
+                    slug={next.slug}
+                    links={next.buy_links}
+                    className="bg-brand-blue text-paper inline-flex min-h-[48px] items-center rounded-2xl px-6 text-[16px] font-medium transition-transform duration-150 ease-out hover:-translate-y-0.5"
+                  />
+                )}
                 <a
                   href="#inside"
                   className="border-ink/15 text-ink hover:border-ink/35 inline-flex min-h-[48px] items-center rounded-2xl border px-6 font-medium transition-colors duration-150 ease-out"
